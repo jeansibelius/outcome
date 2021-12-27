@@ -1,0 +1,94 @@
+import { Category, Expense, Income, IncomeExpenseType } from "../types";
+
+export const categories: Category[] = [
+  {
+    id: "43bde33c-63ab-11ec-af26-c3840e40c503",
+    type: IncomeExpenseType.Expense,
+    name: "Groceries",
+    monthlyBudget: 25000.0,
+    description: "Monthly budget for groceries. Eating out etc. separately.",
+    icon: "shopping basket",
+  },
+  {
+    id: "43bde486-63ab-11ec-af27-676d3453f420",
+    type: IncomeExpenseType.Expense,
+    name: "Eating out",
+    monthlyBudget: 10000.0,
+    icon: "food",
+  },
+  {
+    id: "43bde4b8-63ab-11ec-af28-2308dcfd3410",
+    type: IncomeExpenseType.Expense,
+    name: "Living",
+    monthlyBudget: 100000.0,
+    description: "Monthly budget for living expenses: rent etc.",
+    icon: "home",
+  },
+  {
+    id: "43bde4d6-63ab-11ec-af29-6baea6b57127",
+    type: IncomeExpenseType.Income,
+    name: "Wages",
+    description: "Income from various part time jobs.",
+    icon: "money",
+  },
+  {
+    id: "43bde5a8-63ab-11ec-af2e-23208b6dc36b",
+    type: IncomeExpenseType.Income,
+    name: "Gifts",
+    icon: "gift",
+  },
+];
+
+export const cashFlow: Array<Expense | Income> = [
+  {
+    id: "24dd6c2c-63aa-11ec-8fab-c7590642bc51",
+    type: IncomeExpenseType.Expense,
+    date: "2020-12-12",
+    name: "Co-op",
+    amount: 5000.0,
+    description: "Food purchases",
+    category: "43bde33c-63ab-11ec-af26-c3840e40c503",
+  },
+  {
+    id: "24dd6da8-63aa-11ec-8fac-afcdd343b7e2",
+    type: IncomeExpenseType.Expense,
+    date: "2020-12-02",
+    name: "Co-op",
+    amount: 2455.0,
+    description: "Food purchases",
+    category: "43bde33c-63ab-11ec-af26-c3840e40c503",
+  },
+  {
+    id: "24dd6dd0-63aa-11ec-8fad-df29ef99da40",
+    type: IncomeExpenseType.Expense,
+    date: "2020-12-01",
+    name: "Kagonoya",
+    amount: 4200.0,
+    description: "Anniversary",
+    category: "43bde486-63ab-11ec-af27-676d3453f420",
+  },
+  {
+    id: "24dd6dd0-63aa-11ec-8fad-df29ef99da40",
+    type: IncomeExpenseType.Expense,
+    date: "2020-11-30",
+    name: "Rent",
+    amount: 77500.0,
+    category: "43bde4b8-63ab-11ec-af28-2308dcfd3410",
+  },
+  {
+    id: "16e7e36a-63ad-11ec-88ec-e3f5eb58326a",
+    type: IncomeExpenseType.Income,
+    date: "2020-11-27",
+    name: "Kagonoya",
+    amount: 15222.0,
+    category: "43bde4d6-63ab-11ec-af29-6baea6b57127",
+  },
+  {
+    id: "16e7e586-63ad-11ec-88ee-6f26a5343433",
+    type: IncomeExpenseType.Income,
+    date: "2020-11-15",
+    name: "Mom",
+    amount: 20000.0,
+    category: "43bde5a8-63ab-11ec-af2e-23208b6dc36b",
+  },
+];
