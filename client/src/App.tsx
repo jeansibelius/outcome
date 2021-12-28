@@ -19,14 +19,13 @@ function App() {
   if (error) {
     return <div>Error loading entries</div>;
   }
-  if (data && entries) {
+  if (entries) {
     return (
       <div className="App">
         <header className="App-header"></header>
         <ul>
           {entries.map((entry) => {
             const date = new Date(entry.date);
-            console.log("date", date);
             const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
             return (
               <>
