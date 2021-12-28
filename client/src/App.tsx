@@ -28,15 +28,15 @@ function App() {
             const date = new Date(entry.date);
             const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
             return (
-              <>
-                <li key={entry.id}>{entry.name}</li>
+              <div key={entry.id}>
+                <li>{entry.name}</li>
                 <ul>
                   <li>{entry.amount}</li>
                   {entry.category ? <li>{entry.category.name}</li> : null}
                   <li>{dateString}</li>
                   <li>{entry.type}</li>
                 </ul>
-              </>
+              </div>
             );
           })}
         </ul>
