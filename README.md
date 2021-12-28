@@ -6,7 +6,8 @@ License: All rights reserved (C) Rafael Linnankoski
 
 ## Roadmap
 - Create initial server setup (TypeScript, ApolloServer, GraphQL/type-graphql and MongoDB/typegoose)
-- Create initial client setup (TypeScript, ApolloClient, React)
+  ✅
+- Create initial client setup (TypeScript, ApolloClient, React) ✅
 - Can add new entries (expenses and income) with all variables (type, amount, date, name,
   description, category)
 - Can add new categories with all variables (type, name, description, monthly budget, icon)
