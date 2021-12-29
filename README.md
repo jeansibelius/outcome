@@ -11,9 +11,11 @@ License: All rights reserved (C) Rafael Linnankoski
 - Can add new entries (expenses and income) with all variables (type, amount, date, name,
   description, category) ✅
 - Can add new categories with all variables (type, name, description, monthly budget, icon)
-- Can edit and delete existing entries
+- Can edit and delete existing entries & categories
 - Use a UI framework to make development faster (Tailwindcss/Semantic UI?/other) with "container"
   styles applied
+- Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
+  immediately (queries & cache are kept up to date)
 - Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
 - Can create users
 - Restrict views only to authorized users
