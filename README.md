@@ -9,8 +9,9 @@ License: All rights reserved (C) Rafael Linnankoski
   ✅
 - Create initial client setup (TypeScript, ApolloClient, React) ✅
 - Can add new entries (expenses and income) with all variables (type, amount, date, name,
-  description, category)
+  description, category) ✅
 - Can add new categories with all variables (type, name, description, monthly budget, icon)
+- Can edit and delete existing entries
 - Use a UI framework to make development faster (Tailwindcss/Semantic UI?/other) with "container"
   styles applied
 - Basic views/components exist: expenses, income, adding new entries, adding new categories, summary

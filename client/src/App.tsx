@@ -1,28 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { ALL_ENTRIES } from "./queries";
-import { Entry } from "./types";
+import { ALL_CATEGORIES, ALL_ENTRIES, CREATE_ENTRY } from "./queries";
+import { Category, Entry, NewEntry } from "./types";
+import NewEntryForm from "./components/NewEntryForm";
+import { useMutation } from "@apollo/client";
 
 function App() {
-  const { loading, error, data } = useQuery(ALL_ENTRIES);
+  const getEntries = useQuery(ALL_ENTRIES);
   const [entries, setEntries] = useState<Entry[] | undefined>(undefined);
+  const categoryData = useQuery(ALL_CATEGORIES);
+  const [categories, setCategories] = useState<Category[] | undefined>(undefined);
+
+  const [createEntry] = useMutation<{ CreateEntry: Entry }, { data: NewEntry }>(CREATE_ENTRY, {
+    refetchQueries: [{ query: ALL_ENTRIES }],
+    onError: (error) => {
+      throw new Error(error.message);
+    },
+  });
 
   useEffect(() => {
-    if (data) {
-      setEntries(data.returnAllEntries);
+    if (getEntries.data) {
+      setEntries(getEntries.data.returnAllEntries);
     }
-  }, [data]);
+  }, [getEntries.data]);
 
-  if (loading) {
+  useEffect(() => {
+    if (categoryData.data) {
+      setCategories(categoryData.data.returnAllCategories);
+    }
+  }, [categoryData]);
+
+  if (getEntries.loading) {
     return <div>Loading</div>;
   }
-  if (error) {
+  if (getEntries.error) {
     return <div>Error loading entries</div>;
   }
   if (entries) {
     return (
       <div className="App">
         <header className="App-header"></header>
+        <div>
+          <NewEntryForm headerTitle="New entry" createEntry={createEntry} categories={categories} />
+        </div>
         <ul>
           {entries.map((entry) => {
             const date = new Date(entry.date);

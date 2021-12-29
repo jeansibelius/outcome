@@ -22,11 +22,31 @@ export const ALL_ENTRIES = gql`
   ${ENTRY_DETAILS}
 `;
 
-export const ADD_ENTRY = gql`
-  mutation CreateEntry($createEntryData2: EntryInput!) {
-    createEntry(data: $createEntryData2) {
+export const CREATE_ENTRY = gql`
+  mutation CreateEntry($entryData: EntryInput!) {
+    createEntry(data: $entryData) {
       ...EntryDetails
     }
   }
   ${ENTRY_DETAILS}
+`;
+
+const CATEGORY_DETAILS = gql`
+  fragment CategoryDetails on Category {
+    id
+    type
+    name
+    monthlyBudget
+    description
+    icon
+  }
+`;
+
+export const ALL_CATEGORIES = gql`
+  query ReturnAllCategories {
+    returnAllCategories {
+      ...CategoryDetails
+    }
+  }
+  ${CATEGORY_DETAILS}
 `;

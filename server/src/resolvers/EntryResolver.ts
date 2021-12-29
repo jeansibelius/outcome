@@ -18,17 +18,16 @@ export class EntryResolver {
   async createEntry(
     @Arg("data") { type, date, name, amount, category, description }: EntryInput
   ): Promise<Entry> {
-    const entry = (
-      await EntryModel.create({
-        type,
-        date,
-        name,
-        amount,
-        category,
-        description,
-      })
-    ).save();
-    return entry;
+    const entry = await EntryModel.create({
+      type,
+      date,
+      name,
+      amount,
+      category,
+      description,
+    });
+    await entry.save();
+    return entry.populate("category");
   }
 
   @Mutation(() => Boolean)
