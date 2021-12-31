@@ -1,7 +1,9 @@
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { withFormik, FormikProps, Form, Field } from "formik";
+import { CategorySelect, InputField, RadioGroup } from "./FormFields";
 import { Category, IncomeExpenseType } from "../types";
-import { getYearMonthDay, toNewEntry } from "../utils";
+import { getYearMonthDay } from "../utils";
 
 // Shape of form values
 interface FormValues {
@@ -14,8 +16,6 @@ interface FormValues {
 }
 
 interface OtherProps {
-  headerTitle: string;
-  createEntry: Function;
   categories?: Category[];
 }
 
@@ -29,53 +29,51 @@ const NewEntrySchema = Yup.object().shape({
 });
 
 const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
-  const { values, touched, errors, isSubmitting, headerTitle, categories } = props;
+  const {
+    values,
+    dirty,
+    isValid,
+    isSubmitting,
+    getFieldMeta,
+    setFieldValue,
+    setFieldTouched,
+    categories,
+  } = props;
+
+  const [entryType, setEntryType] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    setEntryType(values.type);
+  }, [values.type]);
+
   return (
-    <Form>
-      <h3>{headerTitle}</h3>
-      <div id="type-radio-group">Type</div>
-      <div role="group" aria-labelledby="type-radio-group">
-        {Object.values(IncomeExpenseType).map((type) => (
-          <div key={type}>
-            <Field type="radio" name="type" id={type} value={type} />
-            <label htmlFor={type}>{type}</label>
-          </div>
-        ))}
-        {touched.type && errors.type && <div>{errors.type}</div>}
-      </div>
-      <label htmlFor="name">Name</label>
-      <Field type="text" id="name" name="name" />
-      {touched.name && errors.name && <div>{errors.name}</div>}
-
-      <label htmlFor="amount">Amount</label>
-      <Field type="number" id="amount" name="amount" />
-      {touched.amount && errors.amount && <div>{errors.amount}</div>}
-
-      <label htmlFor="description">Description</label>
-      <Field type="text" id="description" name="description" />
-      {touched.description && errors.description && <div>{errors.description}</div>}
-
-      <label htmlFor="date">Date</label>
-      <Field type="date" id="date" name="date" />
-      {touched.date && errors.date && <div>{errors.date}</div>}
-
-      {categories ? (
-        <>
-          <label htmlFor="category">Category</label>
-          <Field as="select" id="category" name="category">
-            {categories
-              .filter((category) => category.type === values.type)
-              .map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-          </Field>
-        </>
+    <Form className="w-full form ui">
+      <Field
+        name="type"
+        label="Type"
+        setFieldValue={setFieldValue}
+        setFieldTouched={setFieldTouched}
+        elements={Object.values(IncomeExpenseType)}
+        component={RadioGroup}
+        meta={getFieldMeta("type")}
+      />
+      <Field name="name" label="Name" placeholder="Name" type="text" component={InputField} />
+      <Field name="amount" label="Amount" type="number" component={InputField} />
+      <Field name="description" label="Description" type="text" component={InputField} />
+      <Field name="date" label="Date" type="date" component={InputField} />
+      {categories && entryType ? (
+        <CategorySelect
+          categories={categories}
+          entryType={entryType}
+          setFieldValue={setFieldValue}
+          setFieldTouched={setFieldTouched}
+        />
       ) : null}
-      {touched.category && errors.category && <div>{errors.category}</div>}
-
-      <button type="submit" disabled={isSubmitting}>
+      <button
+        type="submit"
+        disabled={!dirty || !isValid || isSubmitting}
+        className="w-full p-4 px-8 text-lg font-bold bg-green-300 rounded-lg drop-shadow-md hover:drop-shadow-lg hover:bg-green-600 hover:text-white"
+      >
         Submit
       </button>
     </Form>
@@ -83,8 +81,7 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
 };
 
 interface NewEntryFormProps {
-  headerTitle: string;
-  createEntry: Function;
+  onSubmit: (values: FormValues) => void;
   categories?: Category[];
 }
 
@@ -102,27 +99,13 @@ const NewEntryForm = withFormik<NewEntryFormProps, FormValues>({
   },
 
   validationSchema: NewEntrySchema,
-  handleSubmit: (values, { props, resetForm, setStatus }) => {
+  handleSubmit: async (values, { props, resetForm }) => {
     // do submitting things
-    console.log("submit", values);
-    const newEntry = toNewEntry(values);
-    console.log("newEntry", newEntry);
     try {
-      props
-        .createEntry({
-          variables: { entryData: newEntry },
-        })
-        .then(
-          (response: unknown) =>
-            response instanceof Object ? console.log("success", response) : null,
-          (error: unknown) => (error instanceof Error ? console.log("error", error) : null)
-        );
-      setStatus("success");
+      props.onSubmit(values);
       resetForm();
-    } catch (error: unknown) {
-      if (error && error instanceof Error) {
-        setStatus("error");
-      }
+    } catch (error) {
+      console.log("handleSubmit error", error);
     }
   },
 })(InnerForm);

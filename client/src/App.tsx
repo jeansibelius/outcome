@@ -1,69 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { useQuery } from "@apollo/client";
-import { ALL_CATEGORIES, ALL_ENTRIES, CREATE_ENTRY } from "./queries";
-import { Category, Entry, NewEntry } from "./types";
-import NewEntryForm from "./components/NewEntryForm";
-import { useMutation } from "@apollo/client";
+import React from "react";
+import { Button, Container } from "semantic-ui-react";
+import AddEntryModal from "./components/AddEntryModal";
+import Entries from "./components/EntriesContainer";
 
 function App() {
-  const getEntries = useQuery(ALL_ENTRIES);
-  const [entries, setEntries] = useState<Entry[] | undefined>(undefined);
-  const categoryData = useQuery(ALL_CATEGORIES);
-  const [categories, setCategories] = useState<Category[] | undefined>(undefined);
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
 
-  const [createEntry] = useMutation<{ CreateEntry: Entry }, { data: NewEntry }>(CREATE_ENTRY, {
-    refetchQueries: [{ query: ALL_ENTRIES }],
-    onError: (error) => {
-      throw new Error(error.message);
-    },
-  });
+  const openModal = (): void => setModalOpen(true);
 
-  useEffect(() => {
-    if (getEntries.data) {
-      setEntries(getEntries.data.returnAllEntries);
-    }
-  }, [getEntries.data]);
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
 
-  useEffect(() => {
-    if (categoryData.data) {
-      setCategories(categoryData.data.returnAllCategories);
-    }
-  }, [categoryData]);
-
-  if (getEntries.loading) {
-    return <div>Loading</div>;
-  }
-  if (getEntries.error) {
-    return <div>Error loading entries</div>;
-  }
-  if (entries) {
-    return (
-      <div className="App">
-        <header className="App-header"></header>
-        <div>
-          <NewEntryForm headerTitle="New entry" createEntry={createEntry} categories={categories} />
-        </div>
-        <ul>
-          {entries.map((entry) => {
-            const date = new Date(entry.date);
-            const dateString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-            return (
-              <div key={entry.id}>
-                <li>{entry.name}</li>
-                <ul>
-                  <li>{entry.amount}</li>
-                  {entry.category ? <li>{entry.category.name}</li> : null}
-                  <li>{dateString}</li>
-                  <li>{entry.type}</li>
-                </ul>
-              </div>
-            );
-          })}
-        </ul>
-      </div>
-    );
-  }
-  return null;
+  return (
+    <Container className="p-8">
+      <Button onClick={() => openModal()}>New entry</Button>
+      <AddEntryModal modalOpen={modalOpen} onClose={closeModal} error={error} />
+      <Entries />
+    </Container>
+  );
 }
 
 export default App;

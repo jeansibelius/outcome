@@ -58,7 +58,9 @@ export const toNewEntry = (object: EntryInput): NewEntry => {
   return newEntry;
 };
 
-export const getYearMonthDay = () => {
-  const now = new Date();
-  return `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+export const getYearMonthDay = (date = new Date()): string => {
+  if (!(date instanceof Date)) {
+    date = new Date(date);
+  }
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 };

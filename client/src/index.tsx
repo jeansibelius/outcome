@@ -1,5 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "fomantic-ui-css/semantic.min.css";
+import "./index.css";
 import {
   ApolloClient,
   ApolloProvider,
@@ -12,7 +14,9 @@ import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 
 const uri = "http://localhost:4000";
-const httpLink = new HttpLink({ uri });
+const httpLink = new HttpLink({
+  uri,
+});
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),

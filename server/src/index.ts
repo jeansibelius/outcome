@@ -1,5 +1,6 @@
 import { config } from "dotenv";
 config();
+import cors from "cors";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import express from "express";
@@ -12,6 +13,10 @@ import schemaBuild from "./resolvers";
 async function startApolloServer() {
   // Required logic for integrating with Express
   const app = express();
+  const corsOptions: cors.CorsOptions = {
+    origin: [/localhost/, /192\.168\.1\.5/],
+  };
+  app.use(cors(corsOptions));
   const httpServer = http.createServer(app);
 
   const MONGODB_URI = process.env.MONGODB_URI;
@@ -50,6 +55,7 @@ async function startApolloServer() {
     // server root. However, *other* Apollo Server packages host it at
     // /graphql. Optionally provide this to match apollo-server.
     path: "/",
+    cors: false,
   });
 
   // Modified server startup
