@@ -7,16 +7,17 @@ interface InputFieldProps extends FieldProps {
   label: string;
   placeholder?: string;
   type?: string;
+  name?: string;
 }
 
+// TODO check if it would be possible to make this better by
+// https://formik.org/docs/api/useField#fieldinputpropsvalue
 export const InputField = ({ field, label, placeholder, type }: InputFieldProps) => {
   return (
     <Form.Field>
       <label>{label}</label>
-      <Field placeholder={placeholder} {...field} type={type} />
-      <div>
-        <ErrorMessage name={field.name} />
-      </div>
+      <Field type={type} placeholder={placeholder} {...field} />
+      <ErrorMessage name={field.name} />
     </Form.Field>
   );
 };

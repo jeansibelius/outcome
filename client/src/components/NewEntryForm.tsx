@@ -23,7 +23,9 @@ const NewEntrySchema = Yup.object().shape({
   type: Yup.string().required(),
   name: Yup.string().min(1, "Too short").max(255, "Too long").required(),
   date: Yup.date().required(),
-  amount: Yup.number().positive("All numbers must be defined without minus").required(),
+  amount: Yup.number()
+    .positive("All numbers must be defined without minus")
+    .required("Please enter only numbers in the format of 123 or 123.45"),
   description: Yup.string().max(255, "Too long"),
   category: Yup.string(),
 });
@@ -57,7 +59,7 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
         component={RadioGroup}
         meta={getFieldMeta("type")}
       />
-      <Field name="name" label="Name" placeholder="Name" type="text" component={InputField} />
+      <Field name="name" label="Name" type="text" component={InputField} />
       <Field name="amount" label="Amount" type="number" component={InputField} />
       <Field name="description" label="Description" type="text" component={InputField} />
       <Field name="date" label="Date" type="date" component={InputField} />
@@ -72,7 +74,7 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
       <button
         type="submit"
         disabled={!dirty || !isValid || isSubmitting}
-        className="w-full p-4 px-8 text-lg font-bold bg-green-300 rounded-lg drop-shadow-md hover:drop-shadow-lg hover:bg-green-600 hover:text-white"
+        className="w-full p-4 px-8 text-lg font-bold text-green-900 bg-green-300 rounded-lg drop-shadow-md hover:drop-shadow-lg hover:bg-green-400 disabled:opacity-75 disabled:hover:bg-slate-300 disabled:bg-slate-300 disabled:text-white disabled:drop-shadow-none"
       >
         Submit
       </button>

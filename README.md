@@ -11,7 +11,7 @@ License: All rights reserved (C) Rafael Linnankoski
 - Can add new entries (expenses and income) with all variables (type, amount, date, name,
   description, category) ✅
 - Use a UI framework to make development faster (Tailwindcss/Semantic UI?/other) with "container"
-  styles applied
+  styles applied ✅
 - Can add new categories with all variables (type, name, description, monthly budget, icon)
 - Can edit and delete existing entries & categories
 - Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
@@ -22,3 +22,5 @@ License: All rights reserved (C) Rafael Linnankoski
 - Login/register view exists
 - Add PWA manifest
 - Add offline capabilities with service workers
+- Improve submission form appearance (fancier invalid/error states etc.)
+- Check if any TODOs remain
