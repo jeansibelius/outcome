@@ -1,9 +1,10 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Button, Container } from "semantic-ui-react";
 import AddEntryModal from "./components/AddEntryModal";
 import Entries from "./components/EntriesContainer";
 
-function App() {
+const RootView = () => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
 
@@ -15,11 +16,23 @@ function App() {
   };
 
   return (
-    <Container className="p-8">
+    <>
       <Button onClick={() => openModal()}>New entry</Button>
       <AddEntryModal modalOpen={modalOpen} onClose={closeModal} error={error} />
-      <Entries />
-    </Container>
+    </>
+  );
+};
+function App() {
+  return (
+    <Router>
+      <Container className="p-8">
+        <Routes>
+          <Route path="/" element={<RootView />}>
+            <Route path="entries" element={<Entries />} />
+          </Route>
+        </Routes>
+      </Container>
+    </Router>
   );
 }
 
