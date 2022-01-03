@@ -1,5 +1,5 @@
-import { ErrorMessage, Field, FieldProps, FormikProps } from "formik";
-import React from "react";
+import { ErrorMessage, Field, FieldProps, FormikProps, useField } from "formik";
+import React, { useEffect, useState } from "react";
 import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
 import { Category } from "../types";
 
@@ -66,25 +66,44 @@ export const RadioGroup = ({
 interface CategorySelectProps {
   categories: Category[];
   entryType: string;
-  setFieldValue: FormikProps<{ categorySelect: string }>["setFieldValue"];
-  setFieldTouched: FormikProps<{ categorySelect: string }>["setFieldTouched"];
 }
 
-export const CategorySelect = ({
-  categories,
-  entryType,
-  setFieldValue,
-  setFieldTouched,
-}: CategorySelectProps) => {
-  const field = "categorySelect";
+interface StateOptions {
+  key: string;
+  text: string;
+  value: string;
+  description?: string;
+  icon?: string;
+}
+
+export const CategorySelect = ({ categories, entryType }: CategorySelectProps) => {
+  const fieldName = "categorySelect";
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_field, meta, helpers] = useField(fieldName);
+  const [stateOptions, setStateOptions] = useState<StateOptions[] | undefined>();
+
   const onChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-    setFieldTouched(field, true);
-    setFieldValue(field, data.value);
+    helpers.setTouched(true);
+    helpers.setValue(data.value);
   };
 
-  const stateOptions = categories
-    .filter((category) => category.type === entryType)
-    .map((category) => ({ key: category.id, text: category.name, value: category.id }));
+  useEffect(() => {
+    setStateOptions(
+      categories
+        .filter((category) => category.type === entryType)
+        .map((category) => ({
+          key: category.id,
+          text: category.name,
+          value: category.id,
+          description: category.description,
+          icon: category.icon,
+        }))
+    );
+  }, [categories, entryType]);
+
+  if (!stateOptions) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Form.Field>
@@ -93,11 +112,15 @@ export const CategorySelect = ({
         fluid
         search
         selection
+        labeled
+        clearable
         options={stateOptions}
+        value={meta.value ? meta.value : stateOptions[0].value}
         placeholder={stateOptions[0].text}
         onChange={onChange}
+        loading={!stateOptions ? true : false}
       />
-      <ErrorMessage name={field} />
+      <ErrorMessage name={fieldName} />
     </Form.Field>
   );
 };

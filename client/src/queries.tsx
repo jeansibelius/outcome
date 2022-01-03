@@ -50,3 +50,12 @@ export const ALL_CATEGORIES = gql`
   }
   ${CATEGORY_DETAILS}
 `;
+
+export const CREATE_CATEGORY = gql`
+  mutation CreateCategory($categoryData: CategoryInput!) {
+    createCategory(data: $categoryData) {
+      ...CategoryDetails
+    }
+  }
+  ${CATEGORY_DETAILS}
+`;

@@ -9,13 +9,12 @@ import { toNewEntry } from "../utils";
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
-  error?: string;
 }
 
-const AddEntryModal = ({ modalOpen, onClose, error }: Props) => {
+const AddEntryModal = ({ modalOpen, onClose }: Props) => {
   const categoryData = useQuery(ALL_CATEGORIES);
   const [categories, setCategories] = useState<Category[] | undefined>(undefined);
-
+  const [error, setError] = React.useState<string | undefined>();
   const [createEntry] = useMutation<{ CreateEntry: Entry }, { entryData: NewEntry }>(CREATE_ENTRY, {
     refetchQueries: [{ query: ALL_ENTRIES }],
     onError: (error) => {
@@ -30,20 +29,21 @@ const AddEntryModal = ({ modalOpen, onClose, error }: Props) => {
   }, [categoryData]);
 
   const submitNewEntry = async (values: EntryInput) => {
-    console.log("here with", values);
     try {
       const newEntry = toNewEntry(values);
-      createEntry({
+      await createEntry({
         variables: { entryData: newEntry },
       }).then(
         (response: unknown) =>
           response instanceof Object ? console.log("success", response) : null,
         (error: unknown) => (error instanceof Error ? console.log("error", error) : null)
       );
+      setError(undefined);
       onClose();
     } catch (error: unknown) {
       if (error && error instanceof Error) {
         //TODO handle error better
+        setError(error.message);
       }
       console.log("error", error);
     }

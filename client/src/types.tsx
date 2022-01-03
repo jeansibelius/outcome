@@ -13,12 +13,14 @@ export interface Category {
 }
 
 export interface CategoryInput {
-  description: unknown;
-  icon: unknown;
-  monthlyBudget: unknown;
-  name: unknown;
   type: unknown;
+  name: unknown;
+  monthlyBudget?: unknown;
+  description?: unknown;
+  icon?: unknown;
 }
+
+export type NewCategory = Omit<Category, "id">;
 
 export interface Entry {
   id: string;

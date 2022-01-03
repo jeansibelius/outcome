@@ -1,8 +1,8 @@
 import { config } from "dotenv";
 config();
-import cors from "cors";
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import cors from "cors";
 import express from "express";
 import http from "http";
 
@@ -11,11 +11,19 @@ import { connect } from "mongoose";
 import schemaBuild from "./resolvers";
 
 async function startApolloServer() {
+  const corsAllowedOrigins: Array<string | RegExp> = [
+    /localhost/,
+    /192\.168\.1\.5:3000/,
+    "https://studio.apollographql.com",
+  ];
+
+  const corsOptions: cors.CorsOptions = {
+    origin: corsAllowedOrigins,
+  };
+
   // Required logic for integrating with Express
   const app = express();
-  const corsOptions: cors.CorsOptions = {
-    origin: [/localhost/, /192\.168\.1\.5/],
-  };
+
   app.use(cors(corsOptions));
   const httpServer = http.createServer(app);
 

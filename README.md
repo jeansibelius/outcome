@@ -22,5 +22,7 @@ License: All rights reserved (C) Rafael Linnankoski
 - Login/register view exists
 - Add PWA manifest
 - Add offline capabilities with service workers
+- Refactor error message from modals to its own dismissable component
+- Add search feature to NewEntryForm name field (to allow quick selection of previously used names)
 - Improve submission form appearance (fancier invalid/error states etc.)
 - Check if any TODOs remain

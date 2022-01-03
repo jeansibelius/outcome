@@ -1,4 +1,4 @@
-import { EntryInput, IncomeExpenseType, NewEntry } from "../types";
+import { CategoryInput, EntryInput, IncomeExpenseType, NewCategory, NewEntry } from "../types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
@@ -58,9 +58,22 @@ export const toNewEntry = (object: EntryInput): NewEntry => {
   return newEntry;
 };
 
+export const toNewCategory = (object: CategoryInput): NewCategory => {
+  const newCategory = {
+    type: parseType(object.type),
+    name: parseString(object.name),
+    monthlyBudget: parseNumber(object.monthlyBudget),
+    description: parseString(object.description),
+    icon: parseString(object.icon),
+  };
+  return newCategory;
+};
+
 export const getYearMonthDay = (date = new Date()): string => {
   if (!(date instanceof Date)) {
     date = new Date(date);
   }
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  const month = date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+  return `${date.getFullYear()}-${month}-${day}`;
 };

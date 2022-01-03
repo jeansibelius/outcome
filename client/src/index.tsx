@@ -5,10 +5,12 @@ import "./index.css";
 import {
   ApolloClient,
   ApolloProvider,
+  from,
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
 } from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
@@ -18,9 +20,18 @@ const httpLink = new HttpLink({
   uri,
 });
 
+const errorLink = onError(({ graphQLErrors, networkError }) => {
+  if (graphQLErrors)
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
+    );
+
+  if (networkError) console.log(`[Network error]: ${networkError}`);
+});
+
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  link: httpLink,
+  link: from([errorLink, httpLink]),
 });
 
 ReactDOM.render(

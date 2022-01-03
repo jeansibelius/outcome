@@ -1,51 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import * as Yup from "yup";
 import { withFormik, FormikProps, Form, Field } from "formik";
-import { CategorySelect, InputField, RadioGroup } from "./FormFields";
+import { InputField, RadioGroup } from "./FormFields";
 import { Category, IncomeExpenseType } from "../types";
-import { getYearMonthDay } from "../utils";
 
 // Shape of form values
 interface FormValues {
   name: string;
   type: IncomeExpenseType;
-  date: string;
-  amount: number;
+  monthlyBudget?: number;
   description?: string;
-  category?: string;
+  icon?: string;
 }
 
-interface OtherProps {
-  categories?: Category[];
-}
+interface OtherProps {}
 
-const NewEntrySchema = Yup.object().shape({
+const NewCategorySchema = Yup.object().shape({
   type: Yup.string().required(),
   name: Yup.string().min(1, "Too short").max(255, "Too long").required(),
-  date: Yup.date().required(),
-  amount: Yup.number()
-    .positive("All numbers must be defined without minus")
-    .required("Please enter only numbers in the format of 123 or 123.45"),
+  monthlyBudget: Yup.number().positive("All numbers must be defined without minus"),
   description: Yup.string().max(255, "Too long"),
   category: Yup.string(),
 });
 
 const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
-  const {
-    values,
-    isValid,
-    isSubmitting,
-    getFieldMeta,
-    setFieldValue,
-    setFieldTouched,
-    categories,
-  } = props;
-
-  const [entryType, setEntryType] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    setEntryType(values.type);
-  }, [values.type]);
+  const { isValid, isSubmitting, getFieldMeta, setFieldValue, setFieldTouched } = props;
 
   return (
     <Form className="w-full form ui">
@@ -59,12 +38,9 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
         meta={getFieldMeta("type")}
       />
       <Field name="name" label="Name" type="text" component={InputField} />
-      <Field name="amount" label="Amount" type="number" component={InputField} />
+      <Field name="monthlyBudget" label="Monthly Budget" type="number" component={InputField} />
       <Field name="description" label="Description" type="text" component={InputField} />
-      <Field name="date" label="Date" type="date" component={InputField} />
-      {categories && entryType ? (
-        <CategorySelect categories={categories} entryType={entryType} />
-      ) : null}
+      <Field name="icon" label="Icon" type="text" component={InputField} />
       <button
         type="submit"
         disabled={!isValid || isSubmitting}
@@ -81,20 +57,19 @@ interface NewEntryFormProps {
   categories?: Category[];
 }
 
-const NewEntryForm = withFormik<NewEntryFormProps, FormValues>({
+const NewCategoryForm = withFormik<NewEntryFormProps, FormValues>({
   // Transform outer props into form values
-  mapPropsToValues: (props) => {
+  mapPropsToValues: () => {
     return {
       type: IncomeExpenseType.Expense,
-      date: getYearMonthDay(),
-      name: "Test",
-      amount: Number(112.1),
-      description: "Another test",
-      category: props.categories ? props.categories[0].id : "",
+      name: "New Test Category",
+      monthlyBudget: 12000,
+      description: "Another test category",
+      icon: "home",
     };
   },
 
-  validationSchema: NewEntrySchema,
+  validationSchema: NewCategorySchema,
   handleSubmit: async (values, { props, resetForm }) => {
     // do submitting things
     try {
@@ -106,4 +81,4 @@ const NewEntryForm = withFormik<NewEntryFormProps, FormValues>({
   },
 })(InnerForm);
 
-export default NewEntryForm;
+export default NewCategoryForm;
