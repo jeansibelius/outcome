@@ -12,7 +12,8 @@ License: All rights reserved (C) Rafael Linnankoski
   description, category) ✅
 - Use a UI framework to make development faster (Tailwindcss/Semantic UI?/other) with "container"
   styles applied ✅
-- Can add new categories with all variables (type, name, description, monthly budget, icon)
+- Can add new categories with all variables (type, name, description, monthly budget, icon) ✅
+- Improve new category form icon selection ✅
 - Can edit and delete existing entries & categories
 - Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
@@ -23,6 +24,8 @@ License: All rights reserved (C) Rafael Linnankoski
 - Add PWA manifest
 - Add offline capabilities with service workers
 - Refactor error message from modals to its own dismissable component
+- Refactor modal to a reusable component (instead of having two implementations in NewEntryModal and
+  NewCategoryModal)
 - Add search feature to NewEntryForm name field (to allow quick selection of previously used names)
 - Improve submission form appearance (fancier invalid/error states etc.)
 - Check if any TODOs remain

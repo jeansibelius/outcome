@@ -1,7 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 import { withFormik, FormikProps, Form, Field } from "formik";
-import { InputField, RadioGroup } from "./FormFields";
+import { IconSelect, InputField, RadioGroup } from "./FormFields";
 import { Category, IncomeExpenseType } from "../types";
 
 // Shape of form values
@@ -40,7 +40,7 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
       <Field name="name" label="Name" type="text" component={InputField} />
       <Field name="monthlyBudget" label="Monthly Budget" type="number" component={InputField} />
       <Field name="description" label="Description" type="text" component={InputField} />
-      <Field name="icon" label="Icon" type="text" component={InputField} />
+      <IconSelect />
       <button
         type="submit"
         disabled={!isValid || isSubmitting}
