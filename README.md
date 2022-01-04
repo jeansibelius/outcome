@@ -14,7 +14,9 @@ License: All rights reserved (C) Rafael Linnankoski
   styles applied ✅
 - Can add new categories with all variables (type, name, description, monthly budget, icon) ✅
 - Improve new category form icon selection ✅
-- Can edit and delete existing entries & categories
+- Can delete existing entries ✅
+- Can delete existing categories
+- Can edit existing entries & categories
 - Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
 - Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
@@ -27,5 +29,7 @@ License: All rights reserved (C) Rafael Linnankoski
 - Refactor modal to a reusable component (instead of having two implementations in NewEntryModal and
   NewCategoryModal)
 - Add search feature to NewEntryForm name field (to allow quick selection of previously used names)
+- Update Fomantic UI css to check, if it fixes icon not visible in dropdown issue
+  https://github.com/fomantic/Fomantic-UI/issues/2172
 - Improve submission form appearance (fancier invalid/error states etc.)
 - Check if any TODOs remain

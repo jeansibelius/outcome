@@ -10,6 +10,8 @@ const ENTRY_DETAILS = gql`
     description
     category {
       name
+      description
+      icon
     }
   }
 `;
@@ -29,6 +31,11 @@ export const CREATE_ENTRY = gql`
     }
   }
   ${ENTRY_DETAILS}
+`;
+export const DELETE_ENTRY = gql`
+  mutation DeleteEntry($id: String!) {
+    deleteEntry(id: $id)
+  }
 `;
 
 const CATEGORY_DETAILS = gql`
@@ -58,4 +65,10 @@ export const CREATE_CATEGORY = gql`
     }
   }
   ${CATEGORY_DETAILS}
+`;
+
+export const DELETE_CATEGORY = gql`
+  mutation DeleteCategory($id: String!) {
+    deleteCategory(id: $id)
+  }
 `;

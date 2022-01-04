@@ -78,7 +78,7 @@ interface StateOptions {
 }
 
 export const CategorySelect = ({ categories, entryType }: CategorySelectProps) => {
-  const fieldName = "categorySelect";
+  const fieldName = "category";
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_field, meta, helpers] = useField(fieldName);
   const [stateOptions, setStateOptions] = useState<StateOptions[] | undefined>();
