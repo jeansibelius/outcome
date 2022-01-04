@@ -15,21 +15,29 @@ License: All rights reserved (C) Rafael Linnankoski
 - Can add new categories with all variables (type, name, description, monthly budget, icon) ✅
 - Improve new category form icon selection ✅
 - Can delete existing entries ✅
-- Can delete existing categories
+- Can delete existing categories ✅
 - Can edit existing entries & categories
 - Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
 - Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
-- Can create users
-- Restrict views only to authorized users
+- Can create users in the backend
 - Login/register view exists
+- Restrict views only to authorized users
+- First deployment somewhere (heroku/netlify/self-hosted?)
+- Add analytics views to home view (monthly spending vs. budget per category)
+- Add safer UI to deletion of entries and categories (for the latter: show how many associated
+  entries and perhaps do something with them)
 - Add PWA manifest
 - Add offline capabilities with service workers
+- Consider what kind of pattern to use with queries/mutations: action creators or what?
 - Refactor error message from modals to its own dismissable component
 - Refactor modal to a reusable component (instead of having two implementations in NewEntryModal and
   NewCategoryModal)
 - Add search feature to NewEntryForm name field (to allow quick selection of previously used names)
+- Add pagination to entries view (load more or similar)
+- Improve submission form appearance (fancier invalid/error states etc.)
+- General UI facelift: more app-like and smooth (mobile optimised)
+- Add currency to user? which can then be used for all forms and views
 - Update Fomantic UI css to check, if it fixes icon not visible in dropdown issue
   https://github.com/fomantic/Fomantic-UI/issues/2172
-- Improve submission form appearance (fancier invalid/error states etc.)
 - Check if any TODOs remain

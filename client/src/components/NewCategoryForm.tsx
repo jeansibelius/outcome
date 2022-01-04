@@ -21,6 +21,7 @@ const NewCategorySchema = Yup.object().shape({
   monthlyBudget: Yup.number().positive("All numbers must be defined without minus"),
   description: Yup.string().max(255, "Too long"),
   category: Yup.string(),
+  icon: Yup.string(),
 });
 
 const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {

@@ -7,7 +7,7 @@ import { Card } from "semantic-ui-react";
 
 const Entries = () => {
   const getEntries = useQuery(ALL_ENTRIES);
-  const [deleteEntry] = useMutation<{ DeleteEntry: Entry }, { id: string }>(DELETE_ENTRY, {
+  const [deleteEntry] = useMutation<{ DeleteEntry: boolean }, { id: string }>(DELETE_ENTRY, {
     refetchQueries: [{ query: ALL_ENTRIES }],
   });
   const [entries, setEntries] = useState<Entry[] | undefined>(undefined);

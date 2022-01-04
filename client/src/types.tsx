@@ -33,7 +33,7 @@ export interface Entry {
 }
 
 export interface NewEntry extends Omit<Entry, "id" | "category"> {
-  category: string;
+  category?: string;
 }
 
 export interface EntryInput {

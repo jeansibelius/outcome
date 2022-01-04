@@ -52,8 +52,8 @@ export const toNewEntry = (object: EntryInput): NewEntry => {
     date: new Date(parseDate(object.date)),
     name: parseString(object.name),
     amount: parseNumber(object.amount),
-    description: parseString(object.description),
-    category: parseString(object.category),
+    description: object.description ? parseString(object.description) : undefined,
+    category: object.category ? parseString(object.category) : undefined,
   };
   return newEntry;
 };
@@ -62,9 +62,9 @@ export const toNewCategory = (object: CategoryInput): NewCategory => {
   const newCategory = {
     type: parseType(object.type),
     name: parseString(object.name),
-    monthlyBudget: parseNumber(object.monthlyBudget),
-    description: parseString(object.description),
-    icon: parseString(object.icon),
+    monthlyBudget: object.monthlyBudget ? parseNumber(object.monthlyBudget) : undefined,
+    description: object.description ? parseString(object.description) : undefined,
+    icon: object.icon ? parseString(object.icon) : undefined,
   };
   return newCategory;
 };

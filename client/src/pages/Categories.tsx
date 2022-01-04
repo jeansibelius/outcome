@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
-import { ALL_CATEGORIES } from "../queries";
+import { useMutation, useQuery } from "@apollo/client";
+import { ALL_CATEGORIES, DELETE_CATEGORY } from "../queries";
 import { Category, IncomeExpenseType } from "../types";
 import { Button, Icon, Table } from "semantic-ui-react";
 import AddCategoryModal from "../components/AddCategoryModal";
@@ -8,6 +8,12 @@ import AddCategoryModal from "../components/AddCategoryModal";
 const Categories = () => {
   const getCategories = useQuery(ALL_CATEGORIES);
   const [categories, setCategories] = useState<Category[] | undefined>(undefined);
+  const [deleteCategory] = useMutation<{ DeleteCategory: boolean }, { id: string }>(
+    DELETE_CATEGORY,
+    {
+      refetchQueries: [{ query: ALL_CATEGORIES }],
+    }
+  );
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const openModal = (): void => setModalOpen(true);
@@ -21,6 +27,20 @@ const Categories = () => {
     }
   }, [getCategories.data]);
 
+  const onDelete = async (id: string) => {
+    try {
+      console.log("trying to delete", id);
+      const response = await deleteCategory({ variables: { id: id } });
+      console.log("delete response", response);
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        //TODO add some toast or error handling
+      }
+      console.log(error);
+    }
+  };
+
   if (getCategories.loading) {
     return <div>Loading</div>;
   }
@@ -32,6 +52,7 @@ const Categories = () => {
       </div>
     );
   }
+  console.log("categories", categories);
 
   return (
     <>
@@ -45,6 +66,7 @@ const Categories = () => {
                 <Table.HeaderCell>{type}s</Table.HeaderCell>
                 <Table.HeaderCell>Description</Table.HeaderCell>
                 <Table.HeaderCell>Monthly budget</Table.HeaderCell>
+                <Table.HeaderCell></Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -59,6 +81,17 @@ const Categories = () => {
                       </Table.Cell>
                       <Table.Cell>{category.description}</Table.Cell>
                       <Table.Cell>{category.monthlyBudget}</Table.Cell>
+                      <Table.Cell>
+                        <Icon
+                          floated="right"
+                          as={Button}
+                          icon="trash"
+                          color="red"
+                          size="mini"
+                          inverted
+                          onClick={() => onDelete(category.id)}
+                        />
+                      </Table.Cell>
                     </Table.Row>
                   ))
               ) : (

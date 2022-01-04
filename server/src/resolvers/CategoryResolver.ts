@@ -33,7 +33,7 @@ export class CategoriesResolver {
   // TODO: need to set category to null from all associated entries
   @Mutation(() => Boolean)
   async deleteCategory(@Arg("id") id: string) {
-    await CategoryModel.deleteOne({ id });
+    await CategoryModel.deleteOne({ _id: id });
     return true;
   }
 }

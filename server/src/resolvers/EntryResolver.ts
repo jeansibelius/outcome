@@ -32,7 +32,7 @@ export class EntryResolver {
 
   @Mutation(() => Boolean)
   async deleteEntry(@Arg("id") id: string) {
-    await EntryModel.deleteOne({ id });
+    await EntryModel.deleteOne({ _id: id });
     return true;
   }
 }
