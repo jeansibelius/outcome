@@ -21,6 +21,14 @@ input CategoryInput {
   type: IncomeExpenseType!
 }
 
+input CategoryUpdateInput {
+  description: String
+  icon: String
+  monthlyBudget: Float
+  name: String
+  type: IncomeExpenseType
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
@@ -46,6 +54,15 @@ input EntryInput {
   type: IncomeExpenseType!
 }
 
+input EntryUpdateInput {
+  amount: Float
+  category: String
+  date: DateTime
+  description: String
+  name: String
+  type: IncomeExpenseType
+}
+
 """Can be either income or expense."""
 enum IncomeExpenseType {
   Expense
@@ -57,6 +74,8 @@ type Mutation {
   createEntry(data: EntryInput!): Entry!
   deleteCategory(id: String!): Boolean!
   deleteEntry(id: String!): Boolean!
+  updateCategory(data: CategoryUpdateInput!, id: String!): Category!
+  updateEntry(data: EntryUpdateInput!, id: String!): Entry!
 }
 
 type Query {

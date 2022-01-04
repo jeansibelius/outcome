@@ -1,8 +1,8 @@
 import { Category, CategoryModel } from "../entities/Category";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { CategoryInput } from "./inputTypes/CategoryInput";
+import { CategoryInput, CategoryUpdateInput } from "./inputTypes/CategoryInput";
 
-@Resolver()
+@Resolver((_of) => Category)
 export class CategoriesResolver {
   @Query((_returns) => Category, { nullable: false })
   async returnSingleCategory(@Arg("id") id: string) {
@@ -27,6 +27,24 @@ export class CategoriesResolver {
         icon,
       })
     ).save();
+    return category;
+  }
+
+  @Mutation(() => Category)
+  async updateCategory(
+    @Arg("id") id: string,
+    @Arg("data") categoryData: CategoryUpdateInput
+  ): Promise<Category> {
+    const category = await CategoryModel.findByIdAndUpdate(
+      id,
+      {
+        ...categoryData,
+      },
+      { new: true }
+    );
+    if (!category) {
+      throw new Error("Invalid category id");
+    }
     return category;
   }
 

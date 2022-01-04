@@ -1,6 +1,6 @@
 import { Entry, EntryModel } from "../entities/Entry";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { EntryInput } from "./inputTypes/EntryInput";
+import { EntryInput, EntryUpdateInput } from "./inputTypes/EntryInput";
 
 @Resolver((_of) => Entry)
 export class EntryResolver {
@@ -27,6 +27,24 @@ export class EntryResolver {
       description,
     });
     await entry.save();
+    return entry.populate("category");
+  }
+
+  @Mutation(() => Entry)
+  async updateEntry(
+    @Arg("id") id: string,
+    @Arg("data") entryUpdate: EntryUpdateInput
+  ): Promise<Entry> {
+    const entry = await EntryModel.findByIdAndUpdate(
+      id,
+      {
+        ...entryUpdate,
+      },
+      { new: true }
+    );
+    if (!entry) {
+      throw new Error("Invalid entry id");
+    }
     return entry.populate("category");
   }
 

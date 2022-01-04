@@ -16,7 +16,8 @@ License: All rights reserved (C) Rafael Linnankoski
 - Improve new category form icon selection ✅
 - Can delete existing entries ✅
 - Can delete existing categories ✅
-- Can edit existing entries & categories
+- Can edit existing entries
+- Can edit existing categories
 - Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
 - Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
@@ -40,4 +41,6 @@ License: All rights reserved (C) Rafael Linnankoski
 - Add currency to user? which can then be used for all forms and views
 - Update Fomantic UI css to check, if it fixes icon not visible in dropdown issue
   https://github.com/fomantic/Fomantic-UI/issues/2172
+- Consider refactoring types & resolvers according to this example:
+  https://github.com/MichalLytek/type-graphql/tree/master/examples/apollo-client
 - Check if any TODOs remain

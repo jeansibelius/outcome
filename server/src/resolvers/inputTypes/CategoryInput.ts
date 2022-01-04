@@ -22,3 +22,23 @@ export class CategoryInput implements Partial<Category> {
   @Field({ nullable: true })
   icon?: string;
 }
+
+@InputType()
+export class CategoryUpdateInput implements Partial<Category> {
+  @Field((_type) => IncomeExpenseType, { nullable: true })
+  type?: IncomeExpenseType;
+
+  @Field({ nullable: true })
+  @Length(1, 255)
+  name?: string;
+
+  @Field({ nullable: true })
+  monthlyBudget?: number;
+
+  @Field({ nullable: true })
+  @MaxLength(255)
+  description?: string;
+
+  @Field({ nullable: true })
+  icon?: string;
+}
