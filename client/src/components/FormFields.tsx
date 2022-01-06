@@ -1,6 +1,8 @@
+import { useQuery } from "@apollo/client";
 import { ErrorMessage, Field, FieldProps, FormikProps, useField } from "formik";
 import React, { useEffect, useState } from "react";
 import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
+import { ALL_CATEGORIES } from "../queries";
 import { Category } from "../types";
 import { ICONS_AND_ALIASES } from "../utils/icons";
 
@@ -65,8 +67,11 @@ export const RadioGroup = ({
 };
 
 interface CategorySelectProps {
-  categories: Category[];
   entryType: string;
+}
+
+interface GetCategoryData {
+  returnAllCategories: Category[];
 }
 
 interface StateOptions {
@@ -77,30 +82,49 @@ interface StateOptions {
   icon?: string;
 }
 
-export const CategorySelect = ({ categories, entryType }: CategorySelectProps) => {
+export const CategorySelect = ({ entryType }: CategorySelectProps) => {
   const fieldName = "category";
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_field, meta, helpers] = useField(fieldName);
+
+  const getCategories = useQuery<GetCategoryData>(ALL_CATEGORIES);
+  const [categories, setCategories] = useState<Category[] | undefined>(undefined);
+
   const [stateOptions, setStateOptions] = useState<StateOptions[] | undefined>();
+
+  useEffect(() => {
+    if (getCategories.data) {
+      setCategories(getCategories.data.returnAllCategories);
+    }
+  }, [getCategories]);
+
+  useEffect(() => {
+    if (categories) {
+      setStateOptions(
+        categories
+          .filter((category) => category.type === entryType)
+          .map((category) => ({
+            key: category.id,
+            text: category.name,
+            value: category.id,
+            description: category.description,
+            icon: category.icon,
+          }))
+      );
+    }
+  }, [categories, entryType]);
+
+  useEffect(() => {
+    if (stateOptions) {
+      helpers.setValue(stateOptions[0].value);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stateOptions]);
 
   const onChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
     helpers.setTouched(true);
     helpers.setValue(data.value);
   };
-
-  useEffect(() => {
-    setStateOptions(
-      categories
-        .filter((category) => category.type === entryType)
-        .map((category) => ({
-          key: category.id,
-          text: category.name,
-          value: category.id,
-          description: category.description,
-          icon: category.icon,
-        }))
-    );
-  }, [categories, entryType]);
 
   if (!stateOptions) {
     return <div>Loading...</div>;
@@ -115,11 +139,11 @@ export const CategorySelect = ({ categories, entryType }: CategorySelectProps) =
         selection
         labeled
         clearable
+        error={meta.error ? true : false}
         options={stateOptions}
         value={meta.value ? meta.value : stateOptions[0].value}
-        placeholder={stateOptions[0].text}
         onChange={onChange}
-        loading={!stateOptions ? true : false}
+        loading={getCategories.loading ? true : false}
       />
       <ErrorMessage name={fieldName} />
     </Form.Field>
@@ -151,11 +175,10 @@ export const IconSelect = () => {
     <Form.Field>
       <label>Icon</label>
       <Dropdown
-        clearable
         fluid
         search
         selection
-        labeled
+        clearable
         options={stateOptions}
         onChange={onChange}
         loading={!stateOptions ? true : false}

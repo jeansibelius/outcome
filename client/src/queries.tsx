@@ -9,6 +9,7 @@ const ENTRY_DETAILS = gql`
     amount
     description
     category {
+      id
       name
       description
       icon
@@ -32,6 +33,16 @@ export const CREATE_ENTRY = gql`
   }
   ${ENTRY_DETAILS}
 `;
+
+export const UPDATE_ENTRY = gql`
+  mutation UpdateEntry($id: String!, $data: EntryUpdateInput!) {
+    updateEntry(id: $id, data: $data) {
+      ...EntryDetails
+    }
+  }
+  ${ENTRY_DETAILS}
+`;
+
 export const DELETE_ENTRY = gql`
   mutation DeleteEntry($id: String!) {
     deleteEntry(id: $id)
@@ -61,6 +72,15 @@ export const ALL_CATEGORIES = gql`
 export const CREATE_CATEGORY = gql`
   mutation CreateCategory($categoryData: CategoryInput!) {
     createCategory(data: $categoryData) {
+      ...CategoryDetails
+    }
+  }
+  ${CATEGORY_DETAILS}
+`;
+
+export const UPDATE_CATEGORY = gql`
+  mutation UpdateCategory($id: String!, $data: CategoryUpdateInput!) {
+    updateCategory(id: $id, data: $data) {
       ...CategoryDetails
     }
   }

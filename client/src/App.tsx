@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Link, Outlet, Route, Routes } from "react-router-dom";
 import { Button, Container, Divider, Grid } from "semantic-ui-react";
-import AddEntryModal from "./components/AddEntryModal";
+import EntryModal from "./components/EntryModal";
 import Entries from "./pages/Entries";
 import Categories from "./pages/Categories";
 
@@ -33,7 +33,7 @@ const RootView = () => {
         <Grid.Row>
           <Button onClick={() => openModal()}>New entry</Button>
         </Grid.Row>
-        <AddEntryModal modalOpen={modalOpen} onClose={closeModal} />
+        <EntryModal modalOpen={modalOpen} onClose={closeModal} />
         <Outlet />
       </Grid>
     </>

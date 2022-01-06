@@ -1,8 +1,7 @@
 import React from "react";
 import * as Yup from "yup";
 import { withFormik } from "formik";
-import { IncomeExpenseType } from "../types";
-import { getYearMonthDay } from "../utils";
+import { Entry, IncomeExpenseType } from "../types";
 import EntryForm from "./EntryForm";
 
 // Shape of form values
@@ -26,28 +25,28 @@ const NewEntrySchema = Yup.object().shape({
   category: Yup.string(),
 });
 
-interface NewEntryFormProps {
-  onSubmit: (values: FormValues) => void;
+interface UpdateEntryFormProps {
+  onSubmit: (values: FormValues) => Promise<void>;
+  updateEntryValues: Entry;
 }
 
-const NewEntryForm = withFormik<NewEntryFormProps, FormValues>({
+const UpdateEntryForm = withFormik<UpdateEntryFormProps, FormValues>({
   // Transform outer props into form values
-  mapPropsToValues: () => {
+  mapPropsToValues: (props) => {
     return {
-      type: IncomeExpenseType.Expense,
-      date: getYearMonthDay(),
-      name: "Test",
-      amount: Number(699),
-      description: "Another test",
+      type: props.updateEntryValues.type,
+      date: props.updateEntryValues.date.toString().slice(0, 10),
+      name: props.updateEntryValues.name,
+      amount: props.updateEntryValues.amount,
+      description: props.updateEntryValues.description,
     };
   },
 
   validationSchema: NewEntrySchema,
-  handleSubmit: async (values, { props, resetForm }) => {
+  handleSubmit: async (values, { props }) => {
     // do submitting things
     try {
-      props.onSubmit(values);
-      resetForm();
+      await props.onSubmit(values);
     } catch (error) {
       console.log("handleSubmit error", error);
     }
@@ -55,4 +54,4 @@ const NewEntryForm = withFormik<NewEntryFormProps, FormValues>({
   displayName: "NewEntryForm",
 })(EntryForm);
 
-export default NewEntryForm;
+export default UpdateEntryForm;

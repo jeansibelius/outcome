@@ -29,9 +29,7 @@ const Categories = () => {
 
   const onDelete = async (id: string) => {
     try {
-      console.log("trying to delete", id);
       const response = await deleteCategory({ variables: { id: id } });
-      console.log("delete response", response);
       return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -52,7 +50,6 @@ const Categories = () => {
       </div>
     );
   }
-  console.log("categories", categories);
 
   return (
     <>

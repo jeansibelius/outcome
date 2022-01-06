@@ -4,6 +4,7 @@ import { ALL_ENTRIES, DELETE_ENTRY } from "../queries";
 import { Entry } from "../types";
 import SingleEntry from "../components/Entry";
 import { Card } from "semantic-ui-react";
+import EntryModal from "../components/EntryModal";
 
 const Entries = () => {
   const getEntries = useQuery(ALL_ENTRIES);
@@ -11,6 +12,8 @@ const Entries = () => {
     refetchQueries: [{ query: ALL_ENTRIES }],
   });
   const [entries, setEntries] = useState<Entry[] | undefined>(undefined);
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [updateEntryValues, setUpdateEntryValues] = React.useState<Entry | undefined>(undefined);
 
   useEffect(() => {
     if (getEntries.data) {
@@ -18,11 +21,18 @@ const Entries = () => {
     }
   }, [getEntries.data]);
 
+  const openEntryUpdateModal = (data: Entry): void => {
+    setUpdateEntryValues(data);
+    setModalOpen(true);
+  };
+
+  const closeEntryUpdateModal = (): void => {
+    setModalOpen(false);
+  };
+
   const onDelete = async (id: string) => {
     try {
-      console.log("trying to delete", id);
       const response = await deleteEntry({ variables: { id: id } });
-      console.log("delete response", response);
       return response;
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -45,11 +55,26 @@ const Entries = () => {
   }
   if (entries) {
     return (
-      <Card.Group>
-        {entries.map((entry) => (
-          <SingleEntry key={entry.id} entry={entry} onDelete={onDelete} />
-        ))}
-      </Card.Group>
+      <>
+        {updateEntryValues ? (
+          <EntryModal
+            modalOpen={modalOpen}
+            onClose={closeEntryUpdateModal}
+            isUpdatingEntry={true}
+            updateEntryValues={updateEntryValues}
+          />
+        ) : null}
+        <Card.Group>
+          {entries.map((entry) => (
+            <SingleEntry
+              key={entry.id}
+              entry={entry}
+              onDelete={onDelete}
+              updateEntry={openEntryUpdateModal}
+            />
+          ))}
+        </Card.Group>
+      </>
     );
   }
   return null;

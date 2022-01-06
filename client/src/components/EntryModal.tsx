@@ -1,19 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Modal, Segment } from "semantic-ui-react";
-import NewEntryForm from "./NewEntryForm";
-import { Category, Entry, EntryInput, NewEntry } from "../types";
-import { useQuery, useMutation } from "@apollo/client";
-import { ALL_CATEGORIES, CREATE_ENTRY, ALL_ENTRIES } from "../queries";
+import { Entry, EntryInput, NewEntry } from "../types";
+import { useMutation } from "@apollo/client";
+import { CREATE_ENTRY, ALL_ENTRIES, UPDATE_ENTRY } from "../queries";
 import { toNewEntry } from "../utils";
+import NewEntryForm from "./NewEntryForm";
+import UpdateEntryForm from "./UpdateEntryForm";
 
 interface Props {
   modalOpen: boolean;
   onClose: () => void;
+  isUpdatingEntry?: boolean;
+  updateEntryValues?: Entry;
 }
 
-const AddEntryModal = ({ modalOpen, onClose }: Props) => {
-  const categoryData = useQuery(ALL_CATEGORIES);
-  const [categories, setCategories] = useState<Category[] | undefined>(undefined);
+const AddEntryModal = ({
+  modalOpen,
+  onClose,
+  isUpdatingEntry = false,
+  updateEntryValues,
+}: Props) => {
   const [error, setError] = React.useState<string | undefined>();
   const [createEntry] = useMutation<{ CreateEntry: Entry }, { entryData: NewEntry }>(CREATE_ENTRY, {
     refetchQueries: [{ query: ALL_ENTRIES }],
@@ -21,12 +27,12 @@ const AddEntryModal = ({ modalOpen, onClose }: Props) => {
       throw new Error(error.message);
     },
   });
-
-  useEffect(() => {
-    if (categoryData.data) {
-      setCategories(categoryData.data.returnAllCategories);
+  const [updateEntry] = useMutation<{ UpdateEntry: Entry }, { id: string; data: EntryInput }>(
+    UPDATE_ENTRY,
+    {
+      refetchQueries: [{ query: ALL_ENTRIES }],
     }
-  }, [categoryData]);
+  );
 
   const submitNewEntry = async (values: EntryInput) => {
     try {
@@ -48,12 +54,36 @@ const AddEntryModal = ({ modalOpen, onClose }: Props) => {
       console.log("error", error);
     }
   };
+
+  const submitUpdateEntry = async (data: EntryInput): Promise<void> => {
+    try {
+      if (!updateEntryValues) {
+        throw new Error("Values missing from the entry you're trying to update.");
+      }
+      const updateData = toNewEntry(data);
+      await updateEntry({
+        variables: { id: updateEntryValues.id, data: updateData },
+      });
+      onClose();
+    } catch (error: unknown) {
+      if (error && error instanceof Error) {
+        //TODO handle error better
+        setError(error.message);
+      }
+      console.log(error);
+    }
+  };
+
   return (
     <Modal className="p-2" open={modalOpen} onClose={onClose} centered={true} closeIcon>
       <Modal.Header>Add a new entry</Modal.Header>
       <Modal.Content>
         {error && <Segment inverted color="red">{`Error: ${error}`}</Segment>}
-        <NewEntryForm onSubmit={submitNewEntry} categories={categories} />
+        {isUpdatingEntry && updateEntryValues ? (
+          <UpdateEntryForm onSubmit={submitUpdateEntry} updateEntryValues={updateEntryValues} />
+        ) : (
+          <NewEntryForm onSubmit={submitNewEntry} />
+        )}
       </Modal.Content>
     </Modal>
   );

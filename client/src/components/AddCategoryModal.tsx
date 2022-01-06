@@ -24,16 +24,11 @@ const AddCategoryModal = ({ modalOpen, onClose }: Props) => {
   );
 
   const submitNewCategory = async (values: CategoryInput) => {
-    console.log("here with", values);
     try {
       const newCategory = toNewCategory(values);
       await createCategory({
         variables: { categoryData: newCategory },
-      }).then(
-        (response: unknown) =>
-          response instanceof Object ? console.log("success", response) : null,
-        (error: unknown) => (error instanceof Error ? console.log("error", error) : null)
-      );
+      });
       onClose();
       setError(undefined);
     } catch (error: unknown) {

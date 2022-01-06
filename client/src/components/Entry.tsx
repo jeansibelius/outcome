@@ -2,18 +2,30 @@ import { Button, Card, Header, Icon } from "semantic-ui-react";
 import { Entry } from "../types";
 import { getYearMonthDay } from "../utils";
 
-const SingleEntry = ({ entry, onDelete }: { entry: Entry; onDelete: Function }) => {
-  console.log("entry", entry);
+const SingleEntry = ({
+  entry,
+  onDelete,
+  updateEntry,
+}: {
+  entry: Entry;
+  onDelete: Function;
+  updateEntry: Function;
+}) => {
   return (
     <Card color={entry.type === "Expense" ? "orange" : "green"}>
       <Card.Content>
         <Icon
           floated="right"
           as={Button}
-          icon="trash"
-          color="red"
+          icon="pencil"
           size="mini"
-          inverted
+          onClick={() => updateEntry(entry)}
+        />
+        <Icon
+          floated="right"
+          as={Button}
+          icon="trash"
+          size="mini"
           onClick={() => onDelete(entry.id)}
         />
         <Card.Header>¥ {entry.amount}</Card.Header>

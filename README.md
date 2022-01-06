@@ -16,7 +16,7 @@ License: All rights reserved (C) Rafael Linnankoski
 - Improve new category form icon selection ✅
 - Can delete existing entries ✅
 - Can delete existing categories ✅
-- Can edit existing entries
+- Can edit existing entries ✅
 - Can edit existing categories
 - Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)

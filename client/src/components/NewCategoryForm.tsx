@@ -71,13 +71,12 @@ const NewCategoryForm = withFormik<NewEntryFormProps, FormValues>({
   },
 
   validationSchema: NewCategorySchema,
-  handleSubmit: async (values, { props, resetForm }) => {
+  handleSubmit: async (values, { props }) => {
     // do submitting things
     try {
       props.onSubmit(values);
-      resetForm();
     } catch (error) {
-      console.log("handleSubmit error", error);
+      console.log("NewCategoryForm handleSubmit error", error);
     }
   },
 })(InnerForm);
