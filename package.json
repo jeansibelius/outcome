@@ -9,7 +9,7 @@
     "client-install": "cd client && npm install",
     "server-build": "cd server && npm run build",
     "server-install": "cd server && npm install",
-    "install": "npm run client-install && cd .. && npm run server-install",
+    "install": "npm run client-install && echo $PWD && npm run server-install",
     "build": "npm run client-build && cd .. & npm run server-build",
     "start": "NODE_ENV=production node server/build/index.js"
   },
