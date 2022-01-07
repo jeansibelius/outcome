@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
+    "build": "npm run tsc",
     "dev": "NODE_ENV=development ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts src",
     "start": "NODE_ENV=production node build/index.js"
