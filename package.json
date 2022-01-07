@@ -1,0 +1,23 @@
+{
+  "name": "outcome",
+  "version": "0.0.1",
+  "description": "Simple app to track household expenses and budget",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ext .ts src",
+    "client-install": "cd client && npm install",
+    "server-install": "cd server && npm install",
+    "install": "npm run client-install && npm run server-install",
+    "start": "NODE_ENV=production node server/build/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeansibelius/outcome.git"
+  },
+  "author": "Rafael Linnankoski",
+  "private": true,
+  "bugs": {
+    "url": "https://github.com/jeansibelius/outcome/issues"
+  },
+  "homepage": "https://github.com/jeansibelius/outcome#readme"
+}

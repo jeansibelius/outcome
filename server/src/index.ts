@@ -9,6 +9,7 @@ import http from "http";
 import { connect } from "mongoose";
 
 import schemaBuild from "./resolvers";
+import path from "path";
 
 async function startApolloServer() {
   const corsAllowedOrigins: Array<string | RegExp> = [
@@ -25,6 +26,12 @@ async function startApolloServer() {
   const app = express();
 
   app.use(cors(corsOptions));
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static("../client/build"));
+  } else {
+    console.log(path.join(__dirname, "../../client/public"));
+    app.use(express.static(path.join(__dirname, "../../client/public")));
+  }
   const httpServer = http.createServer(app);
 
   const MONGODB_URI = process.env.MONGODB_URI;
