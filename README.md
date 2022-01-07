@@ -17,6 +17,7 @@ License: All rights reserved (C) Rafael Linnankoski
 - Can delete existing entries ✅
 - Can delete existing categories ✅
 - Can edit existing entries ✅
+- First deployment somewhere (heroku/netlify/self-hosted?) ✅
 - Can edit existing categories
 - Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
@@ -24,7 +25,8 @@ License: All rights reserved (C) Rafael Linnankoski
 - Can create users in the backend
 - Login/register view exists
 - Restrict views only to authorized users
-- First deployment somewhere (heroku/netlify/self-hosted?)
+- Test coverage for server is sufficient
+- Test coverage for client is sufficient (considering unfinalised UI)
 - Add analytics views to home view (monthly spending vs. budget per category)
 - Add safer UI to deletion of entries and categories (for the latter: show how many associated
   entries and perhaps do something with them)

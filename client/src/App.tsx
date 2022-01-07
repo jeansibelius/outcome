@@ -1,11 +1,29 @@
 import React from "react";
 import { BrowserRouter as Router, Link, Outlet, Route, Routes } from "react-router-dom";
-import { Menu, Container, Divider, Button } from "semantic-ui-react";
+import { Menu, Container, Divider, Button, Header } from "semantic-ui-react";
 import EntryModal from "./components/EntryModal";
 import Entries from "./pages/Entries";
 import Categories from "./pages/Categories";
 
-const RootView = () => {
+const Navigation = ({ openModal }: { openModal: Function }) => {
+  return (
+    <Menu fixed="bottom">
+      <Menu.Item as={Link} to="/">
+        Home
+      </Menu.Item>
+      <Menu.Item as={Link} to="entries">
+        Entries
+      </Menu.Item>
+      <Menu.Item as={Link} to="categories">
+        Categories
+      </Menu.Item>
+      <Menu.Item position="right">
+        <Button onClick={() => openModal()}>New entry</Button>
+      </Menu.Item>
+    </Menu>
+  );
+};
+const Layout = () => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
 
   const openModal = (): void => setModalOpen(true);
@@ -17,20 +35,7 @@ const RootView = () => {
   return (
     <>
       <Outlet />
-      <Menu fixed="bottom">
-        <Menu.Item as={Link} to="/">
-          Home
-        </Menu.Item>
-        <Menu.Item as={Link} to="entries">
-          Entries
-        </Menu.Item>
-        <Menu.Item as={Link} to="categories">
-          Categories
-        </Menu.Item>
-        <Menu.Item position="right">
-          <Button onClick={() => openModal()}>New entry</Button>
-        </Menu.Item>
-      </Menu>
+      <Navigation openModal={openModal} />
       <EntryModal modalOpen={modalOpen} onClose={closeModal} />
     </>
   );
@@ -38,14 +43,23 @@ const RootView = () => {
 
 const NotFound = () => {
   return (
-    <div>
+    <>
       <h2 className="text-xl">Sorry, no content here...</h2>
       <p>You used a broken link or typed something funny in the address bar. Please check!</p>
       <Divider />
-      <Menu as={Link} to="/">
+      <Button as={Link} to="/">
         Go to the home page
-      </Menu>
-    </div>
+      </Button>
+    </>
+  );
+};
+
+const HomeView = () => {
+  return (
+    <Container textAlign="center">
+      <Header as="h2">Welcome to Outcome.io</Header>
+      <p>Use the bottom navigation to move around.</p>
+    </Container>
   );
 };
 
@@ -54,7 +68,8 @@ function App() {
     <Router>
       <Container className="p-8">
         <Routes>
-          <Route path="/" element={<RootView />}>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomeView />} />
             <Route path="entries" element={<Entries />} />
             <Route path="categories" element={<Categories />} />
             <Route path="*" element={<NotFound />} />
