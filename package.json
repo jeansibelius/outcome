@@ -14,7 +14,8 @@
     "start": "NODE_ENV=production node server/build/index.js"
   },
   "engines": {
-    "node": "14.x"
+    "node": "14.x",
+    "npm": "8.x"
   },
   "repository": {
     "type": "git",
