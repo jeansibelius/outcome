@@ -15,7 +15,7 @@ import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 
-const uri = "http://localhost:4000";
+const uri = "/graphql";
 const httpLink = new HttpLink({
   uri,
 });

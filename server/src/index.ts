@@ -29,8 +29,8 @@ async function startApolloServer() {
   if (process.env.NODE_ENV === "production") {
     app.use(express.static("../client/build"));
   } else {
-    console.log(path.join(__dirname, "../../client/public"));
-    app.use(express.static(path.join(__dirname, "../../client/public")));
+    console.log(path.join(__dirname, "../../client/src/build"));
+    app.use(express.static(path.join(__dirname, "../../client/build")));
   }
   const httpServer = http.createServer(app);
 
@@ -69,7 +69,7 @@ async function startApolloServer() {
     // By default, apollo-server hosts its GraphQL endpoint at the
     // server root. However, *other* Apollo Server packages host it at
     // /graphql. Optionally provide this to match apollo-server.
-    path: "/",
+    path: "/graphql",
     cors: false,
   });
 
