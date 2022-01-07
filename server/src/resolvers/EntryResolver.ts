@@ -35,7 +35,6 @@ export class EntryResolver {
     @Arg("id") id: string,
     @Arg("data") entryUpdate: EntryUpdateInput
   ): Promise<Entry> {
-    console.log("got here with", id, entryUpdate);
     const entry = await EntryModel.findByIdAndUpdate(
       id,
       {

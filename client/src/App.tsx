@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Link, Outlet, Route, Routes } from "react-router-dom";
-import { Button, Container, Divider, Grid } from "semantic-ui-react";
+import { Menu, Container, Divider, Button } from "semantic-ui-react";
 import EntryModal from "./components/EntryModal";
 import Entries from "./pages/Entries";
 import Categories from "./pages/Categories";
@@ -16,26 +16,22 @@ const RootView = () => {
 
   return (
     <>
-      <Grid>
-        <Grid.Row>
-          <Button.Group basic>
-            <Button as={Link} to="/">
-              Home
-            </Button>
-            <Button as={Link} to="entries">
-              Entries
-            </Button>
-            <Button as={Link} to="categories">
-              Categories
-            </Button>
-          </Button.Group>
-        </Grid.Row>
-        <Grid.Row>
+      <Outlet />
+      <Menu fixed="bottom">
+        <Menu.Item as={Link} to="/">
+          Home
+        </Menu.Item>
+        <Menu.Item as={Link} to="entries">
+          Entries
+        </Menu.Item>
+        <Menu.Item as={Link} to="categories">
+          Categories
+        </Menu.Item>
+        <Menu.Item position="right">
           <Button onClick={() => openModal()}>New entry</Button>
-        </Grid.Row>
-        <EntryModal modalOpen={modalOpen} onClose={closeModal} />
-        <Outlet />
-      </Grid>
+        </Menu.Item>
+      </Menu>
+      <EntryModal modalOpen={modalOpen} onClose={closeModal} />
     </>
   );
 };
@@ -46,9 +42,9 @@ const NotFound = () => {
       <h2 className="text-xl">Sorry, no content here...</h2>
       <p>You used a broken link or typed something funny in the address bar. Please check!</p>
       <Divider />
-      <Button as={Link} to="/">
+      <Menu as={Link} to="/">
         Go to the home page
-      </Button>
+      </Menu>
     </div>
   );
 };
