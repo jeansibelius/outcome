@@ -26,12 +26,7 @@ async function startApolloServer() {
   const app = express();
 
   app.use(cors(corsOptions));
-  if (process.env.NODE_ENV === "production") {
-    app.use(express.static("../client/build"));
-  } else {
-    console.log(path.join(__dirname, "../../client/src/build"));
-    app.use(express.static(path.join(__dirname, "../../client/build")));
-  }
+  app.use(express.static(path.join(__dirname, "../../client/build")));
   const httpServer = http.createServer(app);
 
   const MONGODB_URI = process.env.MONGODB_URI;
