@@ -7,7 +7,7 @@ export interface Category {
   id: string;
   type: IncomeExpenseType;
   name: string;
-  monthlyBudget?: number;
+  monthlyBudget?: number | null;
   description?: string;
   icon?: string;
 }

@@ -62,7 +62,7 @@ export const toNewCategory = (object: CategoryInput): NewCategory => {
   const newCategory = {
     type: parseType(object.type),
     name: parseString(object.name),
-    monthlyBudget: object.monthlyBudget ? parseNumber(object.monthlyBudget) : undefined,
+    monthlyBudget: object.monthlyBudget ? parseNumber(object.monthlyBudget) : null,
     description: object.description ? parseString(object.description) : undefined,
     icon: object.icon ? parseString(object.icon) : undefined,
   };

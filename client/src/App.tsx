@@ -66,7 +66,7 @@ const HomeView = () => {
 function App() {
   return (
     <Router>
-      <Container className="p-8">
+      <Container className="px-4 pt-8 pb-20">
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomeView />} />

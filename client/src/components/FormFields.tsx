@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import { ErrorMessage, Field, FieldProps, FormikProps, useField } from "formik";
+import { ErrorMessage, Field, FieldProps, useField } from "formik";
 import React, { useEffect, useState } from "react";
 import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
 import { ALL_CATEGORIES } from "../queries";
@@ -25,24 +25,18 @@ export const InputField = ({ field, label, placeholder, type }: InputFieldProps)
   );
 };
 
-interface RadioGroupFields extends FieldProps {
+interface RadioGroupFields {
+  name: string;
   label: string;
   elements: string[];
-  initial?: string;
-  setFieldValue: FormikProps<{ type: string }>["setFieldValue"];
-  setFieldTouched: FormikProps<{ type: string }>["setFieldTouched"];
 }
-export const RadioGroup = ({
-  label,
-  elements,
-  setFieldValue,
-  setFieldTouched,
-  meta,
-  field,
-}: RadioGroupFields) => {
+export const RadioGroup = ({ name, label, elements }: RadioGroupFields) => {
+  const fieldName = { name };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [field, meta, helpers] = useField(fieldName);
   const onChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-    setFieldTouched(field.name, true);
-    setFieldValue(field.name, data.value);
+    helpers.setTouched(true);
+    helpers.setValue(data.value);
   };
 
   return (
@@ -55,6 +49,7 @@ export const RadioGroup = ({
             name={field.name}
             value={element}
             label={element}
+            error={meta.error ? true : false}
             component={Form.Radio}
             checked={meta.value === element}
             onChange={onChange}
@@ -137,8 +132,6 @@ export const CategorySelect = ({ entryType }: CategorySelectProps) => {
         fluid
         search
         selection
-        labeled
-        clearable
         error={meta.error ? true : false}
         options={stateOptions}
         value={meta.value ? meta.value : stateOptions[0].value}

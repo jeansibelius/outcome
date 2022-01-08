@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@apollo/client";
 import { ALL_CATEGORIES, DELETE_CATEGORY } from "../queries";
 import { Category, IncomeExpenseType } from "../types";
 import { Button, Icon, Table } from "semantic-ui-react";
-import AddCategoryModal from "../components/AddCategoryModal";
+import CategoryModal from "../components/CategoryModal";
 
 const Categories = () => {
   const getCategories = useQuery(ALL_CATEGORIES);
@@ -14,9 +14,14 @@ const Categories = () => {
       refetchQueries: [{ query: ALL_CATEGORIES }],
     }
   );
-
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [updateCategoryValues, setUpdateCategoryValues] = useState<Category | undefined>(undefined);
+
   const openModal = (): void => setModalOpen(true);
+  const openUpdateCategoryModal = (data: Category): void => {
+    setUpdateCategoryValues(data);
+    setModalOpen(true);
+  };
   const closeModal = (): void => {
     setModalOpen(false);
   };
@@ -54,15 +59,20 @@ const Categories = () => {
   return (
     <>
       <Button onClick={openModal}>New category</Button>
-      <AddCategoryModal modalOpen={modalOpen} onClose={closeModal} />
+      <CategoryModal
+        modalOpen={modalOpen}
+        onClose={closeModal}
+        isUpdatingCategory={updateCategoryValues ? true : false}
+        updateCategoryValues={updateCategoryValues}
+      />
       {Object.values(IncomeExpenseType).map((type) => {
         return (
           <Table key={type} color={type === "Expense" ? "orange" : "green"} unstackable>
             <Table.Header fullWidth>
               <Table.Row>
-                <Table.HeaderCell>{type}s</Table.HeaderCell>
-                <Table.HeaderCell>Description</Table.HeaderCell>
-                <Table.HeaderCell>Monthly budget</Table.HeaderCell>
+                <Table.HeaderCell width={3}>{type}s</Table.HeaderCell>
+                <Table.HeaderCell width={8}>Description</Table.HeaderCell>
+                <Table.HeaderCell width={3}>Monthly budget</Table.HeaderCell>
                 <Table.HeaderCell></Table.HeaderCell>
               </Table.Row>
             </Table.Header>
@@ -79,6 +89,13 @@ const Categories = () => {
                       <Table.Cell>{category.description}</Table.Cell>
                       <Table.Cell>{category.monthlyBudget}</Table.Cell>
                       <Table.Cell>
+                        <Icon
+                          floated="right"
+                          as={Button}
+                          icon="pencil"
+                          size="mini"
+                          onClick={() => openUpdateCategoryModal(category)}
+                        />
                         <Icon
                           floated="right"
                           as={Button}

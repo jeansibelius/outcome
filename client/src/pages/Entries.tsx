@@ -65,14 +65,16 @@ const Entries = () => {
           />
         ) : null}
         <Card.Group>
-          {entries.map((entry) => (
-            <SingleEntry
-              key={entry.id}
-              entry={entry}
-              onDelete={onDelete}
-              updateEntry={openEntryUpdateModal}
-            />
-          ))}
+          {[...entries] // create a copy of entries array to disable strict mode in order to sort it
+            .sort((a, b) => Date.parse(b.date.toString()) - Date.parse(a.date.toString()))
+            .map((entry) => (
+              <SingleEntry
+                key={entry.id}
+                entry={entry}
+                onDelete={onDelete}
+                updateEntry={openEntryUpdateModal}
+              />
+            ))}
         </Card.Group>
       </>
     );

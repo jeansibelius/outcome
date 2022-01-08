@@ -18,7 +18,7 @@ License: All rights reserved (C) Rafael Linnankoski
 - Can delete existing categories ✅
 - Can edit existing entries ✅
 - First deployment somewhere (heroku/netlify/self-hosted?) ✅
-- Can edit existing categories
+- Can edit existing categories ✅
 - Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
 - Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
@@ -40,6 +40,8 @@ License: All rights reserved (C) Rafael Linnankoski
 - Add pagination to entries view (load more or similar)
 - Improve submission form appearance (fancier invalid/error states etc.)
 - General UI facelift: more app-like and smooth (mobile optimised)
+- Improve icon selector in category form for performance (typing into fields is slow due to massive
+  list in icon options?)
 - Add currency to user? which can then be used for all forms and views
 - Update Fomantic UI css to check, if it fixes icon not visible in dropdown issue
   https://github.com/fomantic/Fomantic-UI/issues/2172
