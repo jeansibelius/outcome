@@ -1,4 +1,3 @@
-import React from "react";
 import { withFormik } from "formik";
 import { Entry } from "../types";
 import EntryForm, { EntryFormValues, EntryValidationSchema } from "./EntryForm";

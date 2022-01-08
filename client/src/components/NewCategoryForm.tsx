@@ -1,4 +1,3 @@
-import React from "react";
 import { withFormik } from "formik";
 import { IncomeExpenseType } from "../types";
 import CategoryForm, { CategoryFormValues, CategoryValidationSchema } from "./CategoryForm";
