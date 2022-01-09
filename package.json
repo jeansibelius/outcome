@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint --ext .ts src",
-    "client-build": "cd client && npm run build",
-    "client-install": "cd client && npm install",
-    "server-build": "cd server && npm run build",
-    "server-install": "cd server && npm install",
-    "install": "npm run client-install && echo $PWD && npm run server-install",
-    "build": "npm run client-build && cd .. && npm run server-build",
+    "client-build": "npm run build --prefix client",
+    "client-install": "npm install --prefix client",
+    "server-build": "npm run build --prefix server",
+    "server-install": "npm install --prefix server",
+    "install": "npm run client-install && npm run server-install",
+    "build": "npm run client-build && npm run server-build",
     "start": "NODE_ENV=production node server/build/index.js"
   },
   "engines": {
