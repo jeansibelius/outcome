@@ -1,16 +1,23 @@
 import { Field, InputType } from "type-graphql";
 import { User } from "../../entities/User";
-import { IsEmail, Length, MaxLength } from "class-validator";
+import { IsEmail, IsString, Length, MaxLength } from "class-validator";
 
 @InputType()
-export class UserInput implements Omit<User, "id"> {
+export class UserInput implements Omit<User, "id" | "password_hash"> {
   @Field()
   @Length(1, 255)
+  @IsString()
   first_name: string;
 
   @Field()
   @Length(1, 255)
+  @IsString()
   last_name: string;
+
+  @Field()
+  @Length(4, 255)
+  @IsString()
+  password: string;
 
   @Field()
   @IsEmail()
@@ -22,11 +29,18 @@ export class UserInput implements Omit<User, "id"> {
 export class UserUpdateInput implements Partial<User> {
   @Field({ nullable: true })
   @Length(1, 255)
+  @IsString()
   first_name?: string;
 
   @Field({ nullable: true })
   @Length(1, 255)
+  @IsString()
   last_name?: string;
+
+  @Field({ nullable: true })
+  @Length(4, 255)
+  @IsString()
+  password?: string;
 
   @Field({ nullable: true })
   @IsEmail()

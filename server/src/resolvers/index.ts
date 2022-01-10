@@ -9,7 +9,7 @@ const schemaBuild = async () =>
   await buildSchema({
     resolvers: [CategoriesResolver, EntryResolver, UserResolver],
     emitSchemaFile: true,
-    validate: false,
+    validate: true,
   });
 
 export default schemaBuild;

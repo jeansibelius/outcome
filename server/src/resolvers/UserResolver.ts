@@ -1,6 +1,7 @@
 import { User, UserModel } from "../entities/User";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { UserInput, UserUpdateInput } from "./inputTypes/UserInput";
+import { getHashedPassword } from "../utils";
 
 @Resolver((_of) => User)
 export class UserResolver {
@@ -15,10 +16,18 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async createUser(@Arg("data") { first_name, last_name, email }: UserInput): Promise<User> {
+  async createUser(
+    @Arg("data") { first_name, last_name, password, email }: UserInput
+  ): Promise<User> {
+    const userExists = await UserModel.findOne({ email: email }, "email");
+    if (userExists) {
+      throw new Error("A user with these details exists.");
+    }
+    const password_hash = await getHashedPassword(password);
     const user = await UserModel.create({
       first_name,
       last_name,
+      password_hash,
       email,
     });
     await user.save();

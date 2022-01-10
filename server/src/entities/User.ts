@@ -14,6 +14,9 @@ export class User {
   @Property({ required: true })
   last_name: string;
 
+  @Property({ required: true })
+  password_hash: string;
+
   @Field()
   @Property({ required: true })
   email: string;

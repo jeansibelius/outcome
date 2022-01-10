@@ -1,5 +1,10 @@
 import { config } from "dotenv";
 config();
+
+// Typegoose logging TODO: disable before prod
+import { setLogLevel } from "@typegoose/typegoose";
+setLogLevel("DEBUG");
+
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import cors from "cors";
@@ -27,7 +32,10 @@ async function startApolloServer() {
   const app = express();
 
   app.use(cors(corsOptions));
+
+  // Serve static files from client
   app.use(express.static(path.join(__dirname, "../../client/build")));
+
   const httpServer = http.createServer(app);
 
   const MONGODB_URI = process.env.MONGODB_URI;

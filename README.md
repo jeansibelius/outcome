@@ -21,9 +21,9 @@ License: All rights reserved (C) Rafael Linnankoski
 - Can edit existing entries ✅
 - First deployment somewhere (heroku/netlify/self-hosted?) ✅
 - Can edit existing categories ✅
-- Can create users in the backend
+- Can create users in the backend ✅
 - Login/register view exists
-- Restrict views only to authorized users
+- Restrict views and data only to authorized users
 - Separate test and prod databases
 - Test coverage for server is sufficient
 - Test coverage for client is sufficient (considering unfinalised UI)
