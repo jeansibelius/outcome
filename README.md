@@ -5,6 +5,8 @@
 License: All rights reserved (C) Rafael Linnankoski
 
 ## Roadmap
+
+### MVP
 - Create initial server setup (TypeScript, ApolloServer, GraphQL/type-graphql and MongoDB/typegoose)
   ✅
 - Create initial client setup (TypeScript, ApolloClient, React) ✅
@@ -19,16 +21,22 @@ License: All rights reserved (C) Rafael Linnankoski
 - Can edit existing entries ✅
 - First deployment somewhere (heroku/netlify/self-hosted?) ✅
 - Can edit existing categories ✅
-- Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
-  immediately (queries & cache are kept up to date)
-- Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
 - Can create users in the backend
 - Login/register view exists
 - Restrict views only to authorized users
+- Separate test and prod databases
 - Test coverage for server is sufficient
 - Test coverage for client is sufficient (considering unfinalised UI)
-- Add analytics views to home view (monthly spending vs. budget per category)
-- Add safer UI to deletion of entries and categories (for the latter: show how many associated
+- Add first analytics views to home/dashboard view (monthly spending vs. budget per category)
+- Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
+- Disable debugging on mongoose (and other similar data sensitive things)
+- Onboard first users
+
+### After "launch"
+- Caching: Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
+  immediately (queries & cache are kept up to date)
+- Add safer UI to deletion of entries and categories (loading status when clicked, clear response in
+  the form of a toast etc. when successful; for the category deletion: show how many associated
   entries and perhaps do something with them)
 - Add PWA manifest
 - Add offline capabilities with service workers

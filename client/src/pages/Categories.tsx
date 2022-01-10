@@ -100,9 +100,7 @@ const Categories = () => {
                           floated="right"
                           as={Button}
                           icon="trash"
-                          color="red"
                           size="mini"
-                          inverted
                           onClick={() => onDelete(category.id)}
                         />
                       </Table.Cell>

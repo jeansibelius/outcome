@@ -72,15 +72,39 @@ enum IncomeExpenseType {
 type Mutation {
   createCategory(data: CategoryInput!): Category!
   createEntry(data: EntryInput!): Entry!
+  createUser(data: UserInput!): User!
   deleteCategory(id: String!): Boolean!
   deleteEntry(id: String!): Boolean!
+  deleteUser(id: String!): Float!
   updateCategory(data: CategoryUpdateInput!, id: String!): Category!
   updateEntry(data: EntryUpdateInput!, id: String!): Entry!
+  updateUser(data: UserUpdateInput!, id: String!): User!
 }
 
 type Query {
   returnAllCategories: [Category!]!
   returnAllEntries: [Entry!]!
+  returnAllUsers: [User!]!
   returnSingleCategory(id: String!): Category!
   returnSingleEntry(id: String!): Entry!
+  returnSingleUser(id: String!): User!
+}
+
+type User {
+  email: String!
+  first_name: String!
+  id: ID!
+  last_name: String!
+}
+
+input UserInput {
+  email: String!
+  first_name: String!
+  last_name: String!
+}
+
+input UserUpdateInput {
+  email: String
+  first_name: String
+  last_name: String
 }

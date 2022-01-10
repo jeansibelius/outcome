@@ -15,6 +15,7 @@ async function startApolloServer() {
   const corsAllowedOrigins: Array<string | RegExp> = [
     /localhost/,
     /192\.168\.1\.5:3000/,
+    /192\.168\.1\.5:4000/,
     "https://studio.apollographql.com",
   ];
 
