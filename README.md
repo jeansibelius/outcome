@@ -22,6 +22,10 @@ License: All rights reserved (C) Rafael Linnankoski
 - First deployment somewhere (heroku/netlify/self-hosted?) ✅
 - Can edit existing categories ✅
 - Can create users in the backend ✅
+- Add middleware for adding user id to context (for authorization) ✅
+- Add expiry to JWT tokens
+- Backend: user can log in and authorization is added to calls
+- Restrict server requests to authorized users (e.g. logged in user gets only their own stuff)
 - Login/register view exists
 - Restrict views and data only to authorized users
 - Separate test and prod databases

@@ -2,11 +2,11 @@ import { config } from "dotenv";
 config();
 
 // Typegoose logging TODO: disable before prod
-import { setLogLevel } from "@typegoose/typegoose";
-setLogLevel("DEBUG");
+//import { setLogLevel } from "@typegoose/typegoose";
+//setLogLevel("DEBUG");
 
 import { ApolloServer } from "apollo-server-express";
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { ApolloServerPluginDrainHttpServer, AuthenticationError } from "apollo-server-core";
 import cors from "cors";
 import express from "express";
 import http from "http";
@@ -15,6 +15,8 @@ import { connect } from "mongoose";
 
 import schemaBuild from "./resolvers";
 import path from "path";
+import { RequestCustom, tokenExtractor } from "./middleware";
+import { getUserFromToken } from "./utils";
 
 async function startApolloServer() {
   const corsAllowedOrigins: Array<string | RegExp> = [
@@ -30,6 +32,7 @@ async function startApolloServer() {
 
   // Required logic for integrating with Express
   const app = express();
+  const appPath = "/graphql";
 
   app.use(cors(corsOptions));
 
@@ -58,22 +61,43 @@ async function startApolloServer() {
     console.log("MongoDB URI is undefined");
   }
 
+  // Extract token and add to request, if found
+  app.use(tokenExtractor);
+
   const schema = await schemaBuild();
-  // Same ApolloServer initialization as before, plus the drain plugin.
   const server = new ApolloServer({
     schema,
+    context: ({ req }: { req: RequestCustom }) => {
+      // Exclude login from auth
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      if (req.body.query.match("Login")) return {};
+
+      const token = req.token;
+      if (!token) {
+        throw new Error("Token missing from request.");
+      }
+
+      // try to retrieve a user with the token
+      const user = getUserFromToken(token);
+      // we could also check user roles/permissions here
+      if (!user) throw new AuthenticationError("You must be logged in");
+
+      // add the user to the context
+      return { user };
+    },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
   // More required logic for integrating with Express
   await server.start();
+
   server.applyMiddleware({
     app,
 
     // By default, apollo-server hosts its GraphQL endpoint at the
     // server root. However, *other* Apollo Server packages host it at
     // /graphql. Optionally provide this to match apollo-server.
-    path: "/graphql",
+    path: appPath,
     cors: false,
   });
 

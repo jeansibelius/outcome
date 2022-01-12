@@ -3,6 +3,10 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type AuthResponse {
+  token: String!
+}
+
 """The category model"""
 type Category {
   description: String
@@ -76,6 +80,7 @@ type Mutation {
   deleteCategory(id: String!): Boolean!
   deleteEntry(id: String!): Boolean!
   deleteUser(id: String!): Float!
+  login(email: String!, password: String!): AuthResponse!
   updateCategory(data: CategoryUpdateInput!, id: String!): Category!
   updateEntry(data: EntryUpdateInput!, id: String!): Entry!
   updateUser(data: UserUpdateInput!, id: String!): User!

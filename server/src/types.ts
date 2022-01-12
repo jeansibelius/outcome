@@ -12,3 +12,12 @@ registerEnumType(IncomeExpenseType, {
   name: "IncomeExpenseType",
   description: "Can be either income or expense.",
 });
+
+export interface AuthResponse {
+  token: string;
+}
+
+export interface DecodedTokenUser {
+  id: string;
+  email: string;
+}
