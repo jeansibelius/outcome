@@ -21,7 +21,6 @@ export class LoginResolver {
     }
 
     const userForToken = {
-      user: user.email,
       id: user.id,
     };
 
@@ -30,7 +29,7 @@ export class LoginResolver {
       throw new Error("JWT secret missing.");
     }
 
-    const token = jwt.sign(userForToken, SECRET);
+    const token = jwt.sign(userForToken, SECRET, { expiresIn: "24h" });
 
     return { token };
   }

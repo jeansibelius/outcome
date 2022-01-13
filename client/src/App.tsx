@@ -1,42 +1,94 @@
 import React from "react";
-import { BrowserRouter as Router, Link, Outlet, Route, Routes } from "react-router-dom";
-import { Menu, Container, Divider, Button, Header } from "semantic-ui-react";
+import {
+  BrowserRouter as Router,
+  Link,
+  Outlet,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import { Menu, Container, Divider, Button, Header, Icon } from "semantic-ui-react";
 import EntryModal from "./components/EntryModal";
 import Entries from "./pages/Entries";
 import Categories from "./pages/Categories";
+import LoginModal from "./components/LoginModal";
+import { isLoggedInVar } from "./cache";
+import { IsLoggedIn } from ".";
 
-const Navigation = ({ openModal }: { openModal: Function }) => {
+const Navigation = ({
+  openModal,
+  openLoginModal,
+}: {
+  openModal: () => void;
+  openLoginModal: () => void;
+}) => {
+  //const client = useApolloClient();
+  let navigate = useNavigate();
   return (
     <Menu fixed="bottom">
       <Menu.Item as={Link} to="/">
         Home
       </Menu.Item>
-      <Menu.Item as={Link} to="entries">
-        Entries
-      </Menu.Item>
-      <Menu.Item as={Link} to="categories">
-        Categories
-      </Menu.Item>
-      <Menu.Item position="right">
-        <Button onClick={() => openModal()}>New entry</Button>
-      </Menu.Item>
+      {IsLoggedIn() ? (
+        <>
+          <Menu.Item as={Link} to="entries">
+            Entries
+          </Menu.Item>
+          <Menu.Item as={Link} to="categories">
+            Categories
+          </Menu.Item>
+          <Menu.Item>
+            <Button onClick={() => openModal()}>New entry</Button>
+          </Menu.Item>
+          <Menu.Item position="right">
+            <Button
+              icon
+              labelPosition="right"
+              onClick={() => {
+                /*
+                  client.cache.evict({ fieldName: "me" });
+                  client.cache.gc();
+                  */
+                window.localStorage.removeItem("token");
+                isLoggedInVar(false);
+                navigate("/");
+
+                //client.resetStore();
+              }}
+            >
+              <Icon name="log out" />
+              Logout
+            </Button>
+          </Menu.Item>
+        </>
+      ) : (
+        <Menu.Item position="right">
+          <Button onClick={() => openLoginModal()}>Login</Button>
+        </Menu.Item>
+      )}
     </Menu>
   );
 };
 const Layout = () => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false);
 
-  const openModal = (): void => setModalOpen(true);
+  const openEntryModal = (): void => setModalOpen(true);
+  const openLoginModal = (): void => setLoginModalOpen(true);
 
   const closeModal = (): void => {
     setModalOpen(false);
+  };
+  const closeLoginModal = (): void => {
+    setLoginModalOpen(false);
   };
 
   return (
     <>
       <Outlet />
-      <Navigation openModal={openModal} />
+      <Navigation openModal={openEntryModal} openLoginModal={openLoginModal} />
       <EntryModal modalOpen={modalOpen} onClose={closeModal} />
+      <LoginModal modalOpen={loginModalOpen} onClose={closeLoginModal} />
     </>
   );
 };
@@ -63,7 +115,7 @@ const HomeView = () => {
   );
 };
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Container className="px-4 pt-8 pb-20">
@@ -78,6 +130,6 @@ function App() {
       </Container>
     </Router>
   );
-}
+};
 
 export default App;

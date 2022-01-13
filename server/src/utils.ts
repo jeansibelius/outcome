@@ -9,7 +9,6 @@ export const getHashedPassword = async (password: string): Promise<string> => {
 
 export const getUserFromToken = (token: string): DecodedTokenUser => {
   const SECRET = process.env.JWT_SECRET as jwt.Secret;
-  console.log("secret", SECRET);
   if (!SECRET) {
     throw new Error("JWT secret missing from env.");
   }

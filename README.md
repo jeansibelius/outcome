@@ -23,16 +23,17 @@ License: All rights reserved (C) Rafael Linnankoski
 - Can edit existing categories ✅
 - Can create users in the backend ✅
 - Add middleware for adding user id to context (for authorization) ✅
-- Add expiry to JWT tokens
-- Backend: user can log in and authorization is added to calls
+- Add expiry to JWT tokens ✅
+- Backend: user can log in and user details from token are added to context ✅
+- Login view exists ✅
+- Restrict views and data only to authorized users ✅
 - Restrict server requests to authorized users (e.g. logged in user gets only their own stuff)
-- Login/register view exists
-- Restrict views and data only to authorized users
+- Register view exists
+- Add first analytics views to home/dashboard view (monthly spending vs. budget per category)
+- Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
 - Separate test and prod databases
 - Test coverage for server is sufficient
 - Test coverage for client is sufficient (considering unfinalised UI)
-- Add first analytics views to home/dashboard view (monthly spending vs. budget per category)
-- Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
 - Disable debugging on mongoose (and other similar data sensitive things)
 - Onboard first users
 
@@ -42,6 +43,7 @@ License: All rights reserved (C) Rafael Linnankoski
 - Add safer UI to deletion of entries and categories (loading status when clicked, clear response in
   the form of a toast etc. when successful; for the category deletion: show how many associated
   entries and perhaps do something with them)
+- Add some toasts on successful events (such as login, adding an entry etc.)
 - Add PWA manifest
 - Add offline capabilities with service workers
 - Consider what kind of pattern to use with queries/mutations: action creators or what?

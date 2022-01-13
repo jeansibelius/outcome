@@ -1,5 +1,13 @@
 import { gql } from "@apollo/client";
 
+export const LOGIN = gql`
+  mutation Login($password: String!, $email: String!) {
+    login(password: $password, email: $email) {
+      token
+    }
+  }
+`;
+
 const ENTRY_DETAILS = gql`
   fragment EntryDetails on Entry {
     id

@@ -10,6 +10,5 @@ export const tokenExtractor = (request: RequestCustom, _response: Response, next
   if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
     request.token = authorization.split(" ")[1];
   }
-  console.log("middleware token", request.token);
   next();
 };

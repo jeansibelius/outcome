@@ -6,18 +6,35 @@ import {
   ApolloClient,
   ApolloProvider,
   from,
+  gql,
   HttpLink,
-  InMemoryCache,
   NormalizedCacheObject,
+  useQuery,
 } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
+import cache from "./cache";
 
 const uri = "/graphql";
 const httpLink = new HttpLink({
   uri,
+});
+
+const authLink = setContext((_request, { headers }) => {
+  const token = window.localStorage.getItem("token");
+  if (typeof token === "string") {
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `bearer ${token}` : null,
+      },
+    };
+  } else {
+    return headers;
+  }
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -29,10 +46,28 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
+export const typeDefs = gql`
+  extend type Query {
+    isLoggedIn: Boolean!
+  }
+`;
+
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: from([errorLink, httpLink]),
+  cache,
+  link: from([errorLink, authLink, httpLink]),
+  typeDefs,
 });
+
+const IS_LOGGED_IN = gql`
+  query IsUserLoggedIn {
+    isLoggedIn @client
+  }
+`;
+
+export const IsLoggedIn = (): boolean => {
+  const { data } = useQuery(IS_LOGGED_IN);
+  return data.isLoggedIn;
+};
 
 ReactDOM.render(
   <ApolloProvider client={client}>

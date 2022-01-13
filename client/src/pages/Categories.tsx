@@ -4,6 +4,7 @@ import { ALL_CATEGORIES, DELETE_CATEGORY } from "../queries";
 import { Category, IncomeExpenseType } from "../types";
 import { Button, Icon, Table } from "semantic-ui-react";
 import CategoryModal from "../components/CategoryModal";
+import { IsLoggedIn } from "..";
 
 const Categories = () => {
   const getCategories = useQuery(ALL_CATEGORIES);
@@ -44,9 +45,14 @@ const Categories = () => {
     }
   };
 
+  if (!IsLoggedIn()) {
+    return <div>Please login.</div>;
+  }
+
   if (getCategories.loading) {
     return <div>Loading</div>;
   }
+
   if (getCategories.error) {
     return (
       <div>

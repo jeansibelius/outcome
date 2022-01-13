@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import { ALL_ENTRIES, DELETE_ENTRY } from "../queries";
 import { Entry } from "../types";
 import SingleEntry from "../components/Entry";
 import { Card } from "semantic-ui-react";
 import EntryModal from "../components/EntryModal";
+import { IsLoggedIn } from "../index";
 
 const Entries = () => {
   const getEntries = useQuery(ALL_ENTRIES);
   const [deleteEntry] = useMutation<{ DeleteEntry: boolean }, { id: string }>(DELETE_ENTRY, {
     refetchQueries: [{ query: ALL_ENTRIES }],
   });
-  const [entries, setEntries] = useState<Entry[] | undefined>(undefined);
+  const [entries, setEntries] = React.useState<Entry[] | undefined>(undefined);
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [updateEntryValues, setUpdateEntryValues] = React.useState<Entry | undefined>(undefined);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (getEntries.data) {
       setEntries(getEntries.data.returnAllEntries);
     }
@@ -42,9 +43,14 @@ const Entries = () => {
     }
   };
 
+  if (!IsLoggedIn()) {
+    return <div>Please login.</div>;
+  }
+
   if (getEntries.loading) {
     return <div>Loading</div>;
   }
+
   if (getEntries.error) {
     return (
       <div>
@@ -53,6 +59,7 @@ const Entries = () => {
       </div>
     );
   }
+
   if (entries) {
     return (
       <>
