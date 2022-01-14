@@ -54,7 +54,7 @@ const LoginModal = ({ modalOpen, onClose }: Props) => {
 
   return (
     <Modal className="p-2" open={modalOpen} onClose={onClose} centered={true} closeIcon>
-      <Modal.Header>Add a new entry</Modal.Header>
+      <Modal.Header>Login</Modal.Header>
       <Modal.Content>
         {error && <Segment inverted color="red">{`Error: ${error}`}</Segment>}
         <LoginForm onSubmit={submitLogin} />

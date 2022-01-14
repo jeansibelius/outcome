@@ -18,12 +18,11 @@ const Categories = () => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [updateCategoryValues, setUpdateCategoryValues] = useState<Category | undefined>(undefined);
 
-  const openModal = (): void => setModalOpen(true);
   const openUpdateCategoryModal = (data: Category): void => {
     setUpdateCategoryValues(data);
     setModalOpen(true);
   };
-  const closeModal = (): void => {
+  const closeCategoryModal = (): void => {
     setModalOpen(false);
   };
 
@@ -64,10 +63,9 @@ const Categories = () => {
 
   return (
     <>
-      <Button onClick={openModal}>New category</Button>
       <CategoryModal
         modalOpen={modalOpen}
-        onClose={closeModal}
+        onClose={closeCategoryModal}
         isUpdatingCategory={updateCategoryValues ? true : false}
         updateCategoryValues={updateCategoryValues}
       />
@@ -100,6 +98,7 @@ const Categories = () => {
                           as={Button}
                           icon="pencil"
                           size="mini"
+                          style={{ margin: "2px 0" }}
                           onClick={() => openUpdateCategoryModal(category)}
                         />
                         <Icon
@@ -107,6 +106,7 @@ const Categories = () => {
                           as={Button}
                           icon="trash"
                           size="mini"
+                          style={{ margin: "2px 0" }}
                           onClick={() => onDelete(category.id)}
                         />
                       </Table.Cell>

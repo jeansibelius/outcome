@@ -73,7 +73,9 @@ const CategoryModal = ({
 
   return (
     <Modal className="p-2" open={modalOpen} onClose={onClose} centered={true} closeIcon>
-      <Modal.Header>Add a new category</Modal.Header>
+      <Modal.Header>
+        {isUpdatingCategory ? <>Edit category</> : <>Add a new category</>}
+      </Modal.Header>
       <Modal.Content>
         {error && <Segment inverted color="red">{`Error: ${error}`}</Segment>}
         {isUpdatingCategory && updateCategoryValues ? (

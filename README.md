@@ -27,6 +27,8 @@ License: All rights reserved (C) Rafael Linnankoski
 - Backend: user can log in and user details from token are added to context ✅
 - Login view exists ✅
 - Restrict views and data only to authorized users ✅
+- Add user to entry and category models
+- Create a "space" to enable sharing a space with other users and add it to user, entry and category models
 - Restrict server requests to authorized users (e.g. logged in user gets only their own stuff)
 - Register view exists
 - Add first analytics views to home/dashboard view (monthly spending vs. budget per category)

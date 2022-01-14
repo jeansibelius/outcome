@@ -2,10 +2,14 @@ import React from "react";
 import {
   BrowserRouter as Router,
   Link,
+  LinkProps,
   Outlet,
   Route,
   Routes,
+  useLocation,
+  useMatch,
   useNavigate,
+  useResolvedPath,
 } from "react-router-dom";
 import { Menu, Container, Divider, Button, Header, Icon } from "semantic-ui-react";
 import EntryModal from "./components/EntryModal";
@@ -14,41 +18,69 @@ import Categories from "./pages/Categories";
 import LoginModal from "./components/LoginModal";
 import { isLoggedInVar } from "./cache";
 import { IsLoggedIn } from ".";
+import CategoryModal from "./components/CategoryModal";
 
+const CustomLink = ({ children, to }: LinkProps) => {
+  let resolved = useResolvedPath(to);
+  let match = useMatch({ path: resolved.pathname, end: true });
+  return (
+    <Menu.Item as={Link} active={!!match} to={to}>
+      {children}
+    </Menu.Item>
+  );
+};
 const Navigation = ({
-  openModal,
+  openEntryModal,
+  openCategoryModal,
   openLoginModal,
 }: {
-  openModal: () => void;
+  openEntryModal: () => void;
+  openCategoryModal: () => void;
   openLoginModal: () => void;
 }) => {
-  //const client = useApolloClient();
   let navigate = useNavigate();
+  const location = useLocation();
   return (
-    <Menu fixed="bottom">
-      <Menu.Item as={Link} to="/">
-        Home
-      </Menu.Item>
+    <div style={{ position: "fixed", width: "100%", left: 0, bottom: 0 }}>
       {IsLoggedIn() ? (
         <>
-          <Menu.Item as={Link} to="entries">
-            Entries
-          </Menu.Item>
-          <Menu.Item as={Link} to="categories">
-            Categories
-          </Menu.Item>
-          <Menu.Item>
-            <Button onClick={() => openModal()}>New entry</Button>
-          </Menu.Item>
-          <Menu.Item position="right">
-            <Button
-              icon
-              labelPosition="right"
+          <Menu size="mini" secondary fluid>
+            {location.pathname === "/entries" || location.pathname === "/" ? (
+              <Menu.Item position="right">
+                <Button circular size="small" primary onClick={() => openEntryModal()}>
+                  <Icon name="plus" />
+                  New entry
+                </Button>
+              </Menu.Item>
+            ) : location.pathname === "/categories" ? (
+              <Menu.Item position="right">
+                <Button circular size="small" primary onClick={() => openCategoryModal()}>
+                  <Icon name="plus" />
+                  New category
+                </Button>
+              </Menu.Item>
+            ) : null}
+          </Menu>
+          <Menu fluid widths={4} size="mini" icon="labeled" borderless>
+            <CustomLink to="/">
+              <Icon name="home" />
+              Home
+            </CustomLink>
+            <CustomLink to="entries">
+              <Icon name="list ul" />
+              Entries
+            </CustomLink>
+            <CustomLink to="categories">
+              <Icon name="tags" />
+              Categories
+            </CustomLink>
+            <Menu.Item
+              position="right"
               onClick={() => {
                 /*
-                  client.cache.evict({ fieldName: "me" });
-                  client.cache.gc();
-                  */
+                    client.cache.evict({ fieldName: "me" });
+                    client.cache.gc();
+                    */
                 window.localStorage.removeItem("token");
                 isLoggedInVar(false);
                 navigate("/");
@@ -58,26 +90,39 @@ const Navigation = ({
             >
               <Icon name="log out" />
               Logout
-            </Button>
-          </Menu.Item>
+            </Menu.Item>
+          </Menu>
         </>
       ) : (
-        <Menu.Item position="right">
-          <Button onClick={() => openLoginModal()}>Login</Button>
-        </Menu.Item>
+        <Menu fluid widths={2} size="mini" icon="labeled" borderless>
+          <CustomLink to="/">
+            <Icon name="home" />
+            Home
+          </CustomLink>
+          <Menu.Item floated="right" onClick={() => openLoginModal()}>
+            <Icon name="user" />
+            Login
+          </Menu.Item>
+        </Menu>
       )}
-    </Menu>
+    </div>
   );
 };
-const Layout = () => {
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false);
 
-  const openEntryModal = (): void => setModalOpen(true);
+const Layout = () => {
+  const [entryModalOpen, setEntryModalOpen] = React.useState<boolean>(false);
+  const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false);
+  const [categoryModalOpen, setCategoryModalOpen] = React.useState<boolean>(false);
+
+  const openEntryModal = (): void => setEntryModalOpen(true);
+  const openCategoryModal = (): void => setCategoryModalOpen(true);
   const openLoginModal = (): void => setLoginModalOpen(true);
 
-  const closeModal = (): void => {
-    setModalOpen(false);
+  const closeEntryModal = (): void => {
+    setEntryModalOpen(false);
+  };
+  const closeCategoryModal = (): void => {
+    setCategoryModalOpen(false);
   };
   const closeLoginModal = (): void => {
     setLoginModalOpen(false);
@@ -86,8 +131,13 @@ const Layout = () => {
   return (
     <>
       <Outlet />
-      <Navigation openModal={openEntryModal} openLoginModal={openLoginModal} />
-      <EntryModal modalOpen={modalOpen} onClose={closeModal} />
+      <Navigation
+        openEntryModal={openEntryModal}
+        openCategoryModal={openCategoryModal}
+        openLoginModal={openLoginModal}
+      />
+      <EntryModal modalOpen={entryModalOpen} onClose={closeEntryModal} />
+      <CategoryModal modalOpen={categoryModalOpen} onClose={closeCategoryModal} />
       <LoginModal modalOpen={loginModalOpen} onClose={closeLoginModal} />
     </>
   );
@@ -118,7 +168,7 @@ const HomeView = () => {
 const App = () => {
   return (
     <Router>
-      <Container className="px-4 pt-8 pb-20">
+      <Container className="px-4 pt-8 pb-40">
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<HomeView />} />
