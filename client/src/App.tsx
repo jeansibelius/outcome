@@ -11,7 +11,7 @@ import {
   useNavigate,
   useResolvedPath,
 } from "react-router-dom";
-import { Menu, Container, Divider, Button, Header, Icon } from "semantic-ui-react";
+import { Menu, Container, Divider, Button, Header, Icon, Segment } from "semantic-ui-react";
 import EntryModal from "./components/EntryModal";
 import Entries from "./pages/Entries";
 import Categories from "./pages/Categories";
@@ -41,10 +41,13 @@ const Navigation = ({
   let navigate = useNavigate();
   const location = useLocation();
   return (
-    <div style={{ position: "fixed", width: "100%", left: 0, bottom: 0 }}>
+    <div
+      style={{ position: "fixed", width: "94%", margin: "0 3% 2%", bottom: 10 }}
+      className="drop-shadow-lg"
+    >
       {IsLoggedIn() ? (
         <>
-          <Menu size="mini" secondary fluid>
+          <Menu inverted size="mini" secondary fluid>
             {location.pathname === "/entries" || location.pathname === "/" ? (
               <Menu.Item position="right">
                 <Button circular size="small" primary onClick={() => openEntryModal()}>
@@ -130,7 +133,9 @@ const Layout = () => {
 
   return (
     <>
-      <Outlet />
+      <Container className="px-4 pt-8 pb-40">
+        <Outlet />
+      </Container>
       <Navigation
         openEntryModal={openEntryModal}
         openCategoryModal={openCategoryModal}
@@ -168,16 +173,14 @@ const HomeView = () => {
 const App = () => {
   return (
     <Router>
-      <Container className="px-4 pt-8 pb-40">
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<HomeView />} />
-            <Route path="entries" element={<Entries />} />
-            <Route path="categories" element={<Categories />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </Container>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomeView />} />
+          <Route path="entries" element={<Entries />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </Router>
   );
 };
