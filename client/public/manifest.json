@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "outcome.io",
+  "name": "Track the outcome of your income.",
   "icons": [
     {
       "src": "favicon.ico",

@@ -13,10 +13,10 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
-import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
 import cache from "./cache";
+import App from "./App";
 
 const uri = "/graphql";
 const httpLink = new HttpLink({
