@@ -1,8 +1,33 @@
 # Outcome
 
-### A simple app to track household income and expenses against a set budget
+### A simple app to track the outcome of your income against a set budget
 
 License: All rights reserved (C) Rafael Linnankoski
+
+## Structure
+
+The project is structured as a monorepo with utility scripts in the root package.json (e.g. build).
+It is divided into two folders:
+- Server  
+- Client  
+
+The project is written in TypeScript in vim with eslint and prettier enabled.
+
+#### Server
+The server uses the following stack:
+- [Apollo Server](https://formik.org/docs/overview) with Express 
+- [TypeGraphQL](https://formik.org/docs/overview) (to build the schema without duplicating type
+  definitions) 
+- [typegoose](https://formik.org/docs/overview) (to help with mongoose model creation without
+  further duplication of types) 
+- MongoDB (using MongoDB atlas)
+
+#### Client
+The client created with Create React App with PWA typescript template and uses the following stack:
+- [Apollo Client (GraphQL)](https://formik.org/docs/overview) 
+- [Semantic UI react](https://github.com/fomantic/Fomantic-UI) components (with [Fomantic UI CSS](https://github.com/fomantic/Fomantic-UI))
+- [Tailwindcss](https://tailwindcss.com/docs/installation) in a few places (mainly to test out the framework) 
+- [Formik](https://formik.org/docs/overview) (for form related things)
 
 ## Roadmap
 
@@ -59,7 +84,8 @@ License: All rights reserved (C) Rafael Linnankoski
 - Improve icon selector in category form for performance (typing into fields is slow due to massive
   list in icon options?)
 - Add currency to user? which can then be used for all forms and views
-- Update Fomantic UI css to check, if it fixes icon not visible in dropdown issue
+- Update Fomantic UI css to check, if it fixes icon not visible in dropdown issue and remove the
+  patch (& patch package)
   https://github.com/fomantic/Fomantic-UI/issues/2172
 - Consider refactoring types & resolvers according to this example:
   https://github.com/MichalLytek/type-graphql/tree/master/examples/apollo-client
