@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { ALL_CATEGORIES } from "../queries";
 import { Category, IncomeExpenseType } from "../types";
-import { Statistic, Tab } from "semantic-ui-react";
+import { Container, Statistic, Tab } from "semantic-ui-react";
 import CategoryModal from "../components/CategoryModal";
 import CategoryTable from "../components/CategoryTable";
 import { IsLoggedIn } from "..";
@@ -40,7 +40,7 @@ const Categories = () => {
   if (getCategories.loading || !categoryChartData) return <div>Loading...</div>;
 
   const panes = Object.values(IncomeExpenseType).map((type) => ({
-    menuItem: { key: type, content: type },
+    menuItem: { key: type, content: `${type}s` },
     render: () => (
       <Tab.Pane key={type}>
         <DashboardDataPane>
@@ -65,7 +65,7 @@ const Categories = () => {
   );
 
   return (
-    <>
+    <Container>
       <Statistic.Group>
         <Statistic color={balance >= 0 ? "teal" : "pink"} style={{ margin: "0 auto 2em" }}>
           <Statistic.Label>Monthly balance</Statistic.Label>
@@ -87,7 +87,7 @@ const Categories = () => {
         isUpdatingCategory={updateCategoryValues ? true : false}
         updateCategoryValues={updateCategoryValues}
       />
-    </>
+    </Container>
   );
 };
 

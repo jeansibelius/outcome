@@ -34,13 +34,13 @@ const CategoryTable = ({ type, openUpdateCategoryModal }: CategoryTableProps) =>
   }
 
   return (
-    <Table selectable color={type === "Expense" ? "orange" : "green"} unstackable>
+    <Table selectable color={type === "Expense" ? "orange" : "green"}>
       <Table.Header fullWidth>
         <Table.Row>
-          <Table.HeaderCell width={3}>{type}s</Table.HeaderCell>
-          <Table.HeaderCell width={8}>Description</Table.HeaderCell>
-          <Table.HeaderCell width={3}>Monthly budget</Table.HeaderCell>
-          <Table.HeaderCell></Table.HeaderCell>
+          <Table.HeaderCell width={2}>Name</Table.HeaderCell>
+          <Table.HeaderCell width={6}>Description</Table.HeaderCell>
+          <Table.HeaderCell width={2}>Monthly budget</Table.HeaderCell>
+          <Table.HeaderCell width={1}></Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -57,7 +57,6 @@ const CategoryTable = ({ type, openUpdateCategoryModal }: CategoryTableProps) =>
                 <Table.Cell>{category.monthlyBudget}</Table.Cell>
                 <Table.Cell>
                   <Icon
-                    floated="right"
                     as={Button}
                     icon="pencil"
                     size="mini"

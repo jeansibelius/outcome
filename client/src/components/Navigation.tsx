@@ -36,7 +36,7 @@ const Navigation = ({ openEntryModal, openCategoryModal, openLoginModal }: Navig
 
   return (
     <div
-      style={{ position: "fixed", width: "94%", margin: "0 3% 2%", bottom: 10 }}
+      style={{ position: "fixed", width: "100%", padding: "0 1em", bottom: "1em" }}
       className="drop-shadow-lg"
     >
       {IsLoggedIn() ? (
