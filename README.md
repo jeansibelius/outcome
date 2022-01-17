@@ -2,6 +2,8 @@
 
 ### A simple app to track the outcome of your income against a set budget
 
+#### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/)
+
 License: All rights reserved (C) Rafael Linnankoski
 
 ## Project structure
@@ -51,12 +53,12 @@ The client created with Create React App with PWA typescript template and uses t
 - Backend: user can log in and user details from token are added to context ✅
 - Login view exists ✅
 - Restrict views and data only to authorized users ✅
+- Add first analytics views to home/dashboard view (monthly spending vs. budget per category) ✅
 - Add user to entry and category models
 - Create a "space" to enable sharing a space with other users and add it to user, entry and category models
 - Restrict server requests to authorized users (e.g. logged in user gets only their own stuff)
 - Register view exists
-- Add first analytics views to home/dashboard view (monthly spending vs. budget per category)
-- Basic views/components exist: expenses, income, adding new entries, adding new categories, summary
+- Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
 - Separate test and prod databases
 - Test coverage for server is sufficient
 - Test coverage for client is sufficient (considering unfinalised UI)
