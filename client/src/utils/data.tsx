@@ -9,6 +9,13 @@ export const categoriesToIdAndValue = (array: Category[]): CustomPieChartData[] 
     []
   );
 
+export const entriesByCategoryToAndIdAndValue = (array: Entry[]): CustomPieChartData[] =>
+  array.reduce(
+    (obj: any[], entry: Entry) =>
+      obj.concat({ id: entry.name, value: entry.amount, type: entry.type }),
+    []
+  );
+
 export const entriesToBarChartData = (array: Entry[]): CustomHorizontalBarData[] =>
   array.reduce((data: any[], entry: Entry) => {
     let index = entry.type === IncomeExpenseType.Expense ? 0 : 1;

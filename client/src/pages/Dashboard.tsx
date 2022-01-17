@@ -7,9 +7,10 @@ import CustomHorizontalBar, {
 import CustomPieChart, { CustomPieChartData } from "../components/charts/CustomResponsivePie";
 import DashboardDataPane from "../components/DashboardDataPane";
 import { ALL_CATEGORIES, ALL_ENTRIES } from "../queries";
-import { IncomeExpenseType } from "../types";
+import { Entry, IncomeExpenseType } from "../types";
 import {
   categoriesToIdAndValue,
+  entriesByCategoryToAndIdAndValue,
   entriesToIncomeAndExpenseSumBarData,
   entriesToIncomeAndExpenseSumBarDataKeys,
 } from "../utils/data";
@@ -20,6 +21,8 @@ const Dashboard = () => {
   const [incomeExpenseData, setIncomeExpenseData] = useState<CustomHorizontalBarData[]>();
   const [incomeExpenseDataKeys, setIncomeExpenseDataKeys] = useState<string[]>();
   const [categoryChartData, setCategoryChartData] = useState<CustomPieChartData[]>();
+  const [expensesByCategory, setExpensesByCategory] = useState<CustomPieChartData[]>();
+  const [incomesByCategory, setIncomesByCategory] = useState<CustomPieChartData[]>();
 
   useEffect(() => {
     if (getEntries.data) {
@@ -29,6 +32,14 @@ const Dashboard = () => {
       const formattedChartDataKeys: string[] = entriesToIncomeAndExpenseSumBarDataKeys(entries);
       setIncomeExpenseData(formattedChartData);
       setIncomeExpenseDataKeys(formattedChartDataKeys);
+
+      const entriesByCategoryFormatted = entriesByCategoryToAndIdAndValue(entries);
+      setExpensesByCategory(
+        entriesByCategoryFormatted.filter((entry) => entry.type === IncomeExpenseType.Expense)
+      );
+      setIncomesByCategory(
+        entriesByCategoryFormatted.filter((entry) => entry.type === IncomeExpenseType.Income)
+      );
     }
   }, [getEntries.data]);
 
@@ -45,7 +56,9 @@ const Dashboard = () => {
     getEntries.loading ||
     !incomeExpenseData ||
     !incomeExpenseDataKeys ||
-    !categoryChartData
+    !categoryChartData ||
+    !expensesByCategory ||
+    !incomesByCategory
   )
     return <div>Loading...</div>;
 
@@ -58,17 +71,13 @@ const Dashboard = () => {
           </DashboardDataPane>
         </Grid.Column>
         <Grid.Column>
-          <DashboardDataPane title="Expenses">
-            <CustomPieChart
-              data={categoryChartData.filter((cat) => cat.type === IncomeExpenseType.Expense)}
-            />
+          <DashboardDataPane title="Expenses by category">
+            <CustomPieChart data={expensesByCategory} />
           </DashboardDataPane>
         </Grid.Column>
         <Grid.Column>
-          <DashboardDataPane title="Incomes">
-            <CustomPieChart
-              data={categoryChartData.filter((cat) => cat.type === IncomeExpenseType.Income)}
-            />
+          <DashboardDataPane title="Incomes by category">
+            <CustomPieChart data={incomesByCategory} />
           </DashboardDataPane>
         </Grid.Column>
       </Grid>
