@@ -4,12 +4,11 @@
 
 License: All rights reserved (C) Rafael Linnankoski
 
-## Structure
+## Project structure
 
 The project is structured as a monorepo with utility scripts in the root package.json (e.g. build).
-It is divided into two folders:
-- Server  
-- Client  
+It is divided into two folders (client & server) and further within those all source code is located in `./src/`.
+Build directories are gitignored.
 
 The project is written in TypeScript in vim with eslint and prettier enabled.
 

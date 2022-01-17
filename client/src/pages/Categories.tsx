@@ -118,6 +118,21 @@ const Categories = () => {
                 </Table.Row>
               )}
             </Table.Body>
+            {categories ? (
+              <Table.Footer>
+                <Table.Row>
+                  <Table.HeaderCell colSpan="2">
+                    {categories.filter((category) => category.type === type).length} categories
+                  </Table.HeaderCell>
+                  <Table.HeaderCell colSpan="2">
+                    Total:{" "}
+                    {categories
+                      .filter((category) => category.type === type)
+                      .reduce((sum, cat) => (cat.monthlyBudget ? sum + cat.monthlyBudget : sum), 0)}
+                  </Table.HeaderCell>
+                </Table.Row>
+              </Table.Footer>
+            ) : null}
           </Table>
         );
       })}

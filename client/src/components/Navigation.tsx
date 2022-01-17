@@ -20,15 +20,13 @@ const CustomLink = ({ children, to }: LinkProps) => {
   );
 };
 
-const Navigation = ({
-  openEntryModal,
-  openCategoryModal,
-  openLoginModal,
-}: {
-  openEntryModal: () => void;
-  openCategoryModal: () => void;
+interface NavigationProps {
   openLoginModal: () => void;
-}) => {
+  openEntryModal?: () => void;
+  openCategoryModal?: () => void;
+}
+
+const Navigation = ({ openEntryModal, openCategoryModal, openLoginModal }: NavigationProps) => {
   let navigate = useNavigate();
   const location = useLocation();
   return (
@@ -39,14 +37,14 @@ const Navigation = ({
       {IsLoggedIn() ? (
         <>
           <Menu inverted size="mini" secondary fluid>
-            {location.pathname === "/entries" || location.pathname === "/" ? (
+            {openEntryModal && (location.pathname === "/entries" || location.pathname === "/") ? (
               <Menu.Item position="right">
                 <Button circular size="small" primary onClick={() => openEntryModal()}>
                   <Icon name="plus" />
                   New entry
                 </Button>
               </Menu.Item>
-            ) : location.pathname === "/categories" ? (
+            ) : openCategoryModal && location.pathname === "/categories" ? (
               <Menu.Item position="right">
                 <Button circular size="small" primary onClick={() => openCategoryModal()}>
                   <Icon name="plus" />
