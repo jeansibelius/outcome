@@ -24,7 +24,7 @@ export const CategoryValidationSchema = Yup.object().shape({
 });
 
 const CategoryForm = (props: FormikProps<CategoryFormValues>) => {
-  const { isValid, isSubmitting, handleSubmit } = props;
+  const { dirty, isValid, isSubmitting, handleSubmit } = props;
 
   return (
     <Form className="w-full form ui" onSubmit={handleSubmit}>
@@ -35,7 +35,7 @@ const CategoryForm = (props: FormikProps<CategoryFormValues>) => {
       <IconSelect />
       <button
         type="submit"
-        disabled={!isValid || isSubmitting}
+        disabled={!dirty || !isValid || isSubmitting}
         className="w-full p-4 px-8 text-lg font-bold text-green-900 bg-green-300 rounded-lg drop-shadow-md hover:drop-shadow-lg hover:bg-green-400 disabled:opacity-75 disabled:hover:bg-slate-300 disabled:bg-slate-300 disabled:text-white disabled:drop-shadow-none"
       >
         Submit

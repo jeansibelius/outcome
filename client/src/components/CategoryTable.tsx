@@ -1,4 +1,4 @@
-import { FetchResult, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
 import { Table, Icon, Button } from "semantic-ui-react";
 import { ALL_CATEGORIES } from "../queries";
@@ -8,10 +8,9 @@ interface CategoryTableProps {
   key?: IncomeExpenseType | string;
   type: IncomeExpenseType;
   openUpdateCategoryModal: (data: Category) => void;
-  onDelete: (id: string) => Promise<FetchResult | undefined>;
 }
 
-const CategoryTable = ({ type, openUpdateCategoryModal, onDelete }: CategoryTableProps) => {
+const CategoryTable = ({ type, openUpdateCategoryModal }: CategoryTableProps) => {
   const getCategories = useQuery(ALL_CATEGORIES);
   const [categories, setCategories] = useState<Category[] | undefined>(undefined);
 
@@ -64,14 +63,6 @@ const CategoryTable = ({ type, openUpdateCategoryModal, onDelete }: CategoryTabl
                     size="mini"
                     style={{ margin: "2px 0" }}
                     onClick={() => openUpdateCategoryModal(category)}
-                  />
-                  <Icon
-                    floated="right"
-                    as={Button}
-                    icon="trash"
-                    size="mini"
-                    style={{ margin: "2px 0" }}
-                    onClick={() => onDelete(category.id)}
                   />
                 </Table.Cell>
               </Table.Row>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FetchResult, useMutation, useQuery } from "@apollo/client";
-import { ALL_CATEGORIES, DELETE_CATEGORY } from "../queries";
+import { useQuery } from "@apollo/client";
+import { ALL_CATEGORIES } from "../queries";
 import { Category, IncomeExpenseType } from "../types";
 import { Statistic, Tab } from "semantic-ui-react";
 import CategoryModal from "../components/CategoryModal";
@@ -12,12 +12,6 @@ import { categoriesToIdAndValue } from "../utils/data";
 
 const Categories = () => {
   const getCategories = useQuery(ALL_CATEGORIES);
-  const [deleteCategory] = useMutation<{ DeleteCategory: boolean }, { id: string }>(
-    DELETE_CATEGORY,
-    {
-      refetchQueries: [{ query: ALL_CATEGORIES }],
-    }
-  );
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [updateCategoryValues, setUpdateCategoryValues] = useState<Category | undefined>(undefined);
 
@@ -39,18 +33,6 @@ const Categories = () => {
     setModalOpen(false);
   };
 
-  const onDelete = async (id: string): Promise<FetchResult | undefined> => {
-    try {
-      const response = await deleteCategory({ variables: { id: id } });
-      return response;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        //TODO add some toast or error handling
-      }
-      console.log(error);
-    }
-  };
-
   if (!IsLoggedIn()) {
     return <div>Please login.</div>;
   }
@@ -64,11 +46,7 @@ const Categories = () => {
         <DashboardDataPane>
           <CustomPieChart data={categoryChartData.filter((cat) => cat.type === type)} />
         </DashboardDataPane>
-        <CategoryTable
-          type={type}
-          onDelete={onDelete}
-          openUpdateCategoryModal={openUpdateCategoryModal}
-        />
+        <CategoryTable type={type} openUpdateCategoryModal={openUpdateCategoryModal} />
       </Tab.Pane>
     ),
   }));
@@ -80,13 +58,25 @@ const Categories = () => {
     return arr;
   }, []);
 
+  const balance = totals.reduce(
+    (balance, totals) =>
+      totals.type === IncomeExpenseType.Expense ? balance - totals.total : balance + totals.total,
+    0
+  );
+
   return (
     <>
+      <Statistic.Group>
+        <Statistic color={balance >= 0 ? "teal" : "pink"} style={{ margin: "0 auto 2em" }}>
+          <Statistic.Label>Monthly balance</Statistic.Label>
+          <Statistic.Value>{balance}</Statistic.Value>
+        </Statistic>
+      </Statistic.Group>
       <Statistic.Group widths={2} style={{ marginBottom: "2em" }}>
         {totals.map((obj) => (
-          <Statistic key={obj.type} size="small">
+          <Statistic key={obj.type} size="mini">
             <Statistic.Value>{obj.total}</Statistic.Value>
-            <Statistic.Label>{obj.type}</Statistic.Label>
+            <Statistic.Label>{obj.type}s</Statistic.Label>
           </Statistic>
         ))}
       </Statistic.Group>

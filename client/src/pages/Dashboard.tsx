@@ -7,7 +7,7 @@ import CustomHorizontalBar, {
 import CustomPieChart, { CustomPieChartData } from "../components/charts/CustomResponsivePie";
 import DashboardDataPane from "../components/DashboardDataPane";
 import { ALL_CATEGORIES, ALL_ENTRIES } from "../queries";
-import { Entry, IncomeExpenseType } from "../types";
+import { IncomeExpenseType } from "../types";
 import {
   categoriesToIdAndValue,
   entriesByCategoryToAndIdAndValue,

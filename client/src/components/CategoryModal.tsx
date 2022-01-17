@@ -1,9 +1,9 @@
 import React from "react";
-import { Modal, Segment } from "semantic-ui-react";
+import { Button, Icon, Modal, Segment } from "semantic-ui-react";
 import NewCategoryForm from "./NewCategoryForm";
 import { Category, CategoryInput, NewCategory } from "../types";
-import { useMutation } from "@apollo/client";
-import { ALL_CATEGORIES, CREATE_CATEGORY, UPDATE_CATEGORY } from "../queries";
+import { FetchResult, useMutation } from "@apollo/client";
+import { ALL_CATEGORIES, CREATE_CATEGORY, DELETE_CATEGORY, UPDATE_CATEGORY } from "../queries";
 import { toNewCategory } from "../utils";
 import UpdateCategoryForm from "./UpdateCategoryForm";
 
@@ -34,6 +34,12 @@ const CategoryModal = ({
     { UpdateCategory: Category },
     { id: string; data: CategoryInput }
   >(UPDATE_CATEGORY, { refetchQueries: [{ query: ALL_CATEGORIES }] });
+  const [deleteCategory] = useMutation<{ DeleteCategory: boolean }, { id: string }>(
+    DELETE_CATEGORY,
+    {
+      refetchQueries: [{ query: ALL_CATEGORIES }],
+    }
+  );
 
   const submitNewCategory = async (values: CategoryInput) => {
     try {
@@ -49,6 +55,19 @@ const CategoryModal = ({
         setError(error.message);
       }
       console.log("error", error);
+    }
+  };
+
+  const onDelete = async (id: string): Promise<FetchResult | undefined> => {
+    try {
+      const response = await deleteCategory({ variables: { id: id } });
+      onClose();
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        //TODO add some toast or error handling
+      }
+      console.log(error);
     }
   };
 
@@ -74,15 +93,33 @@ const CategoryModal = ({
   return (
     <Modal className="p-2" open={modalOpen} onClose={onClose} centered={true} closeIcon>
       <Modal.Header>
-        {isUpdatingCategory ? <>Edit category</> : <>Add a new category</>}
+        {isUpdatingCategory && updateCategoryValues ? (
+          <>
+            Edit category
+            <Icon
+              floated="right"
+              as={Button}
+              icon="trash"
+              size="mini"
+              content="Delete"
+              color="red"
+              style={{ margin: "0 2em" }}
+              onClick={() => onDelete(updateCategoryValues.id)}
+            />
+          </>
+        ) : (
+          <>Add a new category</>
+        )}
       </Modal.Header>
       <Modal.Content>
         {error && <Segment inverted color="red">{`Error: ${error}`}</Segment>}
         {isUpdatingCategory && updateCategoryValues ? (
-          <UpdateCategoryForm
-            onSubmit={submitUpdateCategory}
-            updateCategoryValues={updateCategoryValues}
-          />
+          <>
+            <UpdateCategoryForm
+              onSubmit={submitUpdateCategory}
+              updateCategoryValues={updateCategoryValues}
+            />
+          </>
         ) : (
           <NewCategoryForm onSubmit={submitNewCategory} />
         )}
