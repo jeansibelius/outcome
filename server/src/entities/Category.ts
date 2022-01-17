@@ -26,6 +26,12 @@ export class Category {
   @Field({ nullable: true })
   @Property()
   icon?: string;
+
+  /*
+  @Field((_type) => User)
+  @Property({ ref: () => User })
+  user: Ref<User>;
+  */
 }
 
 export const CategoryModel = getModelForClass(Category);

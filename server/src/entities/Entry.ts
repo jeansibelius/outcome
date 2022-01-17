@@ -24,6 +24,12 @@ export class Entry {
   @Property({ required: true })
   amount: number;
 
+  /*
+  @Field((_type) => User)
+  @Property({ ref: () => User })
+  user: Ref<User>;
+  */
+
   @Field((_type) => Category, { nullable: true })
   @Property({ ref: () => Category, nullable: true })
   category?: Ref<Category>;

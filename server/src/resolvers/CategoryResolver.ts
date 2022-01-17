@@ -1,8 +1,8 @@
 import { Category, CategoryModel } from "../entities/Category";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { CategoryInput } from "./inputTypes/CategoryInput";
+import { CategoryInput, CategoryUpdateInput } from "./inputTypes/CategoryInput";
 
-@Resolver()
+@Resolver((_of) => Category)
 export class CategoriesResolver {
   @Query((_returns) => Category, { nullable: false })
   async returnSingleCategory(@Arg("id") id: string) {
@@ -30,10 +30,28 @@ export class CategoriesResolver {
     return category;
   }
 
+  @Mutation(() => Category)
+  async updateCategory(
+    @Arg("id") id: string,
+    @Arg("data") categoryData: CategoryUpdateInput
+  ): Promise<Category> {
+    const category = await CategoryModel.findByIdAndUpdate(
+      id,
+      {
+        ...categoryData,
+      },
+      { new: true }
+    );
+    if (!category) {
+      throw new Error("Invalid category id");
+    }
+    return category;
+  }
+
   // TODO: need to set category to null from all associated entries
   @Mutation(() => Boolean)
   async deleteCategory(@Arg("id") id: string) {
-    await CategoryModel.deleteOne({ id });
+    await CategoryModel.deleteOne({ _id: id });
     return true;
   }
 }
