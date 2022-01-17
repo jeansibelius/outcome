@@ -22,7 +22,7 @@ const CustomHorizontalBar = ({
     layout="horizontal"
     valueScale={{ type: "linear" }}
     indexScale={{ type: "band", round: true }}
-    valueFormat=" >-$"
+    valueFormat=">-"
     colors={{ scheme: "set2" }}
     defs={[
       {

@@ -34,7 +34,7 @@ const AddEntryModal = ({
     }
   );
 
-  const submitNewEntry = async (values: EntryInput) => {
+  const submitNewEntry = async (values: EntryInput): Promise<void> => {
     try {
       const newEntry = toNewEntry(values);
       await createEntry({
@@ -76,7 +76,7 @@ const AddEntryModal = ({
 
   return (
     <Modal className="p-2" open={modalOpen} onClose={onClose} centered={true} closeIcon>
-      <Modal.Header>Add a new entry</Modal.Header>
+      <Modal.Header>{isUpdatingEntry ? "Edit entry" : "Add a new entry"}</Modal.Header>
       <Modal.Content>
         {error && <Segment inverted color="red">{`Error: ${error}`}</Segment>}
         {isUpdatingEntry && updateEntryValues ? (

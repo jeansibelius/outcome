@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useMutation, useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
+import { FetchResult, useMutation, useQuery } from "@apollo/client";
 import { ALL_CATEGORIES, DELETE_CATEGORY } from "../queries";
 import { Category, IncomeExpenseType } from "../types";
-import { Button, Icon, Table } from "semantic-ui-react";
+import { Statistic, Tab } from "semantic-ui-react";
 import CategoryModal from "../components/CategoryModal";
+import CategoryTable from "../components/CategoryTable";
 import { IsLoggedIn } from "..";
+import DashboardDataPane from "../components/DashboardDataPane";
+import CustomPieChart, { CustomPieChartData } from "../components/charts/CustomResponsivePie";
+import { categoriesToIdAndValue } from "../utils/data";
 
 const Categories = () => {
   const getCategories = useQuery(ALL_CATEGORIES);
-  const [categories, setCategories] = useState<Category[] | undefined>(undefined);
   const [deleteCategory] = useMutation<{ DeleteCategory: boolean }, { id: string }>(
     DELETE_CATEGORY,
     {
@@ -18,6 +21,16 @@ const Categories = () => {
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [updateCategoryValues, setUpdateCategoryValues] = useState<Category | undefined>(undefined);
 
+  const [categoryChartData, setCategoryChartData] = useState<CustomPieChartData[]>();
+
+  useEffect(() => {
+    if (getCategories.data) {
+      const categories = getCategories.data.returnAllCategories;
+      const formattedChartData: CustomPieChartData[] = categoriesToIdAndValue(categories);
+      setCategoryChartData(formattedChartData);
+    }
+  }, [getCategories.data]);
+
   const openUpdateCategoryModal = (data: Category): void => {
     setUpdateCategoryValues(data);
     setModalOpen(true);
@@ -26,13 +39,7 @@ const Categories = () => {
     setModalOpen(false);
   };
 
-  useEffect(() => {
-    if (getCategories.data) {
-      setCategories(getCategories.data.returnAllCategories);
-    }
-  }, [getCategories.data]);
-
-  const onDelete = async (id: string) => {
+  const onDelete = async (id: string): Promise<FetchResult | undefined> => {
     try {
       const response = await deleteCategory({ variables: { id: id } });
       return response;
@@ -48,94 +55,48 @@ const Categories = () => {
     return <div>Please login.</div>;
   }
 
-  if (getCategories.loading) {
-    return <div>Loading</div>;
-  }
+  if (getCategories.loading || !categoryChartData) return <div>Loading...</div>;
 
-  if (getCategories.error) {
-    return (
-      <div>
-        <p>Error loading categories.</p>
-        <i>{getCategories.error.message}</i>
-      </div>
-    );
-  }
+  const panes = Object.values(IncomeExpenseType).map((type) => ({
+    menuItem: { key: type, content: type },
+    render: () => (
+      <Tab.Pane key={type}>
+        <DashboardDataPane>
+          <CustomPieChart data={categoryChartData.filter((cat) => cat.type === type)} />
+        </DashboardDataPane>
+        <CategoryTable
+          type={type}
+          onDelete={onDelete}
+          openUpdateCategoryModal={openUpdateCategoryModal}
+        />
+      </Tab.Pane>
+    ),
+  }));
+
+  const totals = categoryChartData.reduce((arr: any[], cat) => {
+    const index = cat.type === "Expense" ? 0 : 1;
+    let sum = arr[index] ? arr[index]["total"] : 0;
+    arr[index] = { total: sum + cat.value, type: cat.type };
+    return arr;
+  }, []);
 
   return (
     <>
+      <Statistic.Group widths={2} style={{ marginBottom: "2em" }}>
+        {totals.map((obj) => (
+          <Statistic key={obj.type} size="small">
+            <Statistic.Value>{obj.total}</Statistic.Value>
+            <Statistic.Label>{obj.type}</Statistic.Label>
+          </Statistic>
+        ))}
+      </Statistic.Group>
+      <Tab menu={{ pointing: true }} panes={panes} />
       <CategoryModal
         modalOpen={modalOpen}
         onClose={closeCategoryModal}
         isUpdatingCategory={updateCategoryValues ? true : false}
         updateCategoryValues={updateCategoryValues}
       />
-      {Object.values(IncomeExpenseType).map((type) => {
-        return (
-          <Table key={type} color={type === "Expense" ? "orange" : "green"} unstackable>
-            <Table.Header fullWidth>
-              <Table.Row>
-                <Table.HeaderCell width={3}>{type}s</Table.HeaderCell>
-                <Table.HeaderCell width={8}>Description</Table.HeaderCell>
-                <Table.HeaderCell width={3}>Monthly budget</Table.HeaderCell>
-                <Table.HeaderCell></Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {categories ? (
-                categories
-                  .filter((category) => category.type === type)
-                  .map((category) => (
-                    <Table.Row key={category.id}>
-                      <Table.Cell>
-                        <Icon className={category.icon} />
-                        {category.name}
-                      </Table.Cell>
-                      <Table.Cell>{category.description}</Table.Cell>
-                      <Table.Cell>{category.monthlyBudget}</Table.Cell>
-                      <Table.Cell>
-                        <Icon
-                          floated="right"
-                          as={Button}
-                          icon="pencil"
-                          size="mini"
-                          style={{ margin: "2px 0" }}
-                          onClick={() => openUpdateCategoryModal(category)}
-                        />
-                        <Icon
-                          floated="right"
-                          as={Button}
-                          icon="trash"
-                          size="mini"
-                          style={{ margin: "2px 0" }}
-                          onClick={() => onDelete(category.id)}
-                        />
-                      </Table.Cell>
-                    </Table.Row>
-                  ))
-              ) : (
-                <Table.Row>
-                  <Table.Cell colSpan="3">No {type} categories defined yet.</Table.Cell>
-                </Table.Row>
-              )}
-            </Table.Body>
-            {categories ? (
-              <Table.Footer>
-                <Table.Row>
-                  <Table.HeaderCell colSpan="2">
-                    {categories.filter((category) => category.type === type).length} categories
-                  </Table.HeaderCell>
-                  <Table.HeaderCell colSpan="2">
-                    Total:{" "}
-                    {categories
-                      .filter((category) => category.type === type)
-                      .reduce((sum, cat) => (cat.monthlyBudget ? sum + cat.monthlyBudget : sum), 0)}
-                  </Table.HeaderCell>
-                </Table.Row>
-              </Table.Footer>
-            ) : null}
-          </Table>
-        );
-      })}
     </>
   );
 };

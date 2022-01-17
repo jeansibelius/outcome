@@ -1,8 +1,8 @@
 import { CustomHorizontalBarData } from "../components/charts/CustomHorizontalBar";
-import { PieChartData } from "../components/charts/CustomResponsivePie";
+import { CustomPieChartData } from "../components/charts/CustomResponsivePie";
 import { Category, Entry, IncomeExpenseType } from "../types";
 
-export const categoriesToIdAndValue = (array: Category[]): PieChartData[] =>
+export const categoriesToIdAndValue = (array: Category[]): CustomPieChartData[] =>
   array.reduce(
     (obj: any[], cat: Category) =>
       obj.concat({ id: cat.name, value: cat.monthlyBudget, type: cat.type }),

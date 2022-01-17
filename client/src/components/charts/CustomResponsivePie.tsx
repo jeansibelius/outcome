@@ -3,16 +3,17 @@ import { ResponsivePie } from "@nivo/pie";
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
-export interface PieChartData {
+export interface CustomPieChartData {
   id: string;
   value: number;
+  type: string;
   color?: string;
 }
 
-const CustomResponsivePie = ({ data }: { data: PieChartData[] }) => (
+const CustomResponsivePie = ({ data }: { data: CustomPieChartData[] }) => (
   <ResponsivePie
     data={data}
-    margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+    margin={{ top: 30, right: 80, bottom: 30, left: 80 }}
     innerRadius={0.3}
     padAngle={4}
     cornerRadius={5}

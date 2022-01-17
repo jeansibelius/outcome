@@ -29,7 +29,7 @@ const Layout = () => {
 
   const sharedContent = () => (
     <>
-      <Container className="px-4 pt-8 pb-40">
+      <Container className="px-1 pt-8 pb-40">
         <Outlet />
       </Container>
       <Navigation
