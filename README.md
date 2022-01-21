@@ -59,6 +59,7 @@ The client created with Create React App with PWA typescript template and uses t
 - Add "space" to user, entry and category models
 - Restrict server requests to authorized users (e.g. logged in user gets only their own stuff)
 - Register view exists
+- Add date filtering to reporting (default ongoing month, other options?)
 - Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
 - Separate test and prod databases
 - Test coverage for server is sufficient
