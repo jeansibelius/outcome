@@ -15,7 +15,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
-import cache from "./cache";
+import cache, { isLoggedInVar } from "./cache";
 import App from "./App";
 
 const uri = "/graphql";
@@ -39,9 +39,13 @@ const authLink = setContext((_request, { headers }) => {
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
-    );
+    graphQLErrors.forEach(({ message, locations, path }) => {
+      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+      if (message.includes("TokenExpiredError")) {
+        window.localStorage.removeItem("token");
+        isLoggedInVar(false);
+      }
+    });
 
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
