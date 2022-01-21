@@ -59,7 +59,9 @@ export const EntryAsAFeedEvent = ({ entry, updateEntry }: SingleEntryProps) => {
         </Feed.Summary>
 
         {entry.description ? <Feed.Extra>{entry.description}</Feed.Extra> : null}
-        <Feed.Meta>in {entry.category?.name}</Feed.Meta>
+        <Feed.Meta>
+          {entry.category ? entry.category.name : <i>Not categorised</i>} · {entry.user.first_name}
+        </Feed.Meta>
       </Feed.Content>
     </Feed.Event>
   );

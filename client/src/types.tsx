@@ -22,17 +22,25 @@ export interface CategoryInput {
 
 export type NewCategory = Omit<Category, "id">;
 
+export interface User {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
 export interface Entry {
   id: string;
   type: IncomeExpenseType;
   date: Date;
   name: string;
   amount: number;
+  user: Partial<User>;
   description?: string | null;
   category?: Category;
 }
 
-export interface NewEntry extends Omit<Entry, "id" | "category"> {
+export interface NewEntry extends Omit<Entry, "id" | "category" | "user"> {
   category?: string | null;
 }
 
