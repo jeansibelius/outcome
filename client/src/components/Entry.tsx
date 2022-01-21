@@ -40,7 +40,7 @@ export const EntryAsACard = ({ entry, updateEntry }: SingleEntryProps) => (
 
 export const EntryAsAFeedEvent = ({ entry, updateEntry }: SingleEntryProps) => {
   return (
-    <Feed.Event onClick={() => updateEntry(entry)}>
+    <Feed.Event style={{ margin: "0 0 1em" }} onClick={() => updateEntry(entry)}>
       <Feed.Label>
         {entry.category?.icon ? (
           <Icon
@@ -50,17 +50,16 @@ export const EntryAsAFeedEvent = ({ entry, updateEntry }: SingleEntryProps) => {
         ) : null}
       </Feed.Label>
       <Feed.Content>
+        <Feed.Date>{getYearMonthDay(entry.date)}</Feed.Date>
         <Feed.Summary>
-          {entry.name}
-          <Feed.Date>{getYearMonthDay(entry.date)}</Feed.Date>
-        </Feed.Summary>
-        <Feed.Extra>
           <strong style={entry.type === "Expense" ? { color: "#e03997" } : { color: "teal" }}>
             {entry.type === "Expense" ? `-${entry.amount}` : `${entry.amount}`}
           </strong>
-          {entry.description ? <div>{entry.description}</div> : null}
-        </Feed.Extra>
-        <Feed.Meta>{entry.category?.name}</Feed.Meta>
+           {entry.name}
+        </Feed.Summary>
+
+        {entry.description ? <Feed.Extra>{entry.description}</Feed.Extra> : null}
+        <Feed.Meta>in {entry.category?.name}</Feed.Meta>
       </Feed.Content>
     </Feed.Event>
   );
