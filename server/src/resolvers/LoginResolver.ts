@@ -1,8 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { AuthResponse } from "../entities/AuthResponse";
-import { UserModel } from "../entities/User";
+import { User, UserModel } from "../entities/User";
 import { Arg, Mutation, Resolver } from "type-graphql";
+import { randomUUID } from "crypto";
 
 @Resolver()
 export class LoginResolver {
@@ -11,10 +12,13 @@ export class LoginResolver {
     @Arg("email") email: string,
     @Arg("password") password: string
   ): Promise<AuthResponse> {
-    const user = await UserModel.findOne({ email });
+    const user: User | null = await UserModel.findOne({ email });
 
     const passwordCorrect =
-      user === null ? false : await bcrypt.compare(password, user.password_hash);
+      // Compare even, if user is null to avoid time based user sniffing
+      user === null
+        ? await bcrypt.compare(password, randomUUID())
+        : await bcrypt.compare(password, user.password_hash);
 
     if (!(user && passwordCorrect)) {
       throw new Error("Wrong email or password.");

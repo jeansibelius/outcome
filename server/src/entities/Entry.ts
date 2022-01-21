@@ -2,6 +2,7 @@ import { ObjectType, Field, ID } from "type-graphql";
 import { prop as Property, getModelForClass } from "@typegoose/typegoose";
 import { IncomeExpenseType, Ref } from "../types";
 import { Category } from "./Category";
+import { User } from "./User";
 
 @ObjectType({ description: "The Entry model for income and expense rows." })
 export class Entry {
@@ -24,11 +25,9 @@ export class Entry {
   @Property({ required: true })
   amount: number;
 
-  /*
   @Field((_type) => User)
   @Property({ ref: () => User })
   user: Ref<User>;
-  */
 
   @Field((_type) => Category, { nullable: true })
   @Property({ ref: () => Category, nullable: true })

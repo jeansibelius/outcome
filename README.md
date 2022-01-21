@@ -54,7 +54,7 @@ The client created with Create React App with PWA typescript template and uses t
 - Login view exists ✅
 - Restrict views and data only to authorized users ✅
 - Add first analytics views to home/dashboard view (monthly spending vs. budget per category) ✅
-- Add user to entry and category models
+- Add user to entry model ✅
 - Create a "space" to enable sharing a space with other users and add it to user, entry and category models
 - Add "space" to user, entry and category models
 - Restrict server requests to authorized users (e.g. logged in user gets only their own stuff)

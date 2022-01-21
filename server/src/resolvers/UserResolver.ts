@@ -2,7 +2,7 @@ import { User, UserModel } from "../entities/User";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { UserInput, UserUpdateInput } from "./inputTypes/UserInput";
 import { getHashedPassword } from "../utils";
-import { DecodedTokenUser } from "../types";
+import { DecodedJwtToken } from "../types";
 
 @Resolver((_of) => User)
 export class UserResolver {
@@ -13,7 +13,7 @@ export class UserResolver {
 
   @Query(() => [User])
   // eslint-disable-next-line
-  async returnAllUsers(@Ctx() { user }: { user: DecodedTokenUser }) {
+  async returnAllUsers(@Ctx() { user }: { user: DecodedJwtToken }) {
     console.log("context", user);
     // TODO restrict to ADMIN
     if (!user) {

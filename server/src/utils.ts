@@ -1,13 +1,13 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { DecodedTokenUser } from "./types";
+import { DecodedJwtToken } from "./types";
 
 export const getHashedPassword = async (password: string): Promise<string> => {
   const saltRounds = 10;
   return await bcrypt.hash(password, saltRounds);
 };
 
-export const getUserFromToken = (token: string): DecodedTokenUser => {
+export const decodeToken = (token: string): DecodedJwtToken => {
   const SECRET = process.env.JWT_SECRET as jwt.Secret;
   if (!SECRET) {
     throw new Error("JWT secret missing from env.");
@@ -15,12 +15,15 @@ export const getUserFromToken = (token: string): DecodedTokenUser => {
 
   let decodedTokenUser = undefined;
 
-  jwt.verify(token, SECRET, (error, decoded): DecodedTokenUser => {
+  jwt.verify(token, SECRET, (error, decoded): jwt.JwtPayload => {
     if (error) {
       console.log("jwt error", error);
       throw new Error(error.toString());
     }
-    return (decodedTokenUser = decoded as DecodedTokenUser);
+    if (decoded) {
+      return (decodedTokenUser = decoded);
+    }
+    throw new Error("Something went wrong with jwt.verify");
   });
 
   if (!token || !decodedTokenUser) {

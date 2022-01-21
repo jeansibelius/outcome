@@ -47,6 +47,7 @@ type Entry {
   id: ID!
   name: String!
   type: IncomeExpenseType!
+  user: User!
 }
 
 input EntryInput {
