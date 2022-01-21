@@ -8,7 +8,7 @@ export interface Category {
   type: IncomeExpenseType;
   name: string;
   monthlyBudget?: number | null;
-  description?: string;
+  description?: string | null;
   icon?: string;
 }
 
@@ -28,12 +28,12 @@ export interface Entry {
   date: Date;
   name: string;
   amount: number;
-  description?: string;
+  description?: string | null;
   category?: Category;
 }
 
 export interface NewEntry extends Omit<Entry, "id" | "category"> {
-  category?: string;
+  category?: string | null;
 }
 
 export interface EntryInput {

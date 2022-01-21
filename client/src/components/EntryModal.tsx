@@ -1,8 +1,8 @@
 import React from "react";
-import { Modal, Segment } from "semantic-ui-react";
+import { Button, Icon, Modal, Segment } from "semantic-ui-react";
 import { Entry, EntryInput, NewEntry } from "../types";
 import { useMutation } from "@apollo/client";
-import { CREATE_ENTRY, ALL_ENTRIES, UPDATE_ENTRY } from "../queries";
+import { CREATE_ENTRY, ALL_ENTRIES, UPDATE_ENTRY, DELETE_ENTRY } from "../queries";
 import { toNewEntry } from "../utils";
 import NewEntryForm from "./NewEntryForm";
 import UpdateEntryForm from "./UpdateEntryForm";
@@ -33,17 +33,16 @@ const AddEntryModal = ({
       refetchQueries: [{ query: ALL_ENTRIES }],
     }
   );
+  const [deleteEntry] = useMutation<{ DeleteEntry: boolean }, { id: string }>(DELETE_ENTRY, {
+    refetchQueries: [{ query: ALL_ENTRIES }],
+  });
 
   const submitNewEntry = async (values: EntryInput): Promise<void> => {
     try {
       const newEntry = toNewEntry(values);
       await createEntry({
         variables: { entryData: newEntry },
-      }).then(
-        (response: unknown) =>
-          response instanceof Object ? console.log("success", response) : null,
-        (error: unknown) => (error instanceof Error ? console.log("error", error) : null)
-      );
+      });
       setError(undefined);
       onClose();
     } catch (error: unknown) {
@@ -74,9 +73,40 @@ const AddEntryModal = ({
     }
   };
 
+  const onDelete = async (id: string) => {
+    try {
+      const response = await deleteEntry({ variables: { id: id } });
+      onClose();
+      return response;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        //TODO add some toast or error handling
+      }
+      console.log(error);
+    }
+  };
+
   return (
     <Modal className="p-2" open={modalOpen} onClose={onClose} centered={true} closeIcon>
-      <Modal.Header>{isUpdatingEntry ? "Edit entry" : "Add a new entry"}</Modal.Header>
+      <Modal.Header>
+        {isUpdatingEntry && updateEntryValues ? (
+          <>
+            Edit entry
+            <Icon
+              floated="right"
+              as={Button}
+              icon="trash"
+              size="mini"
+              content="Delete"
+              color="red"
+              style={{ margin: "0 2em" }}
+              onClick={() => onDelete(updateEntryValues.id)}
+            />
+          </>
+        ) : (
+          <>Add a new entry</>
+        )}
+      </Modal.Header>
       <Modal.Content>
         {error && <Segment inverted color="red">{`Error: ${error}`}</Segment>}
         {isUpdatingEntry && updateEntryValues ? (
