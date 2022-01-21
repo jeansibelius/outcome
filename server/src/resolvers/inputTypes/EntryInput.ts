@@ -5,7 +5,7 @@ import { IncomeExpenseType } from "../../types";
 import { ObjectId } from "mongodb";
 
 @InputType()
-export class EntryInput implements Omit<Entry, "id" | "_doc"> {
+export class EntryInput implements Omit<Entry, "id" | "user" | "_doc"> {
   @Field((_type) => IncomeExpenseType)
   type: IncomeExpenseType;
 
