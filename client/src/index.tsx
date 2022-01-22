@@ -62,12 +62,14 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   typeDefs,
 });
 
+// Query for checking logged in status from local cache (won't call the server)
 const IS_LOGGED_IN = gql`
   query IsUserLoggedIn {
     isLoggedIn @client
   }
 `;
 
+// Function to make the above query callable from anywhere in the app
 export const IsLoggedIn = (): boolean => {
   const { data } = useQuery(IS_LOGGED_IN);
   return data.isLoggedIn;

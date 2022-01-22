@@ -30,6 +30,32 @@ The client created with Create React App with PWA typescript template and uses t
 - [Tailwindcss](https://tailwindcss.com/docs/installation) in a few places (mainly to test out the framework) 
 - [Formik](https://formik.org/docs/overview) (for form related things)
 
+
+## How to run
+
+### Production mode
+In the root...  
+- `npm run install` to run installation script for both sub-folders (client & server)
+- `npm run build` to run build scripts in both sub-folders
+- `npm start` to run the backend production build (which serves also the client build)
+- `npm run deploy` to deploy the project to Heroku (might need to update script to deploy the
+  correct/desired branch)
+
+### Development
+In ./client...
+- `npm start` to run the project in `localhost:3000`
+- and other basic installation/build scripts
+
+In ./server...
+- `npm run dev` to run the backend in development mode with hot reloading
+- and other basic installation/build scripts
+
+### Required env variables
+- The server requires the following env vars to be set
+  - `MONGODB_URI`: a connection URI containing the username and password of the MongoDB instance
+  - `JWT_SECRET`: used to create and verify hashed passwords
+
+
 ## Roadmap
 
 ### MVP
