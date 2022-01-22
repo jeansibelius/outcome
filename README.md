@@ -42,13 +42,13 @@ In the root...
   correct/desired branch)
 
 ### Development
-In ./client...
-- `npm start` to run the project in `localhost:3000`
-- and other basic installation/build scripts
+In `./client`...
+- `npm start` to run the project at `localhost:3000`
+- and other basic installation/build scripts, as required
 
-In ./server...
-- `npm run dev` to run the backend in development mode with hot reloading
-- and other basic installation/build scripts
+In `./server`...
+- `npm run dev` to run the backend in development mode with hot reloading at `localhost:4000/graphql`
+- and other basic installation/build scripts, as required
 
 ### Required env variables
 - The server requires the following env vars to be set
