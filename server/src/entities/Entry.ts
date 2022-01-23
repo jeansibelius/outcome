@@ -1,8 +1,9 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { prop as Property, getModelForClass } from "@typegoose/typegoose";
-import { IncomeExpenseType, Ref } from "../types";
+import { prop as Property, Ref } from "@typegoose/typegoose";
+import { IncomeExpenseType } from "../types";
 import { Category } from "./Category";
 import { User } from "./User";
+import { Space } from "./Space";
 
 @ObjectType({ description: "The Entry model for income and expense rows." })
 export class Entry {
@@ -29,6 +30,10 @@ export class Entry {
   @Property({ ref: () => User })
   user: Ref<User>;
 
+  @Field((_type) => Space)
+  @Property({ ref: () => Space, required: true })
+  space: Ref<Space>;
+
   @Field((_type) => Category, { nullable: true })
   @Property({ ref: () => Category, nullable: true })
   category?: Ref<Category>;
@@ -39,5 +44,3 @@ export class Entry {
 
   _doc: Entry;
 }
-
-export const EntryModel = getModelForClass(Entry);

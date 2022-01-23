@@ -3,7 +3,7 @@ import { User } from "../../entities/User";
 import { IsEmail, IsString, Length, MaxLength } from "class-validator";
 
 @InputType()
-export class UserInput implements Omit<User, "id" | "password_hash"> {
+export class UserInput implements Omit<User, "id" | "password_hash" | "spaces"> {
   @Field()
   @Length(1, 255)
   @IsString()

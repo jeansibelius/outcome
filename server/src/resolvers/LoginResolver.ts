@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { AuthResponse } from "../entities/AuthResponse";
-import { User, UserModel } from "../entities/User";
+import { User } from "../entities/User";
+import { UserModel } from "../entities";
 import { Arg, Mutation, Resolver } from "type-graphql";
 import { randomUUID } from "crypto";
 

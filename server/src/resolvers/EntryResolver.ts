@@ -1,4 +1,5 @@
-import { Entry, EntryModel } from "../entities/Entry";
+import { Entry } from "../entities/Entry";
+import { EntryModel } from "../entities";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { EntryInput, EntryUpdateInput } from "./inputTypes/EntryInput";
 import { ContextType } from "../types";
@@ -8,12 +9,12 @@ const populatePaths = ["category", "user"];
 @Resolver((_of) => Entry)
 export class EntryResolver {
   @Query((_returns) => Entry, { nullable: false })
-  async returnSingleEntry(@Arg("id") id: string) {
+  async returnSingleEntry(@Arg("id") id: string): Promise<Entry> {
     return await EntryModel.findById({ _id: id }).populate(populatePaths);
   }
 
   @Query(() => [Entry])
-  async returnAllEntries() {
+  async returnAllEntries(): Promise<Entry[]> {
     return await EntryModel.find().populate(populatePaths);
   }
 
@@ -55,7 +56,7 @@ export class EntryResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteEntry(@Arg("id") id: string) {
+  async deleteEntry(@Arg("id") id: string): Promise<boolean> {
     await EntryModel.deleteOne({ _id: id });
     return true;
   }

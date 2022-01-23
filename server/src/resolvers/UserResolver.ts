@@ -1,4 +1,5 @@
-import { User, UserModel } from "../entities/User";
+import { User } from "../entities/User";
+import { UserModel } from "../entities";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { UserInput, UserUpdateInput } from "./inputTypes/UserInput";
 import { getHashedPassword } from "../utils";

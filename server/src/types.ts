@@ -1,6 +1,7 @@
 import { registerEnumType } from "type-graphql";
 import { ObjectId } from "mongodb";
 
+// TODO consider removing this, if not needed (does typegoose ref provide typeguards?)
 export type Ref<T> = T | ObjectId;
 
 export enum IncomeExpenseType {

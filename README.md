@@ -81,10 +81,11 @@ In `./server`...
 - Restrict views and data only to authorized users ✅
 - Add first analytics views to home/dashboard view (monthly spending vs. budget per category) ✅
 - Add user to entry model ✅
-- Create a "space" to enable sharing a space with other users and add it to user, entry and category models
-- Add "space" to user, entry and category models
-- Restrict server requests to authorized users (e.g. logged in user gets only their own stuff)
-- Register view exists
+- Create a "space" model to enable collaborating with other users on entries etc. ✅
+- Spaces are added to user, entry and category models ✅
+- Spaces are used in client and added to headers for calls
+- Spaces are added to context in server and available for auth checking in resolvers
+- Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories)
 - Add date filtering to reporting (default ongoing month, other options?)
 - Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
 - Separate test and prod databases
@@ -94,6 +95,7 @@ In `./server`...
 - Onboard first users
 
 ### After "launch"
+- Register view exists
 - Remove normalisation of date in entries to allow proper sorting (same day entries)
 - Caching: Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)

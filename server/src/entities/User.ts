@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { prop as Property, getModelForClass } from "@typegoose/typegoose";
+import { prop as Property, Ref } from "@typegoose/typegoose";
+import { Space } from "./Space";
 
 @ObjectType()
 export class User {
@@ -20,6 +21,9 @@ export class User {
   @Field()
   @Property({ required: true })
   email: string;
-}
 
-export const UserModel = getModelForClass(User);
+  @Field((_type) => [Space])
+  // TODO: try refactoring the hardcoded ref below to () => Space, if possible (seems to be a typegoose runtime problem https://typegoose.github.io/typegoose/docs/guides/advanced/reference-other-classes#common-problems)
+  @Property({ ref: () => Space, required: true })
+  spaces: Ref<Space>[];
+}
