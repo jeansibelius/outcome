@@ -9,12 +9,25 @@ export const categoriesToIdAndValue = (array: Category[]): CustomPieChartData[] 
     []
   );
 
-export const entriesByCategoryToAndIdAndValue = (array: Entry[]): CustomPieChartData[] =>
-  array.reduce(
-    (obj: any[], entry: Entry) =>
-      obj.concat({ id: entry.name, value: entry.amount, type: entry.type }),
-    []
-  );
+export const entriesByCategoryToAndIdAndValue = (array: Entry[]): CustomPieChartData[] => {
+  console.log("entries", array);
+  return array.reduce((arr: any[], entry: Entry) => {
+    const isSameCategoryAndType = (el: CustomPieChartData) =>
+      el.id === (entry.category ? entry.category.name : undefined) && el.type === entry.type;
+    // Check if category & type combination already exists and get index
+    const catIndex = arr.findIndex(isSameCategoryAndType);
+    // If index doesn't exist, use the next available one
+    const index = catIndex === -1 ? arr.length : catIndex;
+    // Get total for new sum or initialise to 0
+    const total = arr[index] ? arr[index]["value"] : 0;
+    arr[index] = {
+      id: entry.category?.name ? entry.category.name : "uncategorised",
+      value: total + entry.amount,
+      type: entry.type,
+    };
+    return arr;
+  }, []);
+};
 
 export const entriesToBarChartData = (array: Entry[]): CustomHorizontalBarData[] =>
   array.reduce((data: any[], entry: Entry) => {
