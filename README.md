@@ -4,7 +4,7 @@
 
 #### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/) (might take a moment to start while the Heroku instance wakes up)
 
-License: All rights reserved © Rafael Linnankoski (further details[here](https://github.com/jeansibelius/outcome/blob/master/LICENSE.md)).
+License: All rights reserved © Rafael Linnankoski (further details [here](https://github.com/jeansibelius/outcome/blob/master/LICENSE.md)).
 
 ## Project structure
 
@@ -13,15 +13,6 @@ It is divided into two folders (client & server) and further within those all so
 Build directories are gitignored.
 
 The project is written in TypeScript in vim with eslint and prettier enabled.
-
-### How to run
-To run the production build, run `npm start` in the root folder.
-
-For local development, run `npm start` in `./client` and `npm run dev` in `./server`.
-
-Required env vars in `./server`:
-- `MONGODB_URI`: a connection string to the MongoDB instance `mongodb+srv://...`
-- `JWT_SECRET`: for signing and verifying tokens
 
 #### Server
 The server uses the following stack:
