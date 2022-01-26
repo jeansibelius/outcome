@@ -4,7 +4,7 @@ import { getYearMonthDay } from "../utils";
 import EntryForm, { EntryFormValues, EntryValidationSchema } from "./EntryForm";
 
 interface NewEntryFormProps {
-  onSubmit: (values: EntryFormValues) => void;
+  onSubmit: (values: EntryFormValues) => Promise<void>;
 }
 
 const NewEntryForm = withFormik<NewEntryFormProps, EntryFormValues>({
@@ -13,18 +13,16 @@ const NewEntryForm = withFormik<NewEntryFormProps, EntryFormValues>({
     return {
       type: IncomeExpenseType.Expense,
       date: getYearMonthDay(),
-      name: "Test",
-      amount: Number(699),
-      description: "Another test",
+      name: "",
+      amount: Number(),
+      description: "",
     };
   },
 
   validationSchema: EntryValidationSchema,
-  handleSubmit: async (values, { props, resetForm }) => {
-    // do submitting things
+  handleSubmit: async (values, { props }) => {
     try {
-      props.onSubmit(values);
-      resetForm();
+      await props.onSubmit(values);
     } catch (error) {
       console.log("handleSubmit error", error);
     }

@@ -16,6 +16,10 @@ const ENTRY_DETAILS = gql`
     name
     amount
     description
+    user {
+      first_name
+      last_name
+    }
     category {
       id
       name

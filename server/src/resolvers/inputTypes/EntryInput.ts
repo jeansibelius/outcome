@@ -2,10 +2,10 @@ import { InputType, Field } from "type-graphql";
 import { Entry } from "../../entities/Entry";
 import { IsDate, Length, MaxLength } from "class-validator";
 import { IncomeExpenseType } from "../../types";
-import { ObjectId } from "mongodb";
+import { mongoose } from "@typegoose/typegoose";
 
 @InputType()
-export class EntryInput implements Omit<Entry, "id" | "_doc"> {
+export class EntryInput implements Omit<Entry, "id" | "user" | "_doc" | "space"> {
   @Field((_type) => IncomeExpenseType)
   type: IncomeExpenseType;
 
@@ -21,7 +21,7 @@ export class EntryInput implements Omit<Entry, "id" | "_doc"> {
   amount: number;
 
   @Field((_type) => String, { nullable: true })
-  category?: ObjectId;
+  category?: mongoose.Types.ObjectId;
 
   @Field({ nullable: true })
   @MaxLength(255)
@@ -45,7 +45,7 @@ export class EntryUpdateInput implements Partial<Entry> {
   amount?: number;
 
   @Field((_type) => String, { nullable: true })
-  category?: ObjectId;
+  category?: mongoose.Types.ObjectId;
 
   @Field({ nullable: true })
   @MaxLength(255)

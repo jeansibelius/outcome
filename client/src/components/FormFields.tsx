@@ -73,7 +73,7 @@ interface StateOptions {
   key: string;
   text: string;
   value: string;
-  description?: string;
+  description?: string | null;
   icon?: string;
 }
 

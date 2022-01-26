@@ -29,22 +29,28 @@ interface NavigationProps {
 const Navigation = ({ openEntryModal, openCategoryModal, openLoginModal }: NavigationProps) => {
   let navigate = useNavigate();
   const location = useLocation();
+
+  const dashboardPath = "dashboard";
+  const entriesPath = "entries";
+  const budgetPath = "budget";
+
   return (
     <div
-      style={{ position: "fixed", width: "94%", margin: "0 3% 2%", bottom: 10 }}
+      style={{ position: "fixed", width: "100%", padding: "0 1em", bottom: "1em" }}
       className="drop-shadow-lg"
     >
       {IsLoggedIn() ? (
         <>
           <Menu inverted size="mini" secondary fluid>
-            {openEntryModal && (location.pathname === "/entries" || location.pathname === "/") ? (
+            {openEntryModal &&
+            (location.pathname === `/${entriesPath}` || location.pathname === "/") ? (
               <Menu.Item position="right">
                 <Button circular size="small" primary onClick={() => openEntryModal()}>
                   <Icon name="plus" />
                   New entry
                 </Button>
               </Menu.Item>
-            ) : openCategoryModal && location.pathname === "/categories" ? (
+            ) : openCategoryModal && location.pathname === `/${budgetPath}` ? (
               <Menu.Item position="right">
                 <Button circular size="small" primary onClick={() => openCategoryModal()}>
                   <Icon name="plus" />
@@ -55,16 +61,16 @@ const Navigation = ({ openEntryModal, openCategoryModal, openLoginModal }: Navig
           </Menu>
           <Menu fluid widths={4} size="mini" icon="labeled" borderless>
             <CustomLink to="/">
-              <Icon name="dashboard" />
+              <Icon name={dashboardPath} />
               Dashboard
             </CustomLink>
-            <CustomLink to="entries">
+            <CustomLink to={entriesPath}>
               <Icon name="list ul" />
               Entries
             </CustomLink>
-            <CustomLink to="categories">
+            <CustomLink to={budgetPath}>
               <Icon name="tags" />
-              Categories
+              Budget
             </CustomLink>
             <Menu.Item
               position="right"

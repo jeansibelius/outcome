@@ -1,20 +1,19 @@
 import React from "react";
-import { useMutation, useQuery } from "@apollo/client";
-import { ALL_ENTRIES, DELETE_ENTRY } from "../queries";
-import { Entry } from "../types";
-import SingleEntry from "../components/Entry";
-import { Card } from "semantic-ui-react";
+import { useQuery } from "@apollo/client";
+import { ALL_ENTRIES } from "../queries";
+import { Entry as EntryType } from "../types";
+import { Feed } from "semantic-ui-react";
 import EntryModal from "../components/EntryModal";
 import { IsLoggedIn } from "../index";
+import Entry from "../components/Entry";
 
 const Entries = () => {
   const getEntries = useQuery(ALL_ENTRIES);
-  const [deleteEntry] = useMutation<{ DeleteEntry: boolean }, { id: string }>(DELETE_ENTRY, {
-    refetchQueries: [{ query: ALL_ENTRIES }],
-  });
-  const [entries, setEntries] = React.useState<Entry[] | undefined>(undefined);
+  const [entries, setEntries] = React.useState<EntryType[] | undefined>(undefined);
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [updateEntryValues, setUpdateEntryValues] = React.useState<Entry | undefined>(undefined);
+  const [updateEntryValues, setUpdateEntryValues] = React.useState<EntryType | undefined>(
+    undefined
+  );
 
   React.useEffect(() => {
     if (getEntries.data) {
@@ -22,25 +21,13 @@ const Entries = () => {
     }
   }, [getEntries.data]);
 
-  const openEntryUpdateModal = (data: Entry): void => {
+  const openEntryUpdateModal = (data: EntryType): void => {
     setUpdateEntryValues(data);
     setModalOpen(true);
   };
 
   const closeEntryUpdateModal = (): void => {
     setModalOpen(false);
-  };
-
-  const onDelete = async (id: string) => {
-    try {
-      const response = await deleteEntry({ variables: { id: id } });
-      return response;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        //TODO add some toast or error handling
-      }
-      console.log(error);
-    }
   };
 
   if (!IsLoggedIn()) {
@@ -71,18 +58,13 @@ const Entries = () => {
             updateEntryValues={updateEntryValues}
           />
         ) : null}
-        <Card.Group>
+        <Feed size="large">
           {[...entries] // create a copy of entries array to disable strict mode in order to sort it
             .sort((a, b) => Date.parse(b.date.toString()) - Date.parse(a.date.toString()))
             .map((entry) => (
-              <SingleEntry
-                key={entry.id}
-                entry={entry}
-                onDelete={onDelete}
-                updateEntry={openEntryUpdateModal}
-              />
+              <Entry key={entry.id} entry={entry} updateEntry={openEntryUpdateModal} />
             ))}
-        </Card.Group>
+        </Feed>
       </>
     );
   }

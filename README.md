@@ -2,9 +2,11 @@
 
 ### A simple app to track the outcome of your income against a set budget
 
-#### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/)
+#### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/) (might take a moment to start while
+the Heroku instance wakes up)
 
-License: All rights reserved (C) Rafael Linnankoski
+License: All rights reserved © Rafael Linnankoski (further details
+[here](https://github.com/jeansibelius/outcome/LICENSE.md)).
 
 ## Project structure
 
@@ -13,6 +15,15 @@ It is divided into two folders (client & server) and further within those all so
 Build directories are gitignored.
 
 The project is written in TypeScript in vim with eslint and prettier enabled.
+
+### How to run
+To run the production build, run `npm start` in the root folder.
+
+For local development, run `npm start` in `./client` and `npm run dev` in `./server`.
+
+Required env vars in `./server`:
+- `MONGODB_URI`: a connection string to the MongoDB instance `mongodb+srv://...`
+- `JWT_SECRET`: for signing and verifying tokens
 
 #### Server
 The server uses the following stack:
@@ -29,6 +40,32 @@ The client created with Create React App with PWA typescript template and uses t
 - [Semantic UI react](https://github.com/fomantic/Fomantic-UI) components (with [Fomantic UI CSS](https://github.com/fomantic/Fomantic-UI))
 - [Tailwindcss](https://tailwindcss.com/docs/installation) in a few places (mainly to test out the framework) 
 - [Formik](https://formik.org/docs/overview) (for form related things)
+
+
+## How to run
+
+### Production mode
+In the root...  
+- `npm run install` to run installation script for both sub-folders (client & server)
+- `npm run build` to run build scripts in both sub-folders
+- `npm start` to run the backend production build (which serves also the client build)
+- `npm run deploy` to deploy the project to Heroku (might need to update script to deploy the
+  correct/desired branch)
+
+### Development
+In `./client`...
+- `npm start` to run the project at `localhost:3000`
+- and other basic installation/build scripts, as required
+
+In `./server`...
+- `npm run dev` to run the backend in development mode with hot reloading at `localhost:4000/graphql`
+- and other basic installation/build scripts, as required
+
+### Required env variables
+- The server requires the following env vars to be set
+  - `MONGODB_URI`: a connection URI containing the username and password of the MongoDB instance
+  - `JWT_SECRET`: used to create and verify hashed passwords
+
 
 ## Roadmap
 
@@ -54,10 +91,13 @@ The client created with Create React App with PWA typescript template and uses t
 - Login view exists ✅
 - Restrict views and data only to authorized users ✅
 - Add first analytics views to home/dashboard view (monthly spending vs. budget per category) ✅
-- Add user to entry and category models
-- Create a "space" to enable sharing a space with other users and add it to user, entry and category models
-- Restrict server requests to authorized users (e.g. logged in user gets only their own stuff)
-- Register view exists
+- Add user to entry model ✅
+- Create a "space" model to enable collaborating with other users on entries etc. ✅
+- Spaces are added to user, entry and category models ✅
+- Spaces are used in client and added to headers for calls
+- Spaces are added to context in server and available for auth checking in resolvers
+- Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories)
+- Add date filtering to reporting (default ongoing month, other options?)
 - Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
 - Separate test and prod databases
 - Test coverage for server is sufficient
@@ -66,6 +106,8 @@ The client created with Create React App with PWA typescript template and uses t
 - Onboard first users
 
 ### After "launch"
+- Register view exists
+- Remove normalisation of date in entries to allow proper sorting (same day entries)
 - Caching: Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
 - Add safer UI to deletion of entries and categories (loading status when clicked, clear response in
@@ -75,7 +117,7 @@ The client created with Create React App with PWA typescript template and uses t
 - Add PWA manifest
 - Add offline capabilities with service workers
 - Consider what kind of pattern to use with queries/mutations: action creators or what?
-- Refactor error message from modals to its own dismissable component
+- Refactor error message from modals to its own dismissable component (toast?)
 - Refactor modal to a reusable component (instead of having two implementations in NewEntryModal and
   NewCategoryModal)
 - Add search feature to NewEntryForm name field (to allow quick selection of previously used names)

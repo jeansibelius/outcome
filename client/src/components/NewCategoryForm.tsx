@@ -12,7 +12,7 @@ const NewCategoryForm = withFormik<NewCategoryFormProps, CategoryFormValues>({
     return {
       type: IncomeExpenseType.Expense,
       name: "",
-      monthlyBudget: undefined,
+      monthlyBudget: 0,
       description: "",
       icon: "",
     };

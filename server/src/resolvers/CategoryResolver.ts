@@ -1,4 +1,5 @@
-import { Category, CategoryModel } from "../entities/Category";
+import { Category } from "../entities/Category";
+import { CategoryModel } from "../entities";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { CategoryInput, CategoryUpdateInput } from "./inputTypes/CategoryInput";
 

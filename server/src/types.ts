@@ -1,6 +1,7 @@
 import { registerEnumType } from "type-graphql";
 import { ObjectId } from "mongodb";
 
+// TODO consider removing this, if not needed (does typegoose ref provide typeguards?)
 export type Ref<T> = T | ObjectId;
 
 export enum IncomeExpenseType {
@@ -17,7 +18,12 @@ export interface AuthResponse {
   token: string;
 }
 
-export interface DecodedTokenUser {
+export interface DecodedJwtToken {
   id: string;
-  email: string;
+  iat: number;
+  exp: number;
+}
+
+export interface ContextType {
+  user: DecodedJwtToken;
 }

@@ -13,9 +13,9 @@ const UpdateCategoryForm = withFormik<UpdateCategoryFormProps, CategoryFormValue
     return {
       type: updateCategoryValues.type,
       name: updateCategoryValues.name,
-      monthlyBudget: updateCategoryValues?.monthlyBudget,
-      description: updateCategoryValues?.description,
-      icon: updateCategoryValues?.icon,
+      monthlyBudget: !updateCategoryValues.monthlyBudget ? 0 : updateCategoryValues.monthlyBudget,
+      description: !updateCategoryValues.description ? "" : updateCategoryValues.description,
+      icon: !updateCategoryValues.icon ? "" : updateCategoryValues.icon,
     };
   },
 

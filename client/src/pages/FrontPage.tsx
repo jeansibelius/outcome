@@ -12,8 +12,12 @@ const FrontPage = () => {
         <Container textAlign="center">
           <Image src={logo} centered size="large" />
           <Header as="h2">
-            Welcome to outcome.io
-            <Header.Subheader>A simple app to track the outcome of your income.</Header.Subheader>
+            Welcome to Outcome
+            <Header.Subheader>
+              A simple app to track
+              <br />
+              the outcome of your income.
+            </Header.Subheader>
           </Header>
         </Container>
       )}

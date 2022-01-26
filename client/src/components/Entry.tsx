@@ -1,53 +1,74 @@
-import { Button, Card, Header, Icon } from "semantic-ui-react";
-import { Entry } from "../types";
+import { Button, Card, Feed, Header, Icon } from "semantic-ui-react";
+import { Entry as EntryType } from "../types";
 import { getYearMonthDay } from "../utils";
 
-const SingleEntry = ({
-  entry,
-  onDelete,
-  updateEntry,
-}: {
-  entry: Entry;
-  onDelete: Function;
+interface SingleEntryProps {
+  entry: EntryType;
   updateEntry: Function;
-}) => {
+}
+
+export const EntryAsACard = ({ entry, updateEntry }: SingleEntryProps) => (
+  <Card color={entry.type === "Expense" ? "orange" : "green"}>
+    <Card.Content>
+      <Icon
+        floated="right"
+        as={Button}
+        icon="pencil"
+        size="mini"
+        onClick={() => updateEntry(entry)}
+      />
+      <Card.Header>¥ {entry.amount}</Card.Header>
+      <Card.Meta>
+        {entry.category ? (
+          <>
+            {entry.category.icon ? <Icon className={entry.category.icon} /> : null}
+            <span>{entry.category.name}</span>
+          </>
+        ) : null}
+      </Card.Meta>
+    </Card.Content>
+    <Card.Content>
+      <Header as="h4">{entry.name}</Header>
+      <span>{entry.description}</span>
+    </Card.Content>
+    <Card.Content extra>
+      <span className="float-left">{getYearMonthDay(entry.date)}</span>
+      <span className="float-right">{entry.type}</span>
+    </Card.Content>
+  </Card>
+);
+
+export const EntryAsAFeedEvent = ({ entry, updateEntry }: SingleEntryProps) => {
   return (
-    <Card color={entry.type === "Expense" ? "orange" : "green"}>
-      <Card.Content>
-        <Icon
-          floated="right"
-          as={Button}
-          icon="pencil"
-          size="mini"
-          onClick={() => updateEntry(entry)}
-        />
-        <Icon
-          floated="right"
-          as={Button}
-          icon="trash"
-          size="mini"
-          onClick={() => onDelete(entry.id)}
-        />
-        <Card.Header>¥ {entry.amount}</Card.Header>
-        <Card.Meta>
-          {entry.category ? (
-            <>
-              {entry.category.icon ? <Icon className={entry.category.icon} /> : null}
-              <span>{entry.category.name}</span>
-            </>
-          ) : null}
-        </Card.Meta>
-      </Card.Content>
-      <Card.Content>
-        <Header as="h4">{entry.name}</Header>
-        <span>{entry.description}</span>
-      </Card.Content>
-      <Card.Content extra>
-        <span className="float-left">{getYearMonthDay(entry.date)}</span>
-        <span className="float-right">{entry.type}</span>
-      </Card.Content>
-    </Card>
+    <Feed.Event style={{ margin: "0 0 1em" }} onClick={() => updateEntry(entry)}>
+      <Feed.Label>
+        {entry.category?.icon ? (
+          <Icon
+            color={entry.type === "Expense" ? "pink" : "teal"}
+            className={entry.category.icon}
+          />
+        ) : null}
+      </Feed.Label>
+      <Feed.Content>
+        <Feed.Date>{getYearMonthDay(entry.date)}</Feed.Date>
+        <Feed.Summary>
+          <strong style={entry.type === "Expense" ? { color: "#e03997" } : { color: "teal" }}>
+            {entry.type === "Expense" ? `-${entry.amount}` : `${entry.amount}`}
+          </strong>
+           {entry.name}
+        </Feed.Summary>
+
+        {entry.description ? <Feed.Extra>{entry.description}</Feed.Extra> : null}
+        <Feed.Meta>
+          {entry.category ? entry.category.name : <i>Not categorised</i>} · {entry.user.first_name}
+        </Feed.Meta>
+      </Feed.Content>
+    </Feed.Event>
   );
 };
 
-export default SingleEntry;
+const Entry = (props: SingleEntryProps) => {
+  return <EntryAsAFeedEvent {...props} />;
+};
+
+export default Entry;

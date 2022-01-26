@@ -15,7 +15,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
-import cache from "./cache";
+import cache, { isLoggedInVar } from "./cache";
 import App from "./App";
 
 const uri = "/graphql";
@@ -39,9 +39,13 @@ const authLink = setContext((_request, { headers }) => {
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
-    );
+    graphQLErrors.forEach(({ message, locations, path }) => {
+      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+      if (message.includes("TokenExpiredError")) {
+        window.localStorage.removeItem("token");
+        isLoggedInVar(false);
+      }
+    });
 
   if (networkError) console.log(`[Network error]: ${networkError}`);
 });
@@ -58,12 +62,14 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   typeDefs,
 });
 
+// Query for checking logged in status from local cache (won't call the server)
 const IS_LOGGED_IN = gql`
   query IsUserLoggedIn {
     isLoggedIn @client
   }
 `;
 
+// Function to make the above query callable from anywhere in the app
 export const IsLoggedIn = (): boolean => {
   const { data } = useQuery(IS_LOGGED_IN);
   return data.isLoggedIn;

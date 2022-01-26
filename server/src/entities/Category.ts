@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID } from "type-graphql";
-import { prop as Property, getModelForClass } from "@typegoose/typegoose";
+import { prop as Property, Ref } from "@typegoose/typegoose";
 import { IncomeExpenseType } from "../types";
+import { Space } from "./Space";
 
 @ObjectType({ description: "The category model" })
 export class Category {
@@ -15,6 +16,10 @@ export class Category {
   @Property({ required: true })
   name: string;
 
+  @Field((_type) => Space)
+  @Property({ ref: () => Space, required: true })
+  space: Ref<Space>;
+
   @Field({ nullable: true })
   @Property()
   monthlyBudget?: number;
@@ -26,12 +31,4 @@ export class Category {
   @Field({ nullable: true })
   @Property()
   icon?: string;
-
-  /*
-  @Field((_type) => User)
-  @Property({ ref: () => User })
-  user: Ref<User>;
-  */
 }
-
-export const CategoryModel = getModelForClass(Category);

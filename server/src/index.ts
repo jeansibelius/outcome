@@ -16,7 +16,8 @@ import { connect } from "mongoose";
 import schemaBuild from "./resolvers";
 import path from "path";
 import { RequestCustom, tokenExtractor } from "./middleware";
-import { getUserFromToken } from "./utils";
+import { decodeToken } from "./utils";
+import { ContextType, DecodedJwtToken } from "./types";
 
 async function startApolloServer() {
   const corsAllowedOrigins: Array<string | RegExp> = [
@@ -67,10 +68,10 @@ async function startApolloServer() {
   const schema = await schemaBuild();
   const server = new ApolloServer({
     schema,
-    context: ({ req }: { req: RequestCustom }) => {
+    context: ({ req }: { req: RequestCustom }): ContextType | null => {
       // Exclude login from auth
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-      if (req.body.query.match("Login")) return {};
+      if (req.body.query.match("Login")) return null;
 
       const token = req.token;
       if (!token) {
@@ -78,7 +79,7 @@ async function startApolloServer() {
       }
 
       // try to retrieve a user with the token
-      const user = getUserFromToken(token);
+      const user: DecodedJwtToken = decodeToken(token);
       // we could also check user roles/permissions here
       if (!user) throw new AuthenticationError("You must be logged in");
 
