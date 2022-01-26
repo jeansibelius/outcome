@@ -4,8 +4,7 @@
 
 #### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/) (might take a moment to start while the Heroku instance wakes up)
 
-License: All rights reserved © Rafael Linnankoski (further details
-[here](https://github.com/jeansibelius/outcome/LICENSE.md)).
+License: All rights reserved © Rafael Linnankoski (further details[here](https://github.com/jeansibelius/outcome/blob/master/LICENSE.md)).
 
 ## Project structure
 
