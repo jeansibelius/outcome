@@ -5,6 +5,7 @@
 
 type AuthResponse {
   token: String!
+  user: PublicUser!
 }
 
 """The category model"""
@@ -92,6 +93,12 @@ type Mutation {
   updateEntry(data: EntryUpdateInput!, id: String!): Entry!
   updateSpace(data: UpdateSpaceInput!, id: String!): Space!
   updateUser(data: UserUpdateInput!, id: String!): User!
+}
+
+type PublicUser {
+  first_name: String!
+  last_name: String!
+  spaces: [Space!]!
 }
 
 type Query {

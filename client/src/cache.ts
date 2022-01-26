@@ -1,4 +1,5 @@
 import { InMemoryCache, makeVar, ReactiveVar } from "@apollo/client";
+import { localStorageUser } from "./types";
 
 // Add logged in status to cache and make it callable (read())
 const cache: InMemoryCache = new InMemoryCache({
@@ -10,6 +11,13 @@ const cache: InMemoryCache = new InMemoryCache({
             return isLoggedInVar();
           },
         },
+        /*
+        me: {
+          read() {
+            return me();
+          },
+        },
+        */
       },
     },
   },
@@ -22,3 +30,9 @@ export default cache;
 export const isLoggedInVar: ReactiveVar<boolean> = makeVar<boolean>(
   !!localStorage.getItem("token")
 );
+
+/*
+export const me: ReactiveVar<localStorageUser> = makeVar<localStorageUser>(
+  JSON.parse(localStorage.getItem("user"))
+);
+*/

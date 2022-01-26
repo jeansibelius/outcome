@@ -52,3 +52,11 @@ export interface EntryInput {
   description?: unknown;
   category?: unknown;
 }
+
+export interface localStorageUser {
+  user: {
+    first_name: string;
+    last_name: string;
+    spaces: Array<{ id: string; name: string }>;
+  };
+}
