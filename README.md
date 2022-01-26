@@ -2,9 +2,11 @@
 
 ### A simple app to track the outcome of your income against a set budget
 
-#### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/)
+#### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/) (might take a moment to start while
+the Heroku instance wakes up)
 
-License: All rights reserved (C) Rafael Linnankoski
+License: All rights reserved © Rafael Linnankoski (further details
+[here](https://github.com/jeansibelius/outcome/LICENSE.md)).
 
 ## Project structure
 
@@ -13,6 +15,15 @@ It is divided into two folders (client & server) and further within those all so
 Build directories are gitignored.
 
 The project is written in TypeScript in vim with eslint and prettier enabled.
+
+### How to run
+To run the production build, run `npm start` in the root folder.
+
+For local development, run `npm start` in `./client` and `npm run dev` in `./server`.
+
+Required env vars in `./server`:
+- `MONGODB_URI`: a connection string to the MongoDB instance `mongodb+srv://...`
+- `JWT_SECRET`: for signing and verifying tokens
 
 #### Server
 The server uses the following stack:
@@ -106,7 +117,7 @@ In `./server`...
 - Add PWA manifest
 - Add offline capabilities with service workers
 - Consider what kind of pattern to use with queries/mutations: action creators or what?
-- Refactor error message from modals to its own dismissable component
+- Refactor error message from modals to its own dismissable component (toast?)
 - Refactor modal to a reusable component (instead of having two implementations in NewEntryModal and
   NewCategoryModal)
 - Add search feature to NewEntryForm name field (to allow quick selection of previously used names)
