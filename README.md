@@ -2,8 +2,7 @@
 
 ### A simple app to track the outcome of your income against a set budget
 
-#### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/) (might take a moment to start while
-the Heroku instance wakes up)
+#### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/) (might take a moment to start while the Heroku instance wakes up)
 
 License: All rights reserved © Rafael Linnankoski (further details
 [here](https://github.com/jeansibelius/outcome/LICENSE.md)).
