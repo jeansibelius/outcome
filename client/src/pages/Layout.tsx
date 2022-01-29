@@ -1,12 +1,12 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import { Container, Segment, Image } from "semantic-ui-react";
-import { IsLoggedIn } from "..";
 import CategoryModal from "../components/CategoryModal";
 import EntryModal from "../components/EntryModal";
 import LoginModal from "../components/LoginModal";
 import Navigation from "../components/Navigation";
 import logo from "../logo.svg";
+import { IsLoggedIn } from "../utils";
 
 const Layout = () => {
   const [entryModalOpen, setEntryModalOpen] = React.useState<boolean>(false);

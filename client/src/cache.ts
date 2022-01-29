@@ -11,13 +11,11 @@ const cache: InMemoryCache = new InMemoryCache({
             return isLoggedInVar();
           },
         },
-        /*
         me: {
           read() {
             return me();
           },
         },
-        */
       },
     },
   },
@@ -28,11 +26,11 @@ export default cache;
 // Create a Apollo ReactiveVar to store the logged in status (and initialise with token from
 // localStorage)
 export const isLoggedInVar: ReactiveVar<boolean> = makeVar<boolean>(
-  !!localStorage.getItem("token")
+  !!localStorage.getItem("outcome-token")
 );
 
-/*
+const localUser = localStorage.getItem("outcome-user");
+
 export const me: ReactiveVar<localStorageUser> = makeVar<localStorageUser>(
-  JSON.parse(localStorage.getItem("user"))
+  localUser ? JSON.parse(localUser) : null
 );
-*/

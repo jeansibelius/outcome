@@ -18,8 +18,8 @@ const LoginModal = ({ modalOpen, onClose }: Props) => {
   >(LOGIN, {
     onCompleted({ login }) {
       if (login) {
-        localStorage.setItem("token", login.token as string);
-        localStorage.setItem("user", JSON.stringify(login.user));
+        localStorage.setItem("outcome-token", login.token as string);
+        localStorage.setItem("outcome-user", JSON.stringify(login.user));
         isLoggedInVar(true);
       }
     },

@@ -7,8 +7,9 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Menu, Button, Icon } from "semantic-ui-react";
-import { IsLoggedIn } from "..";
+import { IsLoggedIn } from "../utils";
 import { isLoggedInVar } from "../cache";
+import { useApolloClient } from "@apollo/client";
 
 const CustomLink = ({ children, to }: LinkProps) => {
   let resolved = useResolvedPath(to);
@@ -30,10 +31,29 @@ const Navigation = ({ openEntryModal, openCategoryModal, openLoginModal }: Navig
   let navigate = useNavigate();
   const location = useLocation();
 
+  const client = useApolloClient();
+
   const dashboardPath = "dashboard";
   const entriesPath = "entries";
   const budgetPath = "budget";
 
+  const handleLogout = async () => {
+    await client.resetStore();
+    client.cache.reset();
+    /*
+    client.cache.evict({
+      fieldName: "returnAllCategories",
+    });
+    client.cache.evict({
+      fieldName: "returnAllEntries",
+    });
+    */
+    client.cache.gc();
+    window.localStorage.removeItem("outcome-token");
+    window.localStorage.removeItem("outcome-user");
+    isLoggedInVar(false);
+    navigate("/");
+  };
   return (
     <div
       style={{ position: "fixed", width: "100%", padding: "0 1em", bottom: "1em" }}
@@ -72,20 +92,7 @@ const Navigation = ({ openEntryModal, openCategoryModal, openLoginModal }: Navig
               <Icon name="tags" />
               Budget
             </CustomLink>
-            <Menu.Item
-              position="right"
-              onClick={() => {
-                /*
-                    client.cache.evict({ fieldName: "me" });
-                    client.cache.gc();
-                    */
-                window.localStorage.removeItem("token");
-                isLoggedInVar(false);
-                navigate("/");
-
-                //client.resetStore();
-              }}
-            >
+            <Menu.Item position="right" onClick={() => handleLogout()}>
               <Icon name="log out" />
               Logout
             </Menu.Item>

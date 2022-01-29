@@ -1,4 +1,24 @@
-import { CategoryInput, EntryInput, IncomeExpenseType, NewCategory, NewEntry } from "../types";
+import { useQuery } from "@apollo/client";
+import {
+  CategoryInput,
+  EntryInput,
+  IncomeExpenseType,
+  localStorageUser,
+  NewCategory,
+  NewEntry,
+} from "../types";
+import { IS_LOGGED_IN, GET_ME } from "../queries";
+
+// Function to make the above query callable from anywhere in the app
+export const IsLoggedIn = (): boolean => {
+  const { data } = useQuery(IS_LOGGED_IN);
+  return data.isLoggedIn;
+};
+
+export const GetMe = (): localStorageUser => {
+  const { data } = useQuery(GET_ME);
+  return data.me;
+};
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;

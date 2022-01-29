@@ -5,7 +5,7 @@ import { Category, IncomeExpenseType } from "../types";
 import { Container, Statistic, Tab } from "semantic-ui-react";
 import CategoryModal from "../components/CategoryModal";
 import CategoryTable from "../components/CategoryTable";
-import { IsLoggedIn } from "..";
+import { IsLoggedIn } from "../utils";
 import DashboardDataPane from "../components/DashboardDataPane";
 import CustomPieChart, { CustomPieChartData } from "../components/charts/CustomResponsivePie";
 import { categoriesToIdAndValue } from "../utils/data";

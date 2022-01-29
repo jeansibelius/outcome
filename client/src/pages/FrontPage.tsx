@@ -1,6 +1,6 @@
 import { Container, Image, Header } from "semantic-ui-react";
 import logo from "../logo.svg";
-import { IsLoggedIn } from "..";
+import { IsLoggedIn } from "../utils";
 import Dashboard from "./Dashboard";
 
 const FrontPage = () => {

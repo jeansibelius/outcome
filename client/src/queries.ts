@@ -1,5 +1,18 @@
 import { gql } from "@apollo/client";
 
+// Query for checking logged in status from local cache (won't call the server)
+export const IS_LOGGED_IN = gql`
+  query IsUserLoggedIn {
+    isLoggedIn @client
+  }
+`;
+
+export const GET_ME = gql`
+  query Me {
+    me @client
+  }
+`;
+
 export const LOGIN = gql`
   mutation Login($password: String!, $email: String!) {
     login(password: $password, email: $email) {
