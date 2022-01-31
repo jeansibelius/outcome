@@ -1,19 +1,17 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
-import { Container, Segment, Image, Grid, Icon } from "semantic-ui-react";
+import { Outlet } from "react-router-dom";
+import { Container } from "semantic-ui-react";
 import CategoryModal from "../components/CategoryModal";
 import EntryModal from "../components/EntryModal";
 import LoginModal from "../components/LoginModal";
-import Navigation from "../components/Navigation";
-import logo from "../logo.svg";
-import { localStorageUser } from "../types";
-import { GetMe, IsLoggedIn } from "../utils";
+import BottomNavigation from "../components/BottomNavigation";
+import { IsLoggedIn } from "../utils";
+import TopNavigation from "../components/TopNavigation";
 
 const Layout = () => {
   const [entryModalOpen, setEntryModalOpen] = React.useState<boolean>(false);
   const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false);
   const [categoryModalOpen, setCategoryModalOpen] = React.useState<boolean>(false);
-  const [user] = React.useState<localStorageUser | null>(GetMe());
 
   const openEntryModal = (): void => setEntryModalOpen(true);
   const openCategoryModal = (): void => setCategoryModalOpen(true);
@@ -34,7 +32,7 @@ const Layout = () => {
       <Container className="px-1 pt-8 pb-40">
         <Outlet />
       </Container>
-      <Navigation
+      <BottomNavigation
         openEntryModal={openEntryModal}
         openCategoryModal={openCategoryModal}
         openLoginModal={openLoginModal}
@@ -43,20 +41,10 @@ const Layout = () => {
     </>
   );
 
-  if (IsLoggedIn() && user) {
+  if (IsLoggedIn()) {
     return (
       <>
-        <Segment basic>
-          <Grid verticalAlign="middle" columns={3}>
-            <Grid.Column floated="left">
-              <Image as={Link} to="/" src={logo} size="mini" />
-            </Grid.Column>
-            <Grid.Column textAlign="right" floated="right">
-              <span className="px-2">{user.first_name}</span>
-              <Icon name="user" size="large" />
-            </Grid.Column>
-          </Grid>
-        </Segment>
+        <TopNavigation />
         {sharedContent()}
         <EntryModal modalOpen={entryModalOpen} onClose={closeEntryModal} />
         <CategoryModal modalOpen={categoryModalOpen} onClose={closeCategoryModal} />

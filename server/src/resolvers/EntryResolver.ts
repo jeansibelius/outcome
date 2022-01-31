@@ -24,6 +24,7 @@ export class EntryResolver {
     @Ctx() ctx: ContextType
   ): Promise<Entry> {
     const user = ctx.user.id;
+    const space = ctx.space;
     const entry = await EntryModel.create({
       type,
       date,
@@ -32,6 +33,7 @@ export class EntryResolver {
       category,
       description,
       user,
+      space,
     });
     await entry.save();
     return entry.populate(populatePaths);

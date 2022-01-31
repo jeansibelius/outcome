@@ -26,7 +26,11 @@ interface NavigationProps {
   openCategoryModal?: () => void;
 }
 
-const Navigation = ({ openEntryModal, openCategoryModal, openLoginModal }: NavigationProps) => {
+const BottomNavigation = ({
+  openEntryModal,
+  openCategoryModal,
+  openLoginModal,
+}: NavigationProps) => {
   let navigate = useNavigate();
   const location = useLocation();
 
@@ -96,4 +100,4 @@ const Navigation = ({ openEntryModal, openCategoryModal, openLoginModal }: Navig
   );
 };
 
-export default Navigation;
+export default BottomNavigation;

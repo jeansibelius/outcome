@@ -26,4 +26,5 @@ export interface DecodedJwtToken {
 
 export interface ContextType {
   user: DecodedJwtToken;
+  space: string;
 }

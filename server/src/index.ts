@@ -15,7 +15,7 @@ import { connect } from "mongoose";
 
 import schemaBuild from "./resolvers";
 import path from "path";
-import { RequestCustom, tokenExtractor } from "./middleware";
+import { RequestCustom, spaceExtractor, tokenExtractor } from "./middleware";
 import { decodeToken } from "./utils";
 import { ContextType, DecodedJwtToken } from "./types";
 
@@ -64,6 +64,8 @@ async function startApolloServer() {
 
   // Extract token and add to request, if found
   app.use(tokenExtractor);
+  // Extract space id and add to request, if found
+  app.use(spaceExtractor);
 
   const schema = await schemaBuild();
   const server = new ApolloServer({
@@ -74,8 +76,13 @@ async function startApolloServer() {
       if (req.body.query.match("Login")) return null;
 
       const token = req.token;
+      const space = req.space;
+      console.log("space", space);
       if (!token) {
         throw new Error("Token missing from request.");
+      }
+      if (!space) {
+        throw new Error("User space missing from request.");
       }
 
       // try to retrieve a user with the token
@@ -84,7 +91,7 @@ async function startApolloServer() {
       if (!user) throw new AuthenticationError("You must be logged in");
 
       // add the user to the context
-      return { user };
+      return { user, space };
     },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });

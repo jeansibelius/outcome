@@ -13,7 +13,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
-import cache from "./cache";
+import cache, { activeSpaceVar } from "./cache";
 import App from "./App";
 import { logout } from "./utils";
 
@@ -24,11 +24,13 @@ const httpLink = new HttpLink({
 
 const authLink = setContext((_request, { headers }) => {
   const token = window.localStorage.getItem("outcome-token");
+  const activeSpace = activeSpaceVar();
   if (typeof token === "string") {
     return {
       headers: {
         ...headers,
         authorization: token ? `bearer ${token}` : null,
+        space: activeSpace ? activeSpace.id : null,
       },
     };
   } else {

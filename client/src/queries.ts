@@ -13,6 +13,12 @@ export const GET_ME = gql`
   }
 `;
 
+export const GET_ACTIVE_SPACE = gql`
+  query ActiveSpace {
+    activeSpace @client
+  }
+`;
+
 export const LOGIN = gql`
   mutation Login($password: String!, $email: String!) {
     login(password: $password, email: $email) {

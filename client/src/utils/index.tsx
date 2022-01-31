@@ -6,8 +6,9 @@ import {
   localStorageUser,
   NewCategory,
   NewEntry,
+  Space,
 } from "../types";
-import { IS_LOGGED_IN, GET_ME } from "../queries";
+import { IS_LOGGED_IN, GET_ME, GET_ACTIVE_SPACE } from "../queries";
 import { isLoggedInVar, currentUserVar } from "../cache";
 
 // Function to make the above query callable from anywhere in the app
@@ -19,6 +20,11 @@ export const IsLoggedIn = (): boolean => {
 export const GetMe = (): localStorageUser => {
   const { data } = useQuery(GET_ME);
   return data.me;
+};
+
+export const GetActiveSpace = (): Space => {
+  const { data } = useQuery(GET_ACTIVE_SPACE);
+  return data.activeSpace;
 };
 
 export const logout = async (client: ApolloClient<object>): Promise<void> => {
