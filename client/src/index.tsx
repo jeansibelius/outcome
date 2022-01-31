@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom";
 import "fomantic-ui-css/semantic.min.css";
 import "./index.css";
@@ -14,8 +13,9 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import reportWebVitals from "./reportWebVitals";
-import cache, { isLoggedInVar } from "./cache";
+import cache from "./cache";
 import App from "./App";
+import { logout } from "./utils";
 
 const uri = "/graphql";
 const httpLink = new HttpLink({
@@ -36,17 +36,17 @@ const authLink = setContext((_request, { headers }) => {
   }
 });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
+const errorLink = onError(({ graphQLErrors, networkError, response }) => {
   if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) => {
+    graphQLErrors.forEach(async ({ message, locations, path }) => {
       console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
       if (message.includes("TokenExpiredError")) {
-        window.localStorage.removeItem("outcome-token");
-        isLoggedInVar(false);
+        await logout(client);
       }
     });
 
   if (networkError) console.log(`[Network error]: ${networkError}`);
+  if (response) console.log("Response", response);
 });
 
 const typeDefs = gql`

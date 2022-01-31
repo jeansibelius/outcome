@@ -83,6 +83,8 @@ In `./server`...
 - Add user to entry model ✅
 - Create a "space" model to enable collaborating with other users on entries etc. ✅
 - Spaces are added to user, entry and category models ✅
+- Currently active space is visible to user in the header area
+- User can see their name in top right and click to access their user details
 - Spaces are used in client and added to headers for calls
 - Spaces are added to context in server and available for auth checking in resolvers
 - Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories)

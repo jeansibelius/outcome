@@ -7,8 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Menu, Button, Icon } from "semantic-ui-react";
-import { IsLoggedIn } from "../utils";
-import { isLoggedInVar } from "../cache";
+import { IsLoggedIn, logout } from "../utils";
 import { useApolloClient } from "@apollo/client";
 
 const CustomLink = ({ children, to }: LinkProps) => {
@@ -31,27 +30,14 @@ const Navigation = ({ openEntryModal, openCategoryModal, openLoginModal }: Navig
   let navigate = useNavigate();
   const location = useLocation();
 
-  const client = useApolloClient();
-
   const dashboardPath = "dashboard";
   const entriesPath = "entries";
   const budgetPath = "budget";
 
+  const client = useApolloClient();
+
   const handleLogout = async () => {
-    await client.resetStore();
-    client.cache.reset();
-    /*
-    client.cache.evict({
-      fieldName: "returnAllCategories",
-    });
-    client.cache.evict({
-      fieldName: "returnAllEntries",
-    });
-    */
-    client.cache.gc();
-    window.localStorage.removeItem("outcome-token");
-    window.localStorage.removeItem("outcome-user");
-    isLoggedInVar(false);
+    await logout(client);
     navigate("/");
   };
   return (

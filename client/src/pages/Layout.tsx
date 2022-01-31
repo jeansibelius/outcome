@@ -1,17 +1,19 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Container, Segment, Image } from "semantic-ui-react";
+import { Container, Segment, Image, Grid, Icon } from "semantic-ui-react";
 import CategoryModal from "../components/CategoryModal";
 import EntryModal from "../components/EntryModal";
 import LoginModal from "../components/LoginModal";
 import Navigation from "../components/Navigation";
 import logo from "../logo.svg";
-import { IsLoggedIn } from "../utils";
+import { localStorageUser } from "../types";
+import { GetMe, IsLoggedIn } from "../utils";
 
 const Layout = () => {
   const [entryModalOpen, setEntryModalOpen] = React.useState<boolean>(false);
   const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false);
   const [categoryModalOpen, setCategoryModalOpen] = React.useState<boolean>(false);
+  const [user] = React.useState<localStorageUser | null>(GetMe());
 
   const openEntryModal = (): void => setEntryModalOpen(true);
   const openCategoryModal = (): void => setCategoryModalOpen(true);
@@ -41,11 +43,19 @@ const Layout = () => {
     </>
   );
 
-  if (IsLoggedIn()) {
+  if (IsLoggedIn() && user) {
     return (
       <>
         <Segment basic>
-          <Image as={Link} to="/" src={logo} size="mini" />
+          <Grid verticalAlign="middle" columns={3}>
+            <Grid.Column floated="left">
+              <Image as={Link} to="/" src={logo} size="mini" />
+            </Grid.Column>
+            <Grid.Column textAlign="right" floated="right">
+              <span className="px-2">{user.first_name}</span>
+              <Icon name="user" size="large" />
+            </Grid.Column>
+          </Grid>
         </Segment>
         {sharedContent()}
         <EntryModal modalOpen={entryModalOpen} onClose={closeEntryModal} />

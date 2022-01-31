@@ -13,7 +13,7 @@ const cache: InMemoryCache = new InMemoryCache({
         },
         me: {
           read() {
-            return me();
+            return currentUserVar();
           },
         },
       },
@@ -31,6 +31,6 @@ export const isLoggedInVar: ReactiveVar<boolean> = makeVar<boolean>(
 
 const localUser = localStorage.getItem("outcome-user");
 
-export const me: ReactiveVar<localStorageUser> = makeVar<localStorageUser>(
+export const currentUserVar: ReactiveVar<localStorageUser> = makeVar<localStorageUser>(
   localUser ? JSON.parse(localUser) : null
 );
