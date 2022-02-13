@@ -1,15 +1,18 @@
+import { useApolloClient } from "@apollo/client";
 import React from "react";
-import { Link } from "react-router-dom";
-import { Segment, Grid, Icon, Image } from "semantic-ui-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Image, Menu, Dropdown } from "semantic-ui-react";
 import logo from "../logo.svg";
 import { localStorageUser, Space } from "../types";
-import { GetActiveSpace, GetMe } from "../utils";
+import { GetActiveSpace, GetMe, logout } from "../utils";
 
-const BottomNavigation = () => {
+const TopNavigation = () => {
   const user: localStorageUser | null = GetMe();
   const space: Space | null = GetActiveSpace();
   const [currentUser, setCurrentUser] = React.useState<localStorageUser | null>(null);
   const [currentSpace, setCurrentSpace] = React.useState<Space | null>(null);
+  let navigate = useNavigate();
+  const client = useApolloClient();
 
   React.useEffect(() => {
     setCurrentUser(user);
@@ -19,21 +22,28 @@ const BottomNavigation = () => {
     setCurrentSpace(space);
   }, [space]);
 
+  const handleLogout = async () => {
+    await logout(client);
+    navigate("/");
+  };
+
   if (!currentUser || !currentSpace) return <div>Loading user...</div>;
   return (
-    <Segment basic>
-      <Grid verticalAlign="middle" columns={3}>
-        <Grid.Column floated="left">
-          <Image as={Link} to="/" src={logo} size="mini" />
-        </Grid.Column>
-        <Grid.Column textAlign="center">{currentSpace.name}</Grid.Column>
-        <Grid.Column textAlign="right" floated="right">
-          <span className="px-2">{currentUser.first_name}</span>
-          <Icon name="user" size="large" />
-        </Grid.Column>
-      </Grid>
-    </Segment>
+    <Menu fluid secondary>
+      <Menu.Item position="left">
+        <Image as={Link} to="/" src={logo} size="mini" />
+      </Menu.Item>
+      <Menu.Item link>
+        <Link to="/budget">{currentSpace.name}</Link>
+      </Menu.Item>
+      <Dropdown icon="user" button className="icon right item">
+        <Dropdown.Menu>
+          <Dropdown.Item as={Link} to="/account" text="Account" icon="user" />
+          <Dropdown.Item text="Log out" icon="log out" onClick={() => handleLogout()} />
+        </Dropdown.Menu>
+      </Dropdown>
+    </Menu>
   );
 };
 
-export default BottomNavigation;
+export default TopNavigation;

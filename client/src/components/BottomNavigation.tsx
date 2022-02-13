@@ -1,14 +1,6 @@
-import {
-  LinkProps,
-  useResolvedPath,
-  useMatch,
-  Link,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { LinkProps, useResolvedPath, useMatch, Link, useLocation } from "react-router-dom";
 import { Menu, Button, Icon } from "semantic-ui-react";
-import { IsLoggedIn, logout } from "../utils";
-import { useApolloClient } from "@apollo/client";
+import { IsLoggedIn } from "../utils";
 
 const CustomLink = ({ children, to }: LinkProps) => {
   let resolved = useResolvedPath(to);
@@ -31,19 +23,12 @@ const BottomNavigation = ({
   openCategoryModal,
   openLoginModal,
 }: NavigationProps) => {
-  let navigate = useNavigate();
   const location = useLocation();
 
   const dashboardPath = "dashboard";
   const entriesPath = "entries";
   const budgetPath = "budget";
 
-  const client = useApolloClient();
-
-  const handleLogout = async () => {
-    await logout(client);
-    navigate("/");
-  };
   return (
     <div
       style={{ position: "fixed", width: "100%", padding: "0 1em", bottom: "1em" }}
@@ -69,7 +54,7 @@ const BottomNavigation = ({
               </Menu.Item>
             ) : null}
           </Menu>
-          <Menu fluid widths={4} size="mini" icon="labeled" borderless>
+          <Menu fluid widths={3} size="mini" icon="labeled" borderless>
             <CustomLink to="/">
               <Icon name={dashboardPath} />
               Dashboard
@@ -82,14 +67,10 @@ const BottomNavigation = ({
               <Icon name="tags" />
               Budget
             </CustomLink>
-            <Menu.Item position="right" onClick={() => handleLogout()}>
-              <Icon name="log out" />
-              Logout
-            </Menu.Item>
           </Menu>
         </>
       ) : (
-        <Menu fluid widths={2} size="mini" icon="labeled" borderless>
+        <Menu fluid widths={4} size="mini" icon="labeled" borderless>
           <Menu.Item floated="right" onClick={() => openLoginModal()}>
             <Icon name="user" />
             Login
