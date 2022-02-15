@@ -86,10 +86,11 @@ In `./server`...
 - Currently active space is visible to user in the header area ✅
 - Spaces are used in client and added to headers for calls ✅
 - User can see their name in top right and click to access their user details ✅
-- Spaces are added to context in server and available for auth checking in resolvers
-- Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories)
+- Spaces are added to context in server and available for auth checking in resolvers ✅
+- Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories) ✅
 - Add date filtering to reporting (default ongoing month, other options?)
 - Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
+- Bug: entry modal fails, if there are no categories
 - Separate test and prod databases
 - Test coverage for server is sufficient
 - Test coverage for client is sufficient (considering unfinalised UI)
