@@ -38,7 +38,7 @@ const TopNavigation = () => {
       </Menu.Item>
       <Dropdown icon="user" button className="icon right item">
         <Dropdown.Menu>
-          <Dropdown.Item as={Link} to="/account" text="Account" icon="user" />
+          <Dropdown.Item as={Link} to="/account" text="Account" icon="setting" />
           <Dropdown.Item text="Log out" icon="log out" onClick={() => handleLogout()} />
         </Dropdown.Menu>
       </Dropdown>
