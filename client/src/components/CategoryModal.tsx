@@ -3,7 +3,13 @@ import { Button, Icon, Modal, Segment } from "semantic-ui-react";
 import NewCategoryForm from "./NewCategoryForm";
 import { Category, CategoryInput, NewCategory } from "../types";
 import { FetchResult, useMutation } from "@apollo/client";
-import { ALL_CATEGORIES, CREATE_CATEGORY, DELETE_CATEGORY, UPDATE_CATEGORY } from "../queries";
+import {
+  ALL_CATEGORIES,
+  ALL_ENTRIES,
+  CREATE_CATEGORY,
+  DELETE_CATEGORY,
+  UPDATE_CATEGORY,
+} from "../queries";
 import { toNewCategory } from "../utils";
 import UpdateCategoryForm from "./UpdateCategoryForm";
 
@@ -33,11 +39,11 @@ const CategoryModal = ({
   const [updateCategory] = useMutation<
     { UpdateCategory: Category },
     { id: string; data: CategoryInput }
-  >(UPDATE_CATEGORY, { refetchQueries: [{ query: ALL_CATEGORIES }] });
+  >(UPDATE_CATEGORY, { refetchQueries: [{ query: ALL_CATEGORIES }, { query: ALL_ENTRIES }] });
   const [deleteCategory] = useMutation<{ DeleteCategory: boolean }, { id: string }>(
     DELETE_CATEGORY,
     {
-      refetchQueries: [{ query: ALL_CATEGORIES }],
+      refetchQueries: [{ query: ALL_CATEGORIES }, { query: ALL_ENTRIES }],
     }
   );
 
