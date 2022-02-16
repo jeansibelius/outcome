@@ -1,9 +1,10 @@
 import { User } from "../entities/User";
-import { UserModel } from "../entities";
+import { SpaceModel, UserModel } from "../entities";
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { UserInput, UserUpdateInput } from "./inputTypes/UserInput";
 import { getHashedPassword } from "../utils";
-import { DecodedJwtToken } from "../types";
+import { ContextType, DecodedJwtToken } from "../types";
+import { mongoose } from "@typegoose/typegoose";
 
 const populatePaths = "spaces";
 
@@ -26,7 +27,8 @@ export class UserResolver {
 
   @Mutation(() => User)
   async createUser(
-    @Arg("data") { first_name, last_name, password, email }: UserInput
+    @Arg("data") { first_name, last_name, password, email }: UserInput,
+    @Ctx() { space }: ContextType
   ): Promise<User> {
     const userExists = await UserModel.findOne({ email: email }, "email");
     if (userExists) {
@@ -39,6 +41,16 @@ export class UserResolver {
       password_hash,
       email,
     });
+    // If there no space defined context (i.e. an existing user is not adding a new user), create a new default space for the new user
+    if (!space) {
+      const newSpace = await SpaceModel.create({
+        name: "My Budget",
+        user: user._id as mongoose.Types.ObjectId,
+      });
+      user.spaces = user.spaces.concat(new mongoose.Types.ObjectId(newSpace._id as string));
+    } else {
+      user.spaces = user.spaces.concat(new mongoose.Types.ObjectId(space));
+    }
     await user.save();
     return user.populate(populatePaths);
   }
