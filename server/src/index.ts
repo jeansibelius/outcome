@@ -45,13 +45,26 @@ async function startApolloServer() {
 
   const httpServer = http.createServer(app);
 
-  const MONGODB_URI = process.env.MONGODB_URI;
+  let MONGODB_URI;
+  switch (process.env.NODE_ENV) {
+    case "production":
+      MONGODB_URI = process.env.MONGODB_URI_PROD;
+      break;
+    case "development":
+      MONGODB_URI = process.env.MONGODB_URI_DEV;
+      break;
+    case "demo":
+      MONGODB_URI = process.env.MONGODB_URI_DEMO;
+      break;
+    default:
+      MONGODB_URI = process.env.MONGODB_URI_TEST;
+  }
 
   // create mongoose connection
   if (MONGODB_URI) {
     try {
       const mongoose = await connect(MONGODB_URI);
-      console.log("Connected to MongoDB");
+      console.log("Connected to MongoDB", process.env.NODE_ENV);
       mongoose.set("debug", true);
       mongoose.connection;
     } catch (error: unknown) {
@@ -77,6 +90,8 @@ async function startApolloServer() {
       // Exclude login from auth
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       if (req.body.query.match("Login")) return null;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      if (req.body.query.match("CreateUser")) return null;
 
       const token = req.token;
       const space = req.space;
