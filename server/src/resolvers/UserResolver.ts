@@ -45,7 +45,7 @@ export class UserResolver {
     if (!space) {
       const newSpace = await SpaceModel.create({
         name: "My Budget",
-        user: user._id as mongoose.Types.ObjectId,
+        users: [user._id as mongoose.Types.ObjectId],
       });
       user.spaces = user.spaces.concat(new mongoose.Types.ObjectId(newSpace._id as string));
     } else {
