@@ -88,24 +88,27 @@ In `./server`...
 - User can see their name in top right and click to access their user details ✅
 - Spaces are added to context in server and available for auth checking in resolvers ✅
 - Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories) ✅
-- Add date filtering to reporting (default ongoing month, other options?)
-- Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
+- Separate test, demo and prod databases
 - Bug: entry modal fails, if there are no categories
-- Separate test and prod databases
 - Test coverage for server is sufficient
 - Test coverage for client is sufficient (considering unfinalised UI)
+- Add date filtering to reporting (default ongoing month, other options?)
+- Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
 - Disable debugging on mongoose (and other similar data sensitive things)
 - Onboard first users
 
 ### After "launch"
 - Register view exists
-- Remove normalisation of date in entries to allow proper sorting (same day entries)
+- Remove zeroing of date in entries to allow proper sorting (same day entries)
 - Caching: Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
 - Add safer UI to deletion of entries and categories (loading status when clicked, clear response in
   the form of a toast etc. when successful; for the category deletion: show how many associated
   entries and perhaps do something with them)
 - Add some toasts on successful events (such as login, adding an entry etc.)
+- User can create a new space
+- User can switch between spaces
+- User can add another user to a space
 - Add PWA manifest
 - Add offline capabilities with service workers
 - Consider what kind of pattern to use with queries/mutations: action creators or what?
