@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Entries from "./pages/Entries";
 import Budget from "./pages/Budget";
 import Layout from "./pages/Layout";
+import Account from "./pages/Account";
 import FrontPage from "./pages/FrontPage";
 import PageNotFound from "./pages/PageNotFound";
 
@@ -13,6 +14,7 @@ const App = () => {
           <Route index element={<FrontPage />} />
           <Route path="entries" element={<Entries />} />
           <Route path="budget" element={<Budget />} />
+          <Route path="account" element={<Account />} />
           <Route path="*" element={<PageNotFound />} />
         </Route>
       </Routes>

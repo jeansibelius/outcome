@@ -1,12 +1,12 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
-import { Container, Segment, Image } from "semantic-ui-react";
-import { IsLoggedIn } from "..";
+import { Outlet } from "react-router-dom";
+import { Container } from "semantic-ui-react";
 import CategoryModal from "../components/CategoryModal";
 import EntryModal from "../components/EntryModal";
 import LoginModal from "../components/LoginModal";
-import Navigation from "../components/Navigation";
-import logo from "../logo.svg";
+import BottomNavigation from "../components/BottomNavigation";
+import { IsLoggedIn } from "../utils";
+import TopNavigation from "../components/TopNavigation";
 
 const Layout = () => {
   const [entryModalOpen, setEntryModalOpen] = React.useState<boolean>(false);
@@ -32,7 +32,7 @@ const Layout = () => {
       <Container className="px-1 pt-8 pb-40">
         <Outlet />
       </Container>
-      <Navigation
+      <BottomNavigation
         openEntryModal={openEntryModal}
         openCategoryModal={openCategoryModal}
         openLoginModal={openLoginModal}
@@ -44,9 +44,7 @@ const Layout = () => {
   if (IsLoggedIn()) {
     return (
       <>
-        <Segment basic>
-          <Image as={Link} to="/" src={logo} size="mini" />
-        </Segment>
+        <TopNavigation />
         {sharedContent()}
         <EntryModal modalOpen={entryModalOpen} onClose={closeEntryModal} />
         <CategoryModal modalOpen={categoryModalOpen} onClose={closeCategoryModal} />

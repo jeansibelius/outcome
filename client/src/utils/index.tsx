@@ -1,4 +1,53 @@
-import { CategoryInput, EntryInput, IncomeExpenseType, NewCategory, NewEntry } from "../types";
+import { ApolloClient, useQuery } from "@apollo/client";
+import {
+  CategoryInput,
+  EntryInput,
+  IncomeExpenseType,
+  localStorageUser,
+  NewCategory,
+  NewEntry,
+  Space,
+} from "../types";
+import { IS_LOGGED_IN, GET_ME, GET_ACTIVE_SPACE } from "../queries";
+import { isLoggedInVar, currentUserVar } from "../cache";
+
+// Function to make the above query callable from anywhere in the app
+export const IsLoggedIn = (): boolean => {
+  const { data } = useQuery(IS_LOGGED_IN);
+  return data.isLoggedIn;
+};
+
+export const GetMe = (): localStorageUser => {
+  const { data } = useQuery(GET_ME);
+  return data.me;
+};
+
+export const GetActiveSpace = (): Space => {
+  const { data } = useQuery(GET_ACTIVE_SPACE);
+  return data.activeSpace;
+};
+
+export const logout = async (client: ApolloClient<object>): Promise<void> => {
+  try {
+    await client.cache.reset();
+    /*
+    client.cache.evict({
+      fieldName: "returnAllCategories",
+    });
+    client.cache.evict({
+      fieldName: "returnAllEntries",
+    });
+    */
+    client.cache.gc();
+  } catch (error) {
+    console.log(error);
+  }
+  window.localStorage.removeItem("outcome-token");
+  window.localStorage.removeItem("outcome-user");
+  isLoggedInVar(false);
+  currentUserVar(null);
+  return;
+};
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;

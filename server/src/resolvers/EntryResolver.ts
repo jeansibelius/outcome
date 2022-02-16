@@ -9,21 +9,20 @@ const populatePaths = ["category", "user"];
 @Resolver((_of) => Entry)
 export class EntryResolver {
   @Query((_returns) => Entry, { nullable: false })
-  async returnSingleEntry(@Arg("id") id: string): Promise<Entry> {
-    return await EntryModel.findById({ _id: id }).populate(populatePaths);
+  async returnSingleEntry(@Arg("id") id: string, @Ctx() { space }: ContextType): Promise<Entry> {
+    return await EntryModel.findById({ _id: id, space }).populate(populatePaths);
   }
 
   @Query(() => [Entry])
-  async returnAllEntries(): Promise<Entry[]> {
-    return await EntryModel.find().populate(populatePaths);
+  async returnAllEntries(@Ctx() { space }: ContextType): Promise<Entry[]> {
+    return await EntryModel.find({ space }).populate(populatePaths);
   }
 
   @Mutation(() => Entry)
   async createEntry(
     @Arg("data") { type, date, name, amount, category, description }: EntryInput,
-    @Ctx() ctx: ContextType
+    @Ctx() { user, space }: ContextType
   ): Promise<Entry> {
-    const user = ctx.user.id;
     const entry = await EntryModel.create({
       type,
       date,
@@ -31,7 +30,8 @@ export class EntryResolver {
       amount,
       category,
       description,
-      user,
+      user: user.id,
+      space,
     });
     await entry.save();
     return entry.populate(populatePaths);
@@ -56,8 +56,8 @@ export class EntryResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteEntry(@Arg("id") id: string): Promise<boolean> {
-    await EntryModel.deleteOne({ _id: id });
+  async deleteEntry(@Arg("id") id: string, @Ctx() { space }: ContextType): Promise<boolean> {
+    await EntryModel.deleteOne({ _id: id, space });
     return true;
   }
 }

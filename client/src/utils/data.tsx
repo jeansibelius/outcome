@@ -10,7 +10,6 @@ export const categoriesToIdAndValue = (array: Category[]): CustomPieChartData[] 
   );
 
 export const entriesByCategoryToAndIdAndValue = (array: Entry[]): CustomPieChartData[] => {
-  console.log("entries", array);
   return array.reduce((arr: any[], entry: Entry) => {
     const isSameCategoryAndType = (el: CustomPieChartData) =>
       el.id === (entry.category ? entry.category.name : undefined) && el.type === entry.type;

@@ -11,8 +11,9 @@
     "server-install": "npm install --prefix server",
     "install": "npm run client-install && npm run server-install",
     "build": "npm run client-build && npm run server-build",
-    "start": "NODE_ENV=production node server/build/index.js",
-    "deploy": "git push heroku mvp:master"
+    "start:prod": "NODE_ENV=production node server/build/index.js",
+    "start": "NODE_ENV=demo node server/build/index.js",
+    "deploy:demo": "git push heroku mvp:master"
   },
   "engines": {
     "node": "14.x",

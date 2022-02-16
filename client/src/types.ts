@@ -22,11 +22,17 @@ export interface CategoryInput {
 
 export type NewCategory = Omit<Category, "id">;
 
+export interface Space {
+  id: string;
+  name: string;
+}
+
 export interface User {
   id: string;
   first_name: string;
   last_name: string;
   email: string;
+  spaces: Space[];
 }
 
 export interface Entry {
@@ -52,3 +58,5 @@ export interface EntryInput {
   description?: unknown;
   category?: unknown;
 }
+
+export type localStorageUser = Omit<User, "id" | "email"> | null;

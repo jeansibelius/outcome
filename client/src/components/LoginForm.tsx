@@ -40,7 +40,7 @@ const LoginForm = withFormik<LoginFormProps, LoginFormValues>({
   // Transform outer props into form values
   mapPropsToValues: () => {
     return {
-      email: "testinen@test.com",
+      email: "hari.seldon@foundation.org",
       password: "test",
     };
   },

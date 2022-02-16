@@ -4,7 +4,7 @@ import { ALL_ENTRIES } from "../queries";
 import { Entry as EntryType } from "../types";
 import { Feed } from "semantic-ui-react";
 import EntryModal from "../components/EntryModal";
-import { IsLoggedIn } from "../index";
+import { IsLoggedIn } from "../utils";
 import Entry from "../components/Entry";
 
 const Entries = () => {

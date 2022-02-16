@@ -15,9 +15,12 @@ import { connect } from "mongoose";
 
 import schemaBuild from "./resolvers";
 import path from "path";
-import { RequestCustom, tokenExtractor } from "./middleware";
+import { RequestCustom, spaceExtractor, tokenExtractor } from "./middleware";
 import { decodeToken } from "./utils";
 import { ContextType, DecodedJwtToken } from "./types";
+import { SpaceModel } from "./entities";
+import { Space } from "./entities/Space";
+import { mongoose } from "@typegoose/typegoose";
 
 async function startApolloServer() {
   const corsAllowedOrigins: Array<string | RegExp> = [
@@ -42,13 +45,26 @@ async function startApolloServer() {
 
   const httpServer = http.createServer(app);
 
-  const MONGODB_URI = process.env.MONGODB_URI;
+  let MONGODB_URI;
+  switch (process.env.NODE_ENV) {
+    case "production":
+      MONGODB_URI = process.env.MONGODB_URI_PROD;
+      break;
+    case "development":
+      MONGODB_URI = process.env.MONGODB_URI_DEV;
+      break;
+    case "demo":
+      MONGODB_URI = process.env.MONGODB_URI_DEMO;
+      break;
+    default:
+      MONGODB_URI = process.env.MONGODB_URI_TEST;
+  }
 
   // create mongoose connection
   if (MONGODB_URI) {
     try {
       const mongoose = await connect(MONGODB_URI);
-      console.log("Connected to MongoDB");
+      console.log("Connected to MongoDB", process.env.NODE_ENV);
       mongoose.set("debug", true);
       mongoose.connection;
     } catch (error: unknown) {
@@ -64,18 +80,26 @@ async function startApolloServer() {
 
   // Extract token and add to request, if found
   app.use(tokenExtractor);
+  // Extract space id and add to request, if found
+  app.use(spaceExtractor);
 
   const schema = await schemaBuild();
   const server = new ApolloServer({
     schema,
-    context: ({ req }: { req: RequestCustom }): ContextType | null => {
+    context: async ({ req }: { req: RequestCustom }): Promise<ContextType | null> => {
       // Exclude login from auth
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       if (req.body.query.match("Login")) return null;
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      if (req.body.query.match("CreateUser")) return null;
 
       const token = req.token;
+      const space = req.space;
       if (!token) {
         throw new Error("Token missing from request.");
+      }
+      if (!space) {
+        throw new Error("User space missing from request.");
       }
 
       // try to retrieve a user with the token
@@ -83,8 +107,17 @@ async function startApolloServer() {
       // we could also check user roles/permissions here
       if (!user) throw new AuthenticationError("You must be logged in");
 
-      // add the user to the context
-      return { user };
+      // Check that user belongs to given space
+      const spaceFromDB: Space | null | undefined = await SpaceModel.findById({ _id: space });
+      if (!spaceFromDB) {
+        throw new AuthenticationError("Given space doesn't exist in the DB.");
+      }
+      if (!spaceFromDB.users?.includes(new mongoose.Types.ObjectId(user.id))) {
+        throw new AuthenticationError("User doesn't belong to the given space.");
+      }
+
+      // add the user & active space to the context
+      return { user, space };
     },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
