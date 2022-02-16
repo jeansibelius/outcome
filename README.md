@@ -3,6 +3,7 @@
 ### A simple app to track the outcome of your income against a set budget
 
 #### [Demo hosted on Heroku](https://outcome-demo.herokuapp.com/) (might take a moment to start while the Heroku instance wakes up)
+Demo username: `hari.seldon@foundation.org`, password: `test`  
 
 License: All rights reserved © Rafael Linnankoski (further details [here](https://github.com/jeansibelius/outcome/blob/master/LICENSE.md)).
 
