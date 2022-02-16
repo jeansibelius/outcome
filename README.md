@@ -38,8 +38,9 @@ In the root...
 - `npm run install` to run installation script for both sub-folders (client & server)
 - `npm run build` to run build scripts in both sub-folders
 - `npm start` to run the backend production build (which serves also the client build)
-- `npm run deploy` to deploy the project to Heroku (might need to update script to deploy the
+- `npm run deploy:demo` to deploy the project to the Heroku demo instance (might need to update script to deploy the
   correct/desired branch)
+- `npm run deploy` to deploy the project to the production instance of Heroku
 
 ### Development
 In `./client`...

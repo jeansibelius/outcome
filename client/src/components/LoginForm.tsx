@@ -36,12 +36,23 @@ interface LoginFormProps {
   onSubmit: (email: string, password: string) => void;
 }
 
+let defaultValues = {
+  email: "",
+  password: "",
+};
+if (process.env.NODE_ENV !== "production") {
+  defaultValues = {
+    email: "hari.seldon@foundation.org",
+    password: "test",
+  };
+}
+
 const LoginForm = withFormik<LoginFormProps, LoginFormValues>({
   // Transform outer props into form values
   mapPropsToValues: () => {
     return {
-      email: "hari.seldon@foundation.org",
-      password: "test",
+      email: defaultValues.email,
+      password: defaultValues.password,
     };
   },
 
