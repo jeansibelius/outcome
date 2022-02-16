@@ -2,7 +2,7 @@
 
 ### A simple app to track the outcome of your income against a set budget
 
-#### [Demo hosted on Heroku](https://outcome-io.herokuapp.com/) (might take a moment to start while the Heroku instance wakes up)
+#### [Demo hosted on Heroku](https://outcome-demo.herokuapp.com/) (might take a moment to start while the Heroku instance wakes up)
 
 License: All rights reserved © Rafael Linnankoski (further details [here](https://github.com/jeansibelius/outcome/blob/master/LICENSE.md)).
 
@@ -88,7 +88,7 @@ In `./server`...
 - User can see their name in top right and click to access their user details ✅
 - Spaces are added to context in server and available for auth checking in resolvers ✅
 - Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories) ✅
-- Separate test, demo and prod databases
+- Separate test, dev, demo and prod databases ✅
 - Bug: entry modal fails, if there are no categories
 - Test coverage for server is sufficient
 - Test coverage for client is sufficient (considering unfinalised UI)

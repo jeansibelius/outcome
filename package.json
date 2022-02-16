@@ -13,7 +13,7 @@
     "build": "npm run client-build && npm run server-build",
     "start:prod": "NODE_ENV=production node server/build/index.js",
     "start": "NODE_ENV=demo node server/build/index.js",
-    "deploy": "git push heroku mvp:master"
+    "deploy:demo": "git push heroku mvp:master"
   },
   "engines": {
     "node": "14.x",
