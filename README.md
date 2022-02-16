@@ -54,7 +54,10 @@ In `./server`...
 
 ### Required env variables
 - The server requires the following env vars to be set
-  - `MONGODB_URI`: a connection URI containing the username and password of the MongoDB instance
+  - `MONGODB_URI_PROD`: a connection URI containing the username and password of the MongoDB instance
+  - `MONGODB_URI_DEMO`: a connection URI for the demo instance
+  - `MONGODB_URI_TEST`: a connection URI for testing 
+  - `MONGODB_URI_DEV`: a connection URI for development 
   - `JWT_SECRET`: used to create and verify hashed passwords
 
 
