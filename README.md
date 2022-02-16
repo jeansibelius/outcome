@@ -3,6 +3,7 @@
 ### A simple app to track the outcome of your income against a set budget
 
 #### [Demo hosted on Heroku](https://outcome-demo.herokuapp.com/) (might take a moment to start while the Heroku instance wakes up)
+Demo username: `hari.seldon@foundation.org`, password: `test`  
 
 License: All rights reserved © Rafael Linnankoski (further details [here](https://github.com/jeansibelius/outcome/blob/master/LICENSE.md)).
 
@@ -38,8 +39,9 @@ In the root...
 - `npm run install` to run installation script for both sub-folders (client & server)
 - `npm run build` to run build scripts in both sub-folders
 - `npm start` to run the backend production build (which serves also the client build)
-- `npm run deploy` to deploy the project to Heroku (might need to update script to deploy the
+- `npm run deploy:demo` to deploy the project to the Heroku demo instance (might need to update script to deploy the
   correct/desired branch)
+- `npm run deploy` to deploy the project to the production instance of Heroku
 
 ### Development
 In `./client`...
