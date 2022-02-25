@@ -93,10 +93,10 @@ export class SpaceResolver {
   }
 
   @Mutation(() => Boolean)
-  async deleteSpace(@Arg("id") id: string): Promise<boolean> {
+  async deleteSpace(@Arg("id") id: string): Promise<number> {
     // TODO: Find all entries and categories associated with given space and delete them first
     // For associated users, delete only if each user has more than given space associated with them. Else return error. Other option: make the spaces in a user optional and allow a null state (user could create a space in the UI)
-    await SpaceModel.deleteOne({ _id: id });
-    return true;
+    const result = await SpaceModel.deleteOne({ _id: id });
+    return result.deletedCount;
   }
 }
