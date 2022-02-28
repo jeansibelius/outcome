@@ -12,6 +12,24 @@ export const GET_ME = gql`
     me @client
   }
 `;
+const spaceDetails = `
+fragment spaceDetails on Space {
+  id
+  name
+  users {
+    id
+    first_name
+  }
+}`;
+
+export const createSpace = `
+mutation CreateSpace($data: SpaceInput!) {
+  createSpace(data: $data) {
+    ...spaceDetails
+  }
+}
+${spaceDetails}
+`;
 
 export const GET_ACTIVE_SPACE = gql`
   query ActiveSpace {
@@ -88,46 +106,62 @@ export const DELETE_ENTRY = gql`
   }
 `;
 
-const CATEGORY_DETAILS = gql`
-  fragment CategoryDetails on Category {
-    id
-    type
-    name
-    monthlyBudget
-    description
-    icon
+const categoryDetails = `
+fragment CategoryDetails on Category {
+  id
+  type
+  name
+  monthlyBudget
+  description
+  icon
+}
+`;
+
+export const returnAllCategories = `
+query ReturnAllCategories {
+  returnAllCategories {
+    ...CategoryDetails
   }
+}
+${categoryDetails}
 `;
 
 export const ALL_CATEGORIES = gql`
-  query ReturnAllCategories {
-    returnAllCategories {
-      ...CategoryDetails
-    }
+  ${returnAllCategories}
+`;
+
+export const createCategory = `
+mutation CreateCategory($categoryData: CategoryInput!) {
+  createCategory(data: $categoryData) {
+    ...CategoryDetails
   }
-  ${CATEGORY_DETAILS}
+}
+${categoryDetails}
 `;
 
 export const CREATE_CATEGORY = gql`
-  mutation CreateCategory($categoryData: CategoryInput!) {
-    createCategory(data: $categoryData) {
-      ...CategoryDetails
-    }
+  ${createCategory}
+`;
+
+export const updateCategory = `
+mutation UpdateCategory($id: String!, $data: CategoryUpdateInput!) {
+  updateCategory(id: $id, data: $data) {
+    ...CategoryDetails
   }
-  ${CATEGORY_DETAILS}
+}
+${categoryDetails}
 `;
 
 export const UPDATE_CATEGORY = gql`
-  mutation UpdateCategory($id: String!, $data: CategoryUpdateInput!) {
-    updateCategory(id: $id, data: $data) {
-      ...CategoryDetails
-    }
-  }
-  ${CATEGORY_DETAILS}
+  ${updateCategory}
+`;
+
+export const deleteCategory = `
+mutation DeleteCategory($id: String!) {
+  deleteCategory(id: $id)
+}
 `;
 
 export const DELETE_CATEGORY = gql`
-  mutation DeleteCategory($id: String!) {
-    deleteCategory(id: $id)
-  }
+  ${deleteCategory}
 `;

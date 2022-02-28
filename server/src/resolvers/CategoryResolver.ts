@@ -5,7 +5,7 @@ import { CategoryInput, CategoryUpdateInput } from "./inputTypes/CategoryInput";
 import { ContextType } from "../types";
 
 @Resolver((_of) => Category)
-export class CategoriesResolver {
+export class CategoryResolver {
   @Query((_returns) => Category, { nullable: false })
   async returnSingleCategory(@Arg("id") id: string, @Ctx() { space }: ContextType) {
     return await CategoryModel.findById({ _id: id, space });

@@ -22,6 +22,41 @@ import { SpaceModel } from "./entities";
 import { Space } from "./entities/Space";
 import { mongoose } from "@typegoose/typegoose";
 
+export const connectToDB = async (): Promise<mongoose.Connection | void> => {
+  let MONGODB_URI;
+  switch (process.env.NODE_ENV) {
+    case "production":
+      MONGODB_URI = process.env.MONGODB_URI_PROD;
+      break;
+    case "development":
+      MONGODB_URI = process.env.MONGODB_URI_DEV;
+      break;
+    case "demo":
+      MONGODB_URI = process.env.MONGODB_URI_DEMO;
+      break;
+    default:
+      MONGODB_URI = process.env.MONGODB_URI_TEST;
+  }
+
+  // create mongoose connection
+  if (MONGODB_URI) {
+    try {
+      const mongoose = await connect(MONGODB_URI);
+      console.log("Connected to MongoDB", process.env.NODE_ENV);
+      mongoose.set("debug", true);
+      return mongoose.connection;
+    } catch (error: unknown) {
+      if (error && error instanceof Error) {
+        return console.log(`Error connecting to MongoDB: ${error.message}`);
+      } else {
+        return console.log("Something went wrong with MongoDB");
+      }
+    }
+  } else {
+    return console.log("MongoDB URI is undefined");
+  }
+};
+
 async function startApolloServer() {
   const corsAllowedOrigins: Array<string | RegExp> = [
     /localhost/,
@@ -45,38 +80,8 @@ async function startApolloServer() {
 
   const httpServer = http.createServer(app);
 
-  let MONGODB_URI;
-  switch (process.env.NODE_ENV) {
-    case "production":
-      MONGODB_URI = process.env.MONGODB_URI_PROD;
-      break;
-    case "development":
-      MONGODB_URI = process.env.MONGODB_URI_DEV;
-      break;
-    case "demo":
-      MONGODB_URI = process.env.MONGODB_URI_DEMO;
-      break;
-    default:
-      MONGODB_URI = process.env.MONGODB_URI_TEST;
-  }
-
-  // create mongoose connection
-  if (MONGODB_URI) {
-    try {
-      const mongoose = await connect(MONGODB_URI);
-      console.log("Connected to MongoDB", process.env.NODE_ENV);
-      mongoose.set("debug", true);
-      mongoose.connection;
-    } catch (error: unknown) {
-      if (error && error instanceof Error) {
-        console.log(`Error connecting to MongoDB: ${error.message}`);
-      } else {
-        console.log("Something went wrong with MongoDB");
-      }
-    }
-  } else {
-    console.log("MongoDB URI is undefined");
-  }
+  // Connect to DB
+  await connectToDB();
 
   // Extract token and add to request, if found
   app.use(tokenExtractor);
