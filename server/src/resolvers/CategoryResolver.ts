@@ -4,16 +4,18 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { CategoryInput, CategoryUpdateInput } from "./inputTypes/CategoryInput";
 import { ContextType } from "../types";
 
+const populatePaths = ["space"];
+
 @Resolver((_of) => Category)
 export class CategoryResolver {
   @Query((_returns) => Category, { nullable: false })
   async returnSingleCategory(@Arg("id") id: string, @Ctx() { space }: ContextType) {
-    return await CategoryModel.findById({ _id: id, space });
+    return await CategoryModel.findById({ _id: id, space }).populate(populatePaths);
   }
 
   @Query(() => [Category])
   async returnAllCategories(@Ctx() { space }: ContextType) {
-    return await CategoryModel.find({ space });
+    return await CategoryModel.find({ space }).populate(populatePaths);
   }
 
   @Mutation(() => Category)
@@ -21,17 +23,16 @@ export class CategoryResolver {
     @Arg("data") { type, name, monthlyBudget, description, icon }: CategoryInput,
     @Ctx() { space }: ContextType
   ): Promise<Category> {
-    const category = (
-      await CategoryModel.create({
-        type,
-        name,
-        monthlyBudget,
-        description,
-        icon,
-        space,
-      })
-    ).save();
-    return category;
+    const category = await CategoryModel.create({
+      type,
+      name,
+      monthlyBudget,
+      description,
+      icon,
+      space,
+    });
+    await category.save();
+    return category.populate(populatePaths);
   }
 
   @Mutation(() => Category)
@@ -49,7 +50,7 @@ export class CategoryResolver {
     if (!category) {
       throw new Error("Invalid category id");
     }
-    return category;
+    return category.populate(populatePaths);
   }
 
   @Mutation(() => Boolean)

@@ -34,6 +34,14 @@ The client created with Create React App with PWA typescript template and uses t
 
 ## How to run
 
+### Required env variables
+- The server requires the following env vars to be set
+  - `MONGODB_URI_PROD`: a connection URI containing the username and password of the MongoDB instance
+  - `MONGODB_URI_DEMO`: a connection URI for the demo instance
+  - `MONGODB_URI_TEST`: a connection URI for testing 
+  - `MONGODB_URI_DEV`: a connection URI for development 
+  - `JWT_SECRET`: used to create and verify hashed passwords
+
 ### Production mode
 In the root...  
 - `npm run install` to run installation script for both sub-folders (client & server)
@@ -52,14 +60,9 @@ In `./server`...
 - `npm run dev` to run the backend in development mode with hot reloading at `localhost:4000/graphql`
 - and other basic installation/build scripts, as required
 
-### Required env variables
-- The server requires the following env vars to be set
-  - `MONGODB_URI_PROD`: a connection URI containing the username and password of the MongoDB instance
-  - `MONGODB_URI_DEMO`: a connection URI for the demo instance
-  - `MONGODB_URI_TEST`: a connection URI for testing 
-  - `MONGODB_URI_DEV`: a connection URI for development 
-  - `JWT_SECRET`: used to create and verify hashed passwords
-
+### Testing
+In `./server`
+- run `npm test` to have jest run (verbose & coverage included).
 
 ## Roadmap
 

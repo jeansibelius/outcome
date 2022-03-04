@@ -10,6 +10,7 @@
     "tsc": "tsc",
     "build": "npm run tsc",
     "dev": "NODE_ENV=development ts-node-dev src/index.ts",
+    "start:test": "NODE_ENV=test ts-node-dev src/index.ts",
     "lint": "eslint --ext .ts src",
     "start": "NODE_ENV=production node build/index.js"
   },

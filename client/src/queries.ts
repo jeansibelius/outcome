@@ -114,6 +114,10 @@ fragment CategoryDetails on Category {
   monthlyBudget
   description
   icon
+  space {
+    id
+    name
+  }
 }
 `;
 
