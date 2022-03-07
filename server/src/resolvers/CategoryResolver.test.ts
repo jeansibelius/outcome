@@ -1,40 +1,16 @@
-import { ExecutionResult, graphql, GraphQLSchema } from "graphql";
-import { Maybe } from "type-graphql";
-import schemaBuild from ".";
-
 import { connectToDB } from "../utils";
+import { callQuery } from "../test-utils";
 
 import { createCategory, createSpace, returnAllCategories } from "../../../client/src/queries";
 import { mongoose } from "@typegoose/typegoose";
-import { Space } from "src/entities/Space";
+import { Space } from "../entities/Space";
 import { CategoryModel, SpaceModel } from "../entities/index";
+import { exampleCategories } from "../test-utils/testHelpers";
 import { Category } from "src/entities/Category";
-
-interface Options {
-  source: string;
-  variableValues?: Maybe<{
-    [key: string]: unknown;
-  }>;
-  contextValue?: unknown;
-}
-
-let schema: GraphQLSchema;
-export const callQuery = async ({
-  source,
-  variableValues,
-  contextValue,
-}: Options): Promise<ExecutionResult> => {
-  if (!schema) schema = await schemaBuild();
-  return graphql({
-    schema,
-    source,
-    variableValues,
-    contextValue,
-  });
-};
 
 let space: Space;
 let dbConnection: mongoose.Connection | void;
+
 beforeAll(async () => {
   dbConnection = await connectToDB();
 });
@@ -63,42 +39,34 @@ afterAll(() => {
   console.log("closed db connection");
 });
 
-let category: Category;
 describe("When resolving categories", () => {
+  let categories: any[] = [];
   beforeEach(async () => {
-    const vars = {
-      categoryData: {
-        type: "Expense",
-        name: "Test",
-        monthlyBudget: 9999,
-        description: "Description test",
-        icon: "home",
-      },
-    };
-    const categoryResponse = await callQuery({
-      source: createCategory,
-      variableValues: {
-        ...vars,
-      },
-      contextValue: {
-        space,
-      },
-    });
-    category = categoryResponse.data?.createCategory;
-    console.log("initialised category", category);
+    const categoryResponses = exampleCategories.map((category) =>
+      callQuery({
+        source: createCategory,
+        variableValues: category,
+        contextValue: {
+          space,
+        },
+      })
+        .then((response) => categories.push(response.data?.createCategory))
+        .catch((e) => console.log(e))
+    );
+    await Promise.all(categoryResponses);
   });
 
-  test("given a single ID, expect returnSingleCategory to return a single category", async () => {
+  test("returnAllCategories returns all existing categories", async () => {
     const response = await callQuery({
       source: returnAllCategories,
       contextValue: {
         space,
       },
     });
-    expect(response).toMatchObject({
-      data: {
-        returnAllCategories: [category],
-      },
-    });
+    categories.sort((cat1, cat2) => cat1.name.localeCompare(cat2.name));
+    const allCategories = response.data?.returnAllCategories.sort(
+      (cat1: Category, cat2: Category) => cat1.name.localeCompare(cat2.name)
+    );
+    expect(allCategories).toEqual(categories);
   });
 });
