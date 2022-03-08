@@ -6,13 +6,8 @@ import { ContextType } from "../types";
 
 const populatePaths = ["space"];
 
-@Resolver((_of) => Category)
+@Resolver()
 export class CategoryResolver {
-  @Query((_returns) => Category, { nullable: false })
-  async returnSingleCategory(@Arg("id") id: string, @Ctx() { space }: ContextType) {
-    return await CategoryModel.findById({ _id: id, space }).populate(populatePaths);
-  }
-
   @Query(() => [Category])
   async returnAllCategories(@Ctx() { space }: ContextType) {
     return await CategoryModel.find({ space }).populate(populatePaths);
