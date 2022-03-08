@@ -71,7 +71,7 @@ const BottomNavigation = ({
         </>
       ) : (
         <Menu fluid widths={4} size="mini" icon="labeled" borderless>
-          <Menu.Item floated="right" onClick={() => openLoginModal()}>
+          <Menu.Item style={{ width: "100%" }} onClick={() => openLoginModal()}>
             <Icon name="user" />
             Login
           </Menu.Item>

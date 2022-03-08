@@ -1,19 +1,12 @@
-import { config } from "dotenv";
-config();
-
-// Typegoose logging TODO: disable before prod
-//import { setLogLevel } from "@typegoose/typegoose";
-//setLogLevel("DEBUG");
-
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer, AuthenticationError } from "apollo-server-core";
 import cors from "cors";
 import express from "express";
 import http from "http";
 
-import { connect } from "mongoose";
-
+import { connectToDB } from "./utils";
 import schemaBuild from "./resolvers";
+
 import path from "path";
 import { RequestCustom, spaceExtractor, tokenExtractor } from "./middleware";
 import { decodeToken } from "./utils";
@@ -45,43 +38,13 @@ async function startApolloServer() {
 
   const httpServer = http.createServer(app);
 
-  let MONGODB_URI;
-  switch (process.env.NODE_ENV) {
-    case "production":
-      MONGODB_URI = process.env.MONGODB_URI_PROD;
-      break;
-    case "development":
-      MONGODB_URI = process.env.MONGODB_URI_DEV;
-      break;
-    case "demo":
-      MONGODB_URI = process.env.MONGODB_URI_DEMO;
-      break;
-    default:
-      MONGODB_URI = process.env.MONGODB_URI_TEST;
-  }
-
-  // create mongoose connection
-  if (MONGODB_URI) {
-    try {
-      const mongoose = await connect(MONGODB_URI);
-      console.log("Connected to MongoDB", process.env.NODE_ENV);
-      mongoose.set("debug", true);
-      mongoose.connection;
-    } catch (error: unknown) {
-      if (error && error instanceof Error) {
-        console.log(`Error connecting to MongoDB: ${error.message}`);
-      } else {
-        console.log("Something went wrong with MongoDB");
-      }
-    }
-  } else {
-    console.log("MongoDB URI is undefined");
-  }
-
   // Extract token and add to request, if found
   app.use(tokenExtractor);
   // Extract space id and add to request, if found
   app.use(spaceExtractor);
+
+  // Connect to DB
+  await connectToDB();
 
   const schema = await schemaBuild();
   const server = new ApolloServer({
@@ -122,15 +85,10 @@ async function startApolloServer() {
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
-  // More required logic for integrating with Express
   await server.start();
 
   server.applyMiddleware({
     app,
-
-    // By default, apollo-server hosts its GraphQL endpoint at the
-    // server root. However, *other* Apollo Server packages host it at
-    // /graphql. Optionally provide this to match apollo-server.
     path: appPath,
     cors: false,
   });

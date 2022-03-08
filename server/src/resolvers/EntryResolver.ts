@@ -6,13 +6,8 @@ import { ContextType } from "../types";
 
 const populatePaths = ["category", "user"];
 
-@Resolver((_of) => Entry)
+@Resolver()
 export class EntryResolver {
-  @Query((_returns) => Entry, { nullable: false })
-  async returnSingleEntry(@Arg("id") id: string, @Ctx() { space }: ContextType): Promise<Entry> {
-    return await EntryModel.findById({ _id: id, space }).populate(populatePaths);
-  }
-
   @Query(() => [Entry])
   async returnAllEntries(@Ctx() { space }: ContextType): Promise<Entry[]> {
     return await EntryModel.find({ space }).populate(populatePaths);
@@ -33,7 +28,6 @@ export class EntryResolver {
       user: user.id,
       space,
     });
-    await entry.save();
     return entry.populate(populatePaths);
   }
 
