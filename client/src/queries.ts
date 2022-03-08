@@ -53,7 +53,7 @@ export const LOGIN = gql`
   }
 `;
 
-const ENTRY_DETAILS = gql`
+const entryDetails = `
   fragment EntryDetails on Entry {
     id
     type
@@ -73,37 +73,54 @@ const ENTRY_DETAILS = gql`
     }
   }
 `;
-export const ALL_ENTRIES = gql`
+
+export const returnAllEntries = `
   query ReturnAllEntries {
     returnAllEntries {
       ...EntryDetails
     }
   }
-  ${ENTRY_DETAILS}
+  ${entryDetails}
 `;
 
-export const CREATE_ENTRY = gql`
+export const ALL_ENTRIES = gql`
+  ${returnAllEntries}
+`;
+
+export const createEntry = `
   mutation CreateEntry($entryData: EntryInput!) {
     createEntry(data: $entryData) {
       ...EntryDetails
     }
   }
-  ${ENTRY_DETAILS}
+  ${entryDetails}
 `;
 
-export const UPDATE_ENTRY = gql`
+export const CREATE_ENTRY = gql`
+  ${createEntry}
+`;
+
+export const updateEntry = `
   mutation UpdateEntry($id: String!, $data: EntryUpdateInput!) {
     updateEntry(id: $id, data: $data) {
       ...EntryDetails
     }
   }
-  ${ENTRY_DETAILS}
+  ${entryDetails}
 `;
 
-export const DELETE_ENTRY = gql`
+export const UPDATE_ENTRY = gql`
+  ${updateEntry}
+`;
+
+export const deleteEntry = `
   mutation DeleteEntry($id: String!) {
     deleteEntry(id: $id)
   }
+`;
+
+export const DELETE_ENTRY = gql`
+  ${deleteEntry}
 `;
 
 const categoryDetails = `

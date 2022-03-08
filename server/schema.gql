@@ -106,7 +106,6 @@ type Query {
   returnAllEntries: [Entry!]!
   returnAllSpaces: [Space!]!
   returnAllUsers: [User!]!
-  returnSingleEntry(id: String!): Entry!
   returnSingleSpace(id: String!): Space!
   returnSingleUser(id: String!): User!
 }

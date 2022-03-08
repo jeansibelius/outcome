@@ -1,20 +1,17 @@
 import { connectToDB } from "../utils";
-import { callQuery } from "../test-utils";
+import { callQuery, createDefaultUserAndSpace, resetDB } from "../test-utils";
 
 import {
   createCategory,
-  createSpace,
   deleteCategory,
   returnAllCategories,
   updateCategory,
 } from "../../../client/src/queries";
 import { mongoose } from "@typegoose/typegoose";
-import { Space } from "../entities/Space";
-import { CategoryModel, SpaceModel } from "../entities/index";
 import { exampleCategories } from "../test-utils/testHelpers";
 import { Category } from "src/entities/Category";
 
-let space: Space;
+let space: string;
 let dbConnection: mongoose.Connection | void;
 
 beforeAll(async () => {
@@ -22,22 +19,9 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  const deletedSpaces = await SpaceModel.deleteMany({});
-  console.log(`deleted ${deletedSpaces.deletedCount} space(s)`);
-
-  const deletedCategories = await CategoryModel.deleteMany({});
-  console.log(`deleted ${deletedCategories.deletedCount} categories`);
-
-  const spaceResponse = await callQuery({
-    source: createSpace,
-    variableValues: {
-      data: {
-        name: "Test Space",
-      },
-    },
-  });
-  space = spaceResponse.data?.createSpace.id;
-  console.log("created space", space);
+  await resetDB();
+  const { defaultSpaceID } = await createDefaultUserAndSpace();
+  space = defaultSpaceID;
 });
 
 afterAll(() => {
