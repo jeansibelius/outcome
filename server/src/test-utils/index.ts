@@ -4,6 +4,7 @@ import schemaBuild from "../resolvers";
 
 import { CategoryModel, EntryModel, SpaceModel, UserModel } from "../entities/index";
 import { getHashedPassword } from "../utils";
+import { exampleUser } from "./testHelpers";
 
 interface CallQueryOptions {
   source: string;
@@ -47,10 +48,10 @@ export const createDefaultUserAndSpace = async (): Promise<{
   defaultSpaceID: string;
 }> => {
   const user = await UserModel.create({
-    first_name: "Test",
-    last_name: "User",
-    password_hash: await getHashedPassword("test"),
-    email: "test@user.com",
+    first_name: exampleUser.first_name,
+    last_name: exampleUser.last_name,
+    password_hash: await getHashedPassword(exampleUser.password),
+    email: exampleUser.email,
   });
 
   const space = await SpaceModel.create({ name: "Test Space" });

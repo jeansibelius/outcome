@@ -1,3 +1,10 @@
+export const exampleUser = {
+  first_name: "Test",
+  last_name: "User",
+  password: "test",
+  email: "test@user.com",
+};
+
 export const exampleCategories = [
   {
     categoryData: {
