@@ -14,4 +14,5 @@ module.exports = {
   //moduleNameMapper: {
   //  "client/src/(.*)$": "../client/src/$1",
   //},
+  coveragePathIgnorePatterns: ["node_modules", "test-utils"],
 };

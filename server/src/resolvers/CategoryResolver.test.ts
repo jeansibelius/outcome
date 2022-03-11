@@ -1,5 +1,5 @@
 import { connectToDB } from "../utils";
-import { callQuery, createDefaultUserAndSpace, resetDB } from "../test-utils";
+import { callQuery, createDefaultSpace, resetDB } from "../test-utils";
 
 import {
   createCategory,
@@ -20,8 +20,8 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetDB();
-  const { defaultSpaceID } = await createDefaultUserAndSpace();
-  space = defaultSpaceID;
+  const { id } = await createDefaultSpace();
+  space = id;
 });
 
 afterAll(() => {

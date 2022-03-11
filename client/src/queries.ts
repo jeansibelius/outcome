@@ -12,7 +12,8 @@ export const GET_ME = gql`
     me @client
   }
 `;
-const spaceDetails = `
+
+export const spaceDetails = `
 fragment spaceDetails on Space {
   id
   name
@@ -37,7 +38,7 @@ export const GET_ACTIVE_SPACE = gql`
   }
 `;
 
-export const LOGIN = gql`
+export const login = `
   mutation Login($password: String!, $email: String!) {
     login(password: $password, email: $email) {
       token
@@ -51,6 +52,10 @@ export const LOGIN = gql`
       }
     }
   }
+`;
+
+export const LOGIN = gql`
+  ${login}
 `;
 
 const entryDetails = `

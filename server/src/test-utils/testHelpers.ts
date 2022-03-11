@@ -1,3 +1,28 @@
+export const exampleUser = {
+  first_name: "Test",
+  last_name: "User",
+  password: "test",
+  email: "test@user.com",
+};
+
+export const exampleSpaces = [
+  {
+    data: {
+      name: "Space 1",
+    },
+  },
+  {
+    data: {
+      name: "Space 2",
+    },
+  },
+  {
+    data: {
+      name: "Space 3",
+    },
+  },
+];
+
 export const exampleCategories = [
   {
     categoryData: {

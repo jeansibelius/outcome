@@ -62,7 +62,9 @@ In `./server`...
 
 ### Testing
 In `./server`
-- run `npm test` to have jest run (verbose & coverage included).
+- `npm test` to run jest (with coverage).
+- `npm run test:verbose` for verbose output
+- `npm run test:watch` to have jest watching for changes
 
 ## Roadmap
 
