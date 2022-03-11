@@ -14,7 +14,7 @@ export class SpaceInput implements Partial<Space> {
 }
 
 @InputType()
-export class UpdateSpaceInput implements Partial<Space> {
+export class SpaceUpdateInput implements Partial<Space> {
   @Field({ nullable: true })
   @Length(1, 255)
   name?: string;

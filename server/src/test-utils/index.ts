@@ -5,6 +5,9 @@ import schemaBuild from "../resolvers";
 import { CategoryModel, EntryModel, SpaceModel, UserModel } from "../entities/index";
 import { getHashedPassword } from "../utils";
 import { exampleUser } from "./testHelpers";
+import { Space } from "src/entities/Space";
+import { User } from "src/entities/User";
+import { mongoose } from "@typegoose/typegoose";
 
 interface CallQueryOptions {
   source: string;
@@ -43,26 +46,35 @@ export const resetDB = async () => {
   console.log(`deleted ${deletedEntries.deletedCount} entrie(s)`);
 };
 
-export const createDefaultUserAndSpace = async (): Promise<{
-  defaultUser: { id: string };
-  defaultSpaceID: string;
-}> => {
+export const createDefaultSpace = async (): Promise<mongoose.Document & Space> => {
+  const space = await SpaceModel.create({ name: "Test Space" });
+  console.log("created space", space);
+  return space;
+};
+
+export const createDefaultUser = async (): Promise<mongoose.Document & User> => {
   const user = await UserModel.create({
     first_name: exampleUser.first_name,
     last_name: exampleUser.last_name,
     password_hash: await getHashedPassword(exampleUser.password),
     email: exampleUser.email,
   });
+  console.log("created user", user);
+  return user;
+};
 
-  const space = await SpaceModel.create({ name: "Test Space" });
+export const createDefaultUserAndSpace = async (): Promise<{
+  defaultUser: { id: string };
+  defaultSpaceID: string;
+}> => {
+  const user = await createDefaultUser();
+  const space = await createDefaultSpace();
 
   space.users = space.users?.concat(user.id);
   user.spaces = user.spaces?.concat(space.id);
+
   await user.save();
   await space.save();
-
-  console.log("created user", user.id);
-  console.log("created space", space.id);
 
   return { defaultUser: { id: user.id }, defaultSpaceID: space.id };
 };

@@ -1,18 +1,12 @@
 import { SpaceModel, UserModel } from "../entities";
 import { Space } from "../entities/Space";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { SpaceInput, UpdateSpaceInput } from "./inputTypes/SpaceInput";
-import { mongoose } from "@typegoose/typegoose";
+import { SpaceInput, SpaceUpdateInput } from "./inputTypes/SpaceInput";
 
 const populatePaths = "users";
 
-@Resolver((_of) => Space)
+@Resolver()
 export class SpaceResolver {
-  @Query((_returns) => Space)
-  async returnSingleSpace(@Arg("id") id: string): Promise<Space> {
-    return await SpaceModel.findById({ _id: id }).populate(populatePaths);
-  }
-
   @Query(() => [Space])
   async returnAllSpaces(): Promise<Space[]> {
     return await SpaceModel.find().populate(populatePaths);
@@ -31,7 +25,7 @@ export class SpaceResolver {
   @Mutation(() => Space)
   async updateSpace(
     @Arg("id") id: string,
-    @Arg("data") spaceUpdate: UpdateSpaceInput
+    @Arg("data") spaceUpdate: SpaceUpdateInput
   ): Promise<Space> {
     const space = await SpaceModel.findByIdAndUpdate(
       id,
@@ -58,14 +52,14 @@ export class SpaceResolver {
     }
 
     // Add user id to space, if it doesn't exist there already
-    if (user._id instanceof mongoose.Types.ObjectId && !space.users?.includes(user._id)) {
-      space.users = space.users?.concat(user._id);
+    if (space.users && !space.users.includes(user.id)) {
+      space.users = space.users.concat(user.id);
       await space.save();
     }
 
     // Add space id to user, if it doesn't exist there already
-    if (space._id instanceof mongoose.Types.ObjectId && !user.spaces?.includes(space._id)) {
-      user.spaces = user.spaces?.concat(space._id);
+    if (user.spaces && !user.spaces.includes(space.id)) {
+      user.spaces = user.spaces.concat(space.id);
       await user.save();
     }
 
@@ -83,10 +77,12 @@ export class SpaceResolver {
       throw new Error("Invalid user id");
     }
 
-    if (user._id instanceof mongoose.Types.ObjectId && space.users?.includes(user._id)) {
-      space.users = space.users.filter((id) => id?.toString() !== user.id);
+    if (space.users && space.users.includes(user.id)) {
+      space.users = space.users.filter((id) => id!.toString() !== user.id);
       await space.save();
-      user.spaces = user.spaces.filter((id) => id?.toString() !== space.id);
+    }
+    if (user.spaces && user.spaces.includes(space.id)) {
+      user.spaces = user.spaces.filter((id) => id!.toString() !== space.id);
       await user.save();
     }
     return space.populate(populatePaths);

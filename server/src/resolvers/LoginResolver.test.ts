@@ -21,7 +21,7 @@ afterAll(() => {
   console.log("closed db connection");
 });
 
-describe.only("When resolving login", () => {
+describe("When resolving login", () => {
   test("the login mutation returns a token and user with correct details", async () => {
     const response = await callQuery({
       source: login,

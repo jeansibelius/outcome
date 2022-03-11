@@ -12,7 +12,8 @@ export const GET_ME = gql`
     me @client
   }
 `;
-const spaceDetails = `
+
+export const spaceDetails = `
 fragment spaceDetails on Space {
   id
   name

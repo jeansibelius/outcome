@@ -4,8 +4,9 @@
   "description": "Simple app to track household expenses and budget",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test jest --verbose --runInBand --coverage",
-    "test:watch": "npm run test -- --watch",
+    "test": "NODE_ENV=test jest --runInBand --coverage",
+    "test:verbose": "NODE_ENV=test jest --verbose --runInBand --coverage",
+    "test:watch": "npm run test:verbose -- --watch",
     "clear_jest": "jest --clearCache",
     "tsc": "tsc",
     "build": "npm run tsc",
