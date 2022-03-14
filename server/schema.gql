@@ -91,7 +91,7 @@ type Mutation {
   login(email: String!, password: String!): AuthResponse!
   updateCategory(data: CategoryUpdateInput!, id: String!): Category!
   updateEntry(data: EntryUpdateInput!, id: String!): Entry!
-  updateSpace(data: UpdateSpaceInput!, id: String!): Space!
+  updateSpace(data: SpaceUpdateInput!, id: String!): Space!
   updateUser(data: UserUpdateInput!, id: String!): User!
 }
 
@@ -105,9 +105,6 @@ type Query {
   returnAllCategories: [Category!]!
   returnAllEntries: [Entry!]!
   returnAllSpaces: [Space!]!
-  returnAllUsers: [User!]!
-  returnSingleSpace(id: String!): Space!
-  returnSingleUser(id: String!): User!
 }
 
 type Space {
@@ -121,7 +118,7 @@ input SpaceInput {
   users: [String!]
 }
 
-input UpdateSpaceInput {
+input SpaceUpdateInput {
   name: String
   users: [String!]
 }
