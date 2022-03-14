@@ -5,6 +5,33 @@ export const exampleUser = {
   email: "test@user.com",
 };
 
+export const exampleUsers = [
+  {
+    data: {
+      first_name: "Test 1",
+      last_name: "User 1",
+      password: "test1",
+      email: "test1@user.com",
+    },
+  },
+  {
+    data: {
+      first_name: "Test 2",
+      last_name: "User 2",
+      password: "test2",
+      email: "test2@user.com",
+    },
+  },
+  {
+    data: {
+      first_name: "Test 3",
+      last_name: "User 3",
+      password: "test3",
+      email: "test3@user.com",
+    },
+  },
+];
+
 export const exampleSpaces = [
   {
     data: {
