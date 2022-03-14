@@ -13,6 +13,13 @@ export const GET_ME = gql`
   }
 `;
 
+export const GET_ACTIVE_SPACE = gql`
+  query ActiveSpace {
+    activeSpace @client
+  }
+`;
+
+// Server calls from here
 export const spaceDetails = `
 fragment spaceDetails on Space {
   id
@@ -30,12 +37,6 @@ mutation CreateSpace($data: SpaceInput!) {
   }
 }
 ${spaceDetails}
-`;
-
-export const GET_ACTIVE_SPACE = gql`
-  query ActiveSpace {
-    activeSpace @client
-  }
 `;
 
 export const login = `

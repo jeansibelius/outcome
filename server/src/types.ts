@@ -1,5 +1,6 @@
 import { registerEnumType } from "type-graphql";
 import { ObjectId } from "mongodb";
+import { Context } from "apollo-server-core";
 
 // TODO consider removing this, if not needed (does typegoose ref provide typeguards?)
 export type Ref<T> = T | ObjectId;
@@ -24,7 +25,7 @@ export interface DecodedJwtToken {
   exp: number;
 }
 
-export interface ContextType {
+export interface ContextType extends Context {
   user: DecodedJwtToken;
-  space: string;
+  space?: string;
 }
