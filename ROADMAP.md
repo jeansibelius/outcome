@@ -31,7 +31,7 @@
 - Spaces are added to context in server and available for auth checking in resolvers ✅
 - Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories) ✅
 - Separate test, dev, demo and prod databases ✅
-- Test coverage for server is sufficient
+- Test coverage for server is 100 % ✅
 - Bug: entry modal fails, if there are no categories
 - Test coverage for client is sufficient (considering unfinalised UI)
 - Add date filtering to reporting (default ongoing month, other options?)
