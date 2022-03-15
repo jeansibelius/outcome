@@ -5,7 +5,6 @@ import { mongoose } from "@typegoose/typegoose";
 import { connect } from "mongoose";
 
 const connectToDB = async (): Promise<mongoose.Connection | void> => {
-  console.log("got called");
   let MONGODB_URI;
   switch (process.env.NODE_ENV) {
     case "production":
@@ -32,11 +31,11 @@ const connectToDB = async (): Promise<mongoose.Connection | void> => {
       return mongoose.connection;
     } catch (error: unknown) {
       if (error && error instanceof Error) {
-        return console.log(`Error connecting to MongoDB: ${error.message}`);
+        console.error(`Error connecting to MongoDB: ${error.message}`);
       }
     }
   } else {
-    return console.log("MongoDB URI is undefined");
+    console.error("MongoDB URI is undefined");
   }
 };
 
