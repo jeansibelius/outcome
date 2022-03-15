@@ -2,6 +2,11 @@
 
 ### A simple app to track the outcome of your income against a set budget
 
+![Statements](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-statements.svg)
+![Branches](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-branches.svg)
+![Functions](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-functions.svg)
+![Lines](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-lines.svg)
+
 #### [Demo hosted on Heroku](https://outcome-demo.herokuapp.com/) (might take a moment to start while the Heroku instance wakes up)
 Demo username: `hari.seldon@foundation.org`, password: `test`  
 
