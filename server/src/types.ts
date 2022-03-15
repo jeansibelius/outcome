@@ -1,5 +1,6 @@
 import { registerEnumType } from "type-graphql";
 import { ObjectId } from "mongodb";
+import jwt from "jsonwebtoken";
 import { Context } from "apollo-server-core";
 
 // TODO consider removing this, if not needed (does typegoose ref provide typeguards?)
@@ -19,11 +20,7 @@ export interface AuthResponse {
   token: string;
 }
 
-export interface DecodedJwtToken {
-  id: string;
-  iat: number;
-  exp: number;
-}
+export type DecodedJwtToken = jwt.JwtPayload;
 
 export interface ContextType extends Context {
   user: DecodedJwtToken;

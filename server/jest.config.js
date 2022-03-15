@@ -15,4 +15,5 @@ module.exports = {
   //  "client/src/(.*)$": "../client/src/$1",
   //},
   coveragePathIgnorePatterns: ["node_modules", "test-utils"],
+  coverageReporters: ["json-summary"],
 };

@@ -4,7 +4,7 @@ import cors from "cors";
 import express from "express";
 import http from "http";
 
-import { connectToDB } from "./utils";
+import connectToDB from "./utils/connectToDB";
 import schemaBuild from "./resolvers";
 
 import path from "path";
