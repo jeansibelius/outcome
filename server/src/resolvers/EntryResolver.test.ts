@@ -1,4 +1,4 @@
-import { connectToDB } from "../utils";
+import connectToDB from "../utils/connectToDB";
 import { callQuery, createDefaultUserAndSpace, resetDB } from "../test-utils";
 
 import {
