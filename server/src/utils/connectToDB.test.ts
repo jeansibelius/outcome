@@ -3,39 +3,6 @@ import connectToDB from "./connectToDB";
 
 describe("When connecting to the DB", () => {
   describe("the correct URI is used", () => {
-    test("when NODE_ENV is set to production", async () => {
-      const envToTest = "production";
-      const OLD_ENV = process.env;
-      process.env = { ...OLD_ENV };
-      process.env.NODE_ENV = envToTest;
-      const connection: mongoose.Connection | void = await connectToDB();
-      connection?.close();
-      expect(connection?.name).toEqual(envToTest);
-      process.env = OLD_ENV;
-    });
-
-    test("when NODE_ENV is set to development", async () => {
-      const envToTest = "development";
-      const OLD_ENV = process.env;
-      process.env = { ...OLD_ENV };
-      process.env.NODE_ENV = envToTest;
-      const connection: mongoose.Connection | void = await connectToDB();
-      connection?.close();
-      expect(connection?.name).toEqual(envToTest);
-      process.env = OLD_ENV;
-    });
-
-    test("when NODE_ENV is set to demo", async () => {
-      const envToTest = "demo";
-      const OLD_ENV = process.env;
-      process.env = { ...OLD_ENV };
-      process.env.NODE_ENV = envToTest;
-      const connection: mongoose.Connection | void = await connectToDB();
-      connection?.close();
-      expect(connection?.name).toEqual(envToTest);
-      process.env = OLD_ENV;
-    });
-
     test("when NODE_ENV is set to test", async () => {
       const envToTest = "test";
       const OLD_ENV = process.env;

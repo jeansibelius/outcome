@@ -67,8 +67,9 @@ In `./server`...
 
 ### Testing
 In `./server`
-- `npm test` to run jest (with coverage).
-- `npm run test:verbose` for verbose output
+- `npm test` to run jest.
+- `npm run test:coverage` to update coverage reports
+- `npm run test:badges` to update coverage reports and create badges from them
 - `npm run test:watch` to have jest watching for changes
 
 ## Roadmap

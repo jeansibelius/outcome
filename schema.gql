@@ -3,6 +3,10 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type AuthResponse {
+  token: String!
+}
+
 """The category model"""
 type Category {
   description: String
@@ -10,6 +14,7 @@ type Category {
   id: ID!
   monthlyBudget: Float
   name: String!
+  space: Space!
   type: IncomeExpenseType!
 }
 
@@ -42,7 +47,9 @@ type Entry {
   description: String
   id: ID!
   name: String!
+  space: Space!
   type: IncomeExpenseType!
+  user: User!
 }
 
 input EntryInput {
@@ -72,15 +79,49 @@ enum IncomeExpenseType {
 type Mutation {
   createCategory(data: CategoryInput!): Category!
   createEntry(data: EntryInput!): Entry!
+  createUser(data: UserInput!): User!
   deleteCategory(id: String!): Boolean!
   deleteEntry(id: String!): Boolean!
+  deleteUser(id: String!): Float!
+  login(email: String!, password: String!): AuthResponse!
   updateCategory(data: CategoryUpdateInput!, id: String!): Category!
   updateEntry(data: EntryUpdateInput!, id: String!): Entry!
+  updateUser(data: UserUpdateInput!, id: String!): User!
 }
 
 type Query {
   returnAllCategories: [Category!]!
   returnAllEntries: [Entry!]!
+  returnAllUsers: [User!]!
   returnSingleCategory(id: String!): Category!
   returnSingleEntry(id: String!): Entry!
+  returnSingleUser(id: String!): User!
+}
+
+type Space {
+  id: ID!
+  name: String!
+  users: [User!]
+}
+
+type User {
+  email: String!
+  first_name: String!
+  id: ID!
+  last_name: String!
+  spaces: [Space!]!
+}
+
+input UserInput {
+  email: String!
+  first_name: String!
+  last_name: String!
+  password: String!
+}
+
+input UserUpdateInput {
+  email: String
+  first_name: String
+  last_name: String
+  password: String
 }
