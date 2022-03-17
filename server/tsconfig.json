@@ -34,8 +34,8 @@
     "baseUrl": "./" /* Specify the base directory to resolve non-relative module names. */,
     "paths": {
       "*": ["node_modules/*", "types/*"],
-      "src/*": ["./src/*"],
-      "client/src/*": ["../client/src/*"]
+      "src/*": ["./src/*"]
+      //"client/src/*": ["../client/src/*"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     // "typeRoots": [] /* Specify multiple folders that act like `./node_modules/@types`. */,

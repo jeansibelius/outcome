@@ -4,7 +4,7 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
-  //roots: ["<rootDir>/src/", "../client/"],
+  roots: ["<rootDir>/src/", "../client/"],
   //moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   globals: {
     "ts-jest": {
@@ -15,5 +15,5 @@ module.exports = {
   //  "client/src/(.*)$": "../client/src/$1",
   //},
   coveragePathIgnorePatterns: ["node_modules", "test-utils"],
-  coverageReporters: ["json-summary"],
+  coverageReporters: ["text", "clover", "html", "lcov", "json-summary"],
 };

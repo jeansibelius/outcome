@@ -3,5 +3,6 @@
 *.swo
 **/node_modules
 **/build
+**/dist
 **/coverage
 tsconfig.tsbuildinfo
