@@ -33,6 +33,7 @@
 - Separate test, dev, demo and prod databases ✅
 - Test coverage for server is 100 % ✅
 - Bug: entry modal fails, if there are no categories
+- Bug: entry category resets to first in array, when editing an existing entry
 - Test coverage for client is sufficient (considering unfinalised UI)
 - Add date filtering to reporting (default ongoing month, other options?)
 - Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
