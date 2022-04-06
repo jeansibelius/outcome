@@ -33,13 +33,10 @@
 - Separate test, dev, demo and prod databases ✅
 - Test coverage for server is 100 % ✅
 - Bug: entry modal fails, if there are no categories
+- Bug: entry category resets to first in array, when editing an existing entry
 - Test coverage for client is sufficient (considering unfinalised UI)
 - Add date filtering to reporting (default ongoing month, other options?)
 - Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
-- Disable debugging on mongoose (and other similar data sensitive things)
-- Onboard first users
-
-## After "launch"
 - Register view exists
 - Remove zeroing of date in entries to allow proper sorting (same day entries)
 - Caching: Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI

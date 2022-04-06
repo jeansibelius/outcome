@@ -41,7 +41,9 @@ const authLink = setContext((_request, { headers }) => {
 const errorLink = onError(({ graphQLErrors, networkError, response }) => {
   if (graphQLErrors)
     graphQLErrors.forEach(async ({ message, locations, path }) => {
-      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+      console.log(
+        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+      );
       if (message.includes("TokenExpiredError")) {
         await logout(client);
       }
