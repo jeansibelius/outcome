@@ -1,6 +1,7 @@
 # Roadmap
 
 ## MVP
+
 - Create initial server setup (TypeScript, ApolloServer, GraphQL/type-graphql and MongoDB/typegoose)
   ✅
 - Create initial client setup (TypeScript, ApolloClient, React) ✅
@@ -32,13 +33,16 @@
 - Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories) ✅
 - Separate test, dev, demo and prod databases ✅
 - Test coverage for server is 100 % ✅
+- Add date filtering to reporting (default ongoing month, other options?)
+- Remove zeroing of date in entries to allow proper sorting (same day entries)
 - Bug: entry modal fails, if there are no categories
 - Bug: entry category resets to first in array, when editing an existing entry
 - Test coverage for client is sufficient (considering unfinalised UI)
-- Add date filtering to reporting (default ongoing month, other options?)
 - Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
+
+## Next steps
+
 - Register view exists
-- Remove zeroing of date in entries to allow proper sorting (same day entries)
 - Caching: Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
 - Add safer UI to deletion of entries and categories (loading status when clicked, clear response in

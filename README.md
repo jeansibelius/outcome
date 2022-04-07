@@ -2,10 +2,14 @@
 
 ### A simple app to track the outcome of your income against a set budget
 
+_License: All rights reserved © Rafael Linnankoski (further details [here](https://github.com/jeansibelius/outcome/blob/master/LICENSE.md))._
+
 ![Statements](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-statements.svg)
 ![Branches](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-branches.svg)
 ![Functions](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-functions.svg)
 ![Lines](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-lines.svg)
+
+## Demo
 
 #### [Demo hosted on Heroku](https://outcome-demo.herokuapp.com/)
 
@@ -15,8 +19,6 @@ _(Might take a moment to start while the heroku instance wakes up.)_
 - Demo credentials
   - username: `hari.seldon@foundation.org`
   - password: `test`
-
-License: All rights reserved © Rafael Linnankoski (further details [here](https://github.com/jeansibelius/outcome/blob/master/LICENSE.md)).
 
 ## Project structure
 
