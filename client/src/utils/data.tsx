@@ -1,6 +1,6 @@
 import { CustomHorizontalBarData } from "../components/charts/CustomHorizontalBar";
 import { CustomPieChartData } from "../components/charts/CustomResponsivePie";
-import { Category, Entry, IncomeExpenseType } from "../types";
+import { Category, Entry } from "../types";
 
 export const categoriesToIdAndValue = (
   array: Category[]

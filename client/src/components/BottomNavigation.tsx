@@ -1,7 +1,10 @@
+import { useQuery } from "@apollo/client";
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { Menu, Button, Icon, Grid, Header } from "semantic-ui-react";
 import { currentViewMonthVar } from "../cache";
+import { ALL_ENTRIES } from "../queries";
+import { Entry } from "../types";
 import { GetCurrentViewMonth, IsLoggedIn } from "../utils";
 import CustomMenuItemWithLink from "./CustomMenuItemWithLink";
 
@@ -22,33 +25,75 @@ const BottomNavigation = ({
 }: NavigationProps) => {
   const currentViewMonth = GetCurrentViewMonth();
   const today = new Date();
-  const [dateFilter, setDateFilter] = React.useState<Date>(
-    new Date(today.getFullYear(), today.getMonth())
-  );
+  const initMonth = new Date(today.getFullYear(), today.getMonth());
+  const [dateFilter, setDateFilter] = React.useState<Date>(initMonth);
+
+  const entries = useQuery(ALL_ENTRIES);
+  const [oldestDate, setOldestDate] = React.useState<Date>(initMonth);
+  const [newestDate, setNewestDate] = React.useState<Date>(initMonth);
+  const [prevButtonDisabled, setPrevButtonDisabled] =
+    React.useState<boolean>(false);
+  const [nextButtonDisabled, setNextButtonDisabled] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
     setDateFilter(currentViewMonth);
   }, [currentViewMonth]);
 
+  React.useEffect(() => {
+    if (entries.data) {
+      const sortedEntries = [...entries.data.returnAllEntries].sort(
+        (a: Entry, b: Entry) => {
+          const aDate = new Date(a.date);
+          const bDate = new Date(b.date);
+          return aDate.valueOf() - bDate.valueOf();
+        }
+      );
+      const oldestEntryDate = new Date(sortedEntries[0].date);
+      const newestEntryDate = new Date(
+        sortedEntries[sortedEntries.length - 1].date
+      );
+      setOldestDate(oldestEntryDate);
+      setNewestDate(
+        new Date(newestEntryDate.getFullYear(), newestEntryDate.getMonth())
+      );
+    }
+  }, [entries.data]);
+
   const location = useLocation();
 
-  const prevMonth = () => {
-    currentViewMonthVar(
-      new Date(dateFilter.getFullYear(), dateFilter.getMonth() - 1)
-    );
+  const updateButtonStates = (newMonth: Date) => {
+    console.log(newMonth, newestDate);
+    if (newMonth <= oldestDate) setPrevButtonDisabled(true);
+    if (newMonth > oldestDate) setPrevButtonDisabled(false);
+    if (newMonth >= newestDate) setNextButtonDisabled(true);
+    if (newMonth < newestDate) setNextButtonDisabled(false);
+  };
 
-    setDateFilter(
-      new Date(dateFilter.getFullYear(), dateFilter.getMonth() - 1)
+  const prevMonth = () => {
+    const newMonth = new Date(
+      dateFilter.getFullYear(),
+      dateFilter.getMonth() - 1
     );
+    currentViewMonthVar(newMonth);
+    setDateFilter(newMonth);
+    updateButtonStates(newMonth);
   };
 
   const nextMonth = () => {
-    currentViewMonthVar(
-      new Date(dateFilter.getFullYear(), dateFilter.getMonth() + 1)
+    const newMonth = new Date(
+      dateFilter.getFullYear(),
+      dateFilter.getMonth() + 1
     );
-    setDateFilter(
-      new Date(dateFilter.getFullYear(), dateFilter.getMonth() + 1)
-    );
+    currentViewMonthVar(newMonth);
+    setDateFilter(newMonth);
+    updateButtonStates(newMonth);
+  };
+
+  const resetMonth = () => {
+    currentViewMonthVar(initMonth);
+    setDateFilter(initMonth);
+    updateButtonStates(initMonth);
   };
 
   return (
@@ -91,20 +136,35 @@ const BottomNavigation = ({
               <Grid.Column floated="left">
                 <Menu size="mini" borderless compact>
                   <Menu.Item fitted>
-                    <Button size="tiny" onClick={() => prevMonth()}>
+                    <Button
+                      attached="left"
+                      size="mini"
+                      disabled={prevButtonDisabled}
+                      onClick={() => prevMonth()}
+                    >
                       <Icon name="caret left" inverted color="black" />
                     </Button>
                   </Menu.Item>
-                  <Menu.Item fitted>
+                  <Button
+                    as={Menu.Item}
+                    size="mini"
+                    onClick={() => resetMonth()}
+                    fitted
+                  >
                     <Header as="h4" style={{ padding: "0 1em" }}>
                       {dateFilter.toLocaleString("default", {
                         month: "short",
                         year: "2-digit",
                       })}
                     </Header>
-                  </Menu.Item>
+                  </Button>
                   <Menu.Item fitted>
-                    <Button size="tiny" onClick={() => nextMonth()}>
+                    <Button
+                      attached="right"
+                      size="mini"
+                      disabled={nextButtonDisabled}
+                      onClick={() => nextMonth()}
+                    >
                       <Icon name="caret right" />
                     </Button>
                   </Menu.Item>
@@ -156,7 +216,3 @@ const BottomNavigation = ({
 };
 
 export default BottomNavigation;
-
-function useState<T>(arg0: Date): [any, any] {
-  throw new Error("Function not implemented.");
-}
