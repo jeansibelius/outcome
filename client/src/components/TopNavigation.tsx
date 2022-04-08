@@ -38,6 +38,7 @@ const TopNavigation = () => {
         <Image as={Link} to="/" src={logo} size="mini" />
       </Menu.Item>
       <CustomMenuItemWithLink to={budgetPath}>
+        <Icon name="tags" />
         {currentSpace.name}
       </CustomMenuItemWithLink>
       <Dropdown icon="user" button className="icon right item">

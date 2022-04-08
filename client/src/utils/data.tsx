@@ -2,17 +2,22 @@ import { CustomHorizontalBarData } from "../components/charts/CustomHorizontalBa
 import { CustomPieChartData } from "../components/charts/CustomResponsivePie";
 import { Category, Entry, IncomeExpenseType } from "../types";
 
-export const categoriesToIdAndValue = (array: Category[]): CustomPieChartData[] =>
+export const categoriesToIdAndValue = (
+  array: Category[]
+): CustomPieChartData[] =>
   array.reduce(
     (obj: any[], cat: Category) =>
       obj.concat({ id: cat.name, value: cat.monthlyBudget, type: cat.type }),
     []
   );
 
-export const entriesByCategoryToAndIdAndValue = (array: Entry[]): CustomPieChartData[] => {
+export const entriesByCategoryToIdAndValue = (
+  array: Entry[]
+): CustomPieChartData[] => {
   return array.reduce((arr: any[], entry: Entry) => {
     const isSameCategoryAndType = (el: CustomPieChartData) =>
-      el.id === (entry.category ? entry.category.name : undefined) && el.type === entry.type;
+      el.id === (entry.category ? entry.category.name : undefined) &&
+      el.type === entry.type;
     // Check if category & type combination already exists and get index
     const catIndex = arr.findIndex(isSameCategoryAndType);
     // If index doesn't exist, use the next available one
@@ -28,9 +33,20 @@ export const entriesByCategoryToAndIdAndValue = (array: Entry[]): CustomPieChart
   }, []);
 };
 
-export const entriesToBarChartData = (array: Entry[]): CustomHorizontalBarData[] =>
+export const entriesToBarChartKeys = (array: Entry[]): string[] =>
+  Array.from(
+    // Remove duplicate values
+    new Set(
+      array.reduce((arr: string[], entry: Entry) => arr.concat(entry.name), [])
+    )
+  );
+
+export const entriesToBarChartData = (
+  array: Entry[],
+  keys: string[]
+): CustomHorizontalBarData[] =>
   array.reduce((data: any[], entry: Entry) => {
-    let index = entry.type === IncomeExpenseType.Expense ? 0 : 1;
+    let index = keys.indexOf(entry.type);
     data[index] = {
       ...data[index],
       [entry.name]: entry.amount,
@@ -39,15 +55,22 @@ export const entriesToBarChartData = (array: Entry[]): CustomHorizontalBarData[]
     return data;
   }, []);
 
-export const entriesToBarChartKeys = (array: Entry[]): string[] =>
+export const entriesToIncomeAndExpenseSumBarDataKeys = (
+  array: Entry[]
+): string[] =>
   Array.from(
     // Remove duplicate values
-    new Set(array.reduce((arr: string[], entry: Entry) => arr.concat(entry.name), []))
+    new Set(
+      array.reduce((arr: string[], entry: Entry) => arr.concat(entry.type), [])
+    )
   );
 
-export const entriesToIncomeAndExpenseSumBarData = (array: Entry[]): CustomHorizontalBarData[] =>
+export const entriesToIncomeAndExpenseSumBarData = (
+  array: Entry[],
+  keys: string[]
+): CustomHorizontalBarData[] =>
   array.reduce((data: any[], entry: Entry) => {
-    let index = entry.type === "Expense" ? 0 : 1;
+    let index = keys.indexOf(entry.type);
     let sum = data[index] ? data[index]["total"] : 0;
     data[index] = {
       total: sum + entry.amount,
@@ -56,9 +79,3 @@ export const entriesToIncomeAndExpenseSumBarData = (array: Entry[]): CustomHoriz
     };
     return data;
   }, []);
-
-export const entriesToIncomeAndExpenseSumBarDataKeys = (array: Entry[]): string[] =>
-  Array.from(
-    // Remove duplicate values
-    new Set(array.reduce((arr: string[], entry: Entry) => arr.concat(entry.type), []))
-  );

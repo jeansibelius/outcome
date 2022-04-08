@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { ALL_ENTRIES } from "../queries";
+import { ALL_ENTRIES, GET_CURRENT_VIEW_MONTH } from "../queries";
 import { Entry as EntryType } from "../types";
 import { Feed } from "semantic-ui-react";
 import EntryModal from "../components/EntryModal";
@@ -9,17 +9,37 @@ import Entry from "../components/Entry";
 
 const Entries = () => {
   const getEntries = useQuery(ALL_ENTRIES);
-  const [entries, setEntries] = React.useState<EntryType[] | undefined>(undefined);
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
-  const [updateEntryValues, setUpdateEntryValues] = React.useState<EntryType | undefined>(
+  const [entries, setEntries] = React.useState<EntryType[] | undefined>(
     undefined
   );
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [updateEntryValues, setUpdateEntryValues] = React.useState<
+    EntryType | undefined
+  >(undefined);
+  const today = new Date();
+  const currentViewMonth = useQuery(GET_CURRENT_VIEW_MONTH);
+  const [dateFilter, setDateFilter] = useState<Date>(
+    new Date(today.getFullYear(), today.getMonth())
+  );
+
+  useEffect(() => {
+    setDateFilter(currentViewMonth.data.currentViewMonth);
+  }, [currentViewMonth]);
 
   React.useEffect(() => {
     if (getEntries.data) {
-      setEntries(getEntries.data.returnAllEntries);
+      setEntries(
+        getEntries.data.returnAllEntries.filter((entry: EntryType) => {
+          const entryDate = new Date(entry.date);
+          const endOfMonth = new Date(
+            dateFilter.getFullYear(),
+            dateFilter.getMonth() + 1
+          );
+          return entryDate >= dateFilter && entryDate < endOfMonth;
+        })
+      );
     }
-  }, [getEntries.data]);
+  }, [dateFilter, getEntries.data]);
 
   const openEntryUpdateModal = (data: EntryType): void => {
     setUpdateEntryValues(data);
@@ -60,9 +80,16 @@ const Entries = () => {
         ) : null}
         <Feed size="large">
           {[...entries] // create a copy of entries array to disable strict mode in order to sort it
-            .sort((a, b) => Date.parse(b.date.toString()) - Date.parse(a.date.toString()))
+            .sort(
+              (a, b) =>
+                Date.parse(b.date.toString()) - Date.parse(a.date.toString())
+            )
             .map((entry) => (
-              <Entry key={entry.id} entry={entry} updateEntry={openEntryUpdateModal} />
+              <Entry
+                key={entry.id}
+                entry={entry}
+                updateEntry={openEntryUpdateModal}
+              />
             ))}
         </Feed>
       </>

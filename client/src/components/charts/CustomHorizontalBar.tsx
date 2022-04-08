@@ -28,7 +28,7 @@ const CustomHorizontalBar = ({
       {
         id: "dots",
         type: "patternDots",
-        background: "inherit",
+        background: "#66c2a5",
         color: "#38bcb2",
         size: 4,
         padding: 1,
@@ -37,7 +37,7 @@ const CustomHorizontalBar = ({
       {
         id: "lines",
         type: "patternLines",
-        background: "inherit",
+        background: "#fc8d62",
         color: "#eed312",
         rotation: -45,
         lineWidth: 6,
@@ -47,20 +47,20 @@ const CustomHorizontalBar = ({
     fill={[
       {
         match: {
-          id: keys[0],
+          id: "Expense",
         },
         id: "dots",
       },
       {
         match: {
-          id: keys[1],
+          id: "Income",
         },
         id: "lines",
       },
     ]}
     borderRadius={5}
     borderColor={{
-      from: "color",
+      from: "keys",
       modifiers: [["darker", 1.6]],
     }}
     axisTop={null}

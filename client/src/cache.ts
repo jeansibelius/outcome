@@ -21,6 +21,11 @@ const cache: InMemoryCache = new InMemoryCache({
             return activeSpaceVar();
           },
         },
+        currentViewMonth: {
+          read() {
+            return currentViewMonthVar();
+          },
+        },
       },
     },
   },
@@ -36,6 +41,8 @@ export const isLoggedInVar: ReactiveVar<boolean> = makeVar<boolean>(
 
 const localUser = localStorage.getItem("outcome-user");
 const initLocalUser = localUser ? JSON.parse(localUser) : null;
+const today = new Date();
+const currentDate = new Date(today.getFullYear(), today.getMonth());
 
 export const currentUserVar: ReactiveVar<localStorageUser> =
   makeVar<localStorageUser>(initLocalUser);
@@ -43,3 +50,6 @@ export const currentUserVar: ReactiveVar<localStorageUser> =
 export const activeSpaceVar: ReactiveVar<Space> = makeVar<Space>(
   initLocalUser ? initLocalUser.spaces[0] : null
 );
+
+export const currentViewMonthVar: ReactiveVar<Date> =
+  makeVar<Date>(currentDate);

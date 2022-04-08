@@ -8,11 +8,15 @@ import CustomPieChart, {
   CustomPieChartData,
 } from "../components/charts/CustomResponsivePie";
 import DashboardDataPane from "../components/DashboardDataPane";
-import { ALL_CATEGORIES, ALL_ENTRIES } from "../queries";
+import {
+  ALL_CATEGORIES,
+  ALL_ENTRIES,
+  GET_CURRENT_VIEW_MONTH,
+} from "../queries";
 import { Entry, IncomeExpenseType } from "../types";
 import {
   categoriesToIdAndValue,
-  entriesByCategoryToAndIdAndValue,
+  entriesByCategoryToIdAndValue,
   entriesToIncomeAndExpenseSumBarData,
   entriesToIncomeAndExpenseSumBarDataKeys,
 } from "../utils/data";
@@ -32,9 +36,14 @@ const Dashboard = () => {
     useState<CustomPieChartData[]>();
 
   const today = new Date();
-  const [dateFilter] = useState<Date>(
+  const currentViewMonth = useQuery(GET_CURRENT_VIEW_MONTH);
+  const [dateFilter, setDateFilter] = useState<Date>(
     new Date(today.getFullYear(), today.getMonth())
   );
+
+  useEffect(() => {
+    setDateFilter(currentViewMonth.data.currentViewMonth);
+  }, [currentViewMonth]);
 
   useEffect(() => {
     if (getEntries.data) {
@@ -45,22 +54,20 @@ const Dashboard = () => {
             dateFilter.getFullYear(),
             dateFilter.getMonth() + 1
           );
-          console.log(dateFilter, endOfMonth);
           return entryDate >= dateFilter && entryDate < endOfMonth;
         }
       );
 
-      const formattedChartData: CustomHorizontalBarData[] =
-        entriesToIncomeAndExpenseSumBarData(entries);
-
       const formattedChartDataKeys: string[] =
         entriesToIncomeAndExpenseSumBarDataKeys(entries);
+
+      const formattedChartData: CustomHorizontalBarData[] =
+        entriesToIncomeAndExpenseSumBarData(entries, formattedChartDataKeys);
 
       setIncomeExpenseData(formattedChartData);
       setIncomeExpenseDataKeys(formattedChartDataKeys);
 
-      const entriesByCategoryFormatted =
-        entriesByCategoryToAndIdAndValue(entries);
+      const entriesByCategoryFormatted = entriesByCategoryToIdAndValue(entries);
       setExpensesByCategory(
         entriesByCategoryFormatted.filter(
           (entry) => entry.type === IncomeExpenseType.Expense
