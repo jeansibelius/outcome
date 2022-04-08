@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client";
-import React from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Menu, Button, Icon, Grid, Header } from "semantic-ui-react";
 import { currentViewMonthVar } from "../cache";
@@ -23,24 +23,24 @@ const BottomNavigation = ({
   openCategoryModal,
   openLoginModal,
 }: NavigationProps) => {
+  const location = useLocation();
+
   const currentViewMonth = GetCurrentViewMonth();
   const today = new Date();
   const initMonth = new Date(today.getFullYear(), today.getMonth());
-  const [dateFilter, setDateFilter] = React.useState<Date>(initMonth);
+  const [dateFilter, setDateFilter] = useState<Date>(initMonth);
 
   const entries = useQuery(ALL_ENTRIES);
-  const [oldestDate, setOldestDate] = React.useState<Date>(initMonth);
-  const [newestDate, setNewestDate] = React.useState<Date>(initMonth);
-  const [prevButtonDisabled, setPrevButtonDisabled] =
-    React.useState<boolean>(false);
-  const [nextButtonDisabled, setNextButtonDisabled] =
-    React.useState<boolean>(false);
+  const [oldestDate, setOldestDate] = useState<Date>(initMonth);
+  const [newestDate, setNewestDate] = useState<Date>(initMonth);
+  const [prevButtonDisabled, setPrevButtonDisabled] = useState<boolean>(true);
+  const [nextButtonDisabled, setNextButtonDisabled] = useState<boolean>(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setDateFilter(currentViewMonth);
   }, [currentViewMonth]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (entries.data) {
       const sortedEntries = [...entries.data.returnAllEntries].sort(
         (a: Entry, b: Entry) => {
@@ -60,15 +60,12 @@ const BottomNavigation = ({
     }
   }, [entries.data]);
 
-  const location = useLocation();
-
-  const updateButtonStates = (newMonth: Date) => {
-    console.log(newMonth, newestDate);
-    if (newMonth <= oldestDate) setPrevButtonDisabled(true);
-    if (newMonth > oldestDate) setPrevButtonDisabled(false);
-    if (newMonth >= newestDate) setNextButtonDisabled(true);
-    if (newMonth < newestDate) setNextButtonDisabled(false);
-  };
+  useEffect(() => {
+    if (dateFilter <= oldestDate) setPrevButtonDisabled(true);
+    if (dateFilter > oldestDate) setPrevButtonDisabled(false);
+    if (dateFilter >= newestDate) setNextButtonDisabled(true);
+    if (dateFilter < newestDate) setNextButtonDisabled(false);
+  }, [dateFilter, newestDate, oldestDate]);
 
   const prevMonth = () => {
     const newMonth = new Date(
@@ -77,7 +74,6 @@ const BottomNavigation = ({
     );
     currentViewMonthVar(newMonth);
     setDateFilter(newMonth);
-    updateButtonStates(newMonth);
   };
 
   const nextMonth = () => {
@@ -87,13 +83,11 @@ const BottomNavigation = ({
     );
     currentViewMonthVar(newMonth);
     setDateFilter(newMonth);
-    updateButtonStates(newMonth);
   };
 
   const resetMonth = () => {
     currentViewMonthVar(initMonth);
     setDateFilter(initMonth);
-    updateButtonStates(initMonth);
   };
 
   return (
