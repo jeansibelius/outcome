@@ -8,7 +8,12 @@ import {
   NewEntry,
   Space,
 } from "../types";
-import { IS_LOGGED_IN, GET_ME, GET_ACTIVE_SPACE } from "../queries";
+import {
+  IS_LOGGED_IN,
+  GET_ME,
+  GET_ACTIVE_SPACE,
+  GET_CURRENT_VIEW_MONTH,
+} from "../queries";
 import { isLoggedInVar, currentUserVar } from "../cache";
 
 // Function to make the above query callable from anywhere in the app
@@ -25,6 +30,11 @@ export const GetMe = (): localStorageUser => {
 export const GetActiveSpace = (): Space => {
   const { data } = useQuery(GET_ACTIVE_SPACE);
   return data.activeSpace;
+};
+
+export const GetCurrentViewMonth = (): Date => {
+  const { data } = useQuery(GET_CURRENT_VIEW_MONTH);
+  return data.currentViewMonth;
 };
 
 export const logout = async (client: ApolloClient<object>): Promise<void> => {
@@ -111,7 +121,9 @@ export const toNewCategory = (object: CategoryInput): NewCategory => {
   const newCategory = {
     type: parseType(object.type),
     name: parseString(object.name),
-    monthlyBudget: object.monthlyBudget ? parseNumber(object.monthlyBudget) : null,
+    monthlyBudget: object.monthlyBudget
+      ? parseNumber(object.monthlyBudget)
+      : null,
     description: object.description ? parseString(object.description) : null,
     icon: object.icon ? parseString(object.icon) : undefined,
   };
@@ -122,7 +134,8 @@ export const getYearMonthDay = (date = new Date()): string => {
   if (!(date instanceof Date)) {
     date = new Date(date);
   }
-  const month = date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+  const month =
+    date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
   const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
   return `${date.getFullYear()}-${month}-${day}`;
 };

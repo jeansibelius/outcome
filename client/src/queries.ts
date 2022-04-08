@@ -19,6 +19,12 @@ export const GET_ACTIVE_SPACE = gql`
   }
 `;
 
+export const GET_CURRENT_VIEW_MONTH = gql`
+  query CurrentViewMonth {
+    currentViewMonth @client
+  }
+`;
+
 // Server calls from here
 export const spaceDetails = `
 fragment spaceDetails on Space {

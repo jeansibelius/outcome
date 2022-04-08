@@ -5,4 +5,6 @@
 **/build
 **/dist
 **/coverage
+*.lock
+*-lock.json
 tsconfig.tsbuildinfo
