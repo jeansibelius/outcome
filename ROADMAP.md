@@ -33,12 +33,12 @@
 - Restrict server requests to authorized users (e.g. logged in user gets only their own entries, categories) ✅
 - Separate test, dev, demo and prod databases ✅
 - Test coverage for server is 100 % ✅
-- Add date filtering to reporting (default ongoing month, other options?)
+- Add date filtering by month to reporting (default ongoing month) ✅
 - Remove zeroing of date in entries to allow proper sorting (same day entries)
-- Bug: entry modal fails, if there are no categories
 - Bug: entry category resets to first in array, when editing an existing entry
+- Bug: entry modal fails, if there are no categories
 - Test coverage for client is sufficient (considering unfinalised UI)
-- Milestone: basic views/components exist: expenses, income, adding new entries, adding new categories, summary
+- New data panels: spend per category vs. budgeted; how much left (total/per day/week)
 
 ## Next steps
 
