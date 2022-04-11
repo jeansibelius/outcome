@@ -139,3 +139,6 @@ export const getYearMonthDay = (date = new Date()): string => {
   const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
   return `${date.getFullYear()}-${month}-${day}`;
 };
+
+export const getCountOfDaysInMonth = (year: number, month: number): number =>
+  new Date(year, month, 0).getDate();
