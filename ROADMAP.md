@@ -34,11 +34,11 @@
 - Separate test, dev, demo and prod databases ✅
 - Test coverage for server is 100 % ✅
 - Add date filtering by month to reporting (default ongoing month) ✅
+- New data panels: spend per category vs. budgeted; how much left (total/per day/week)
 - Remove zeroing of date in entries to allow proper sorting (same day entries)
 - Bug: entry category resets to first in array, when editing an existing entry
 - Bug: entry modal fails, if there are no categories
 - Test coverage for client is sufficient (considering unfinalised UI)
-- New data panels: spend per category vs. budgeted; how much left (total/per day/week)
 
 ## Next steps
 

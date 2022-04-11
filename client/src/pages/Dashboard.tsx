@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Header, Table } from "semantic-ui-react";
 import CustomHorizontalBar, {
   CustomHorizontalBarData,
 } from "../components/charts/CustomHorizontalBar";
@@ -100,7 +100,7 @@ const Dashboard = () => {
     !incomesByCategory
   )
     return <div>Loading...</div>;
-
+  console.log(categoryChartData, expensesByCategory);
   return (
     <>
       <Grid stackable columns={3}>
@@ -111,6 +111,53 @@ const Dashboard = () => {
               keys={incomeExpenseDataKeys}
             />
           </DashboardDataPane>
+        </Grid.Column>
+        <Grid.Column>
+          <Header as="h3">Spend by category</Header>
+          <Table unstackable basic="very" singleLine>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Expenses</Table.HeaderCell>
+                <Table.HeaderCell>Budget</Table.HeaderCell>
+                <Table.HeaderCell>Spent</Table.HeaderCell>
+                <Table.HeaderCell>+/-</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {categoryChartData
+                .filter(
+                  (category) => category.type === IncomeExpenseType.Expense
+                )
+                .sort((a, b) => a.id.localeCompare(b.id))
+                .map((category) => {
+                  const expenseValue = expensesByCategory.find(
+                    (data) => data.id === category.id
+                  )?.value;
+                  const remainingBudget = expenseValue
+                    ? category.value - expenseValue
+                    : category.value;
+                  return (
+                    <Table.Row
+                      negative={remainingBudget < 0 ? true : false}
+                      warning={
+                        remainingBudget > 0 &&
+                        remainingBudget < category.value / 5
+                          ? true
+                          : false
+                      }
+                      positive={
+                        remainingBudget > category.value / 2 ? true : false
+                      }
+                    >
+                      <Table.Cell>{category.id}</Table.Cell>
+                      <Table.Cell>{category.value}</Table.Cell>
+                      <Table.Cell>{expenseValue}</Table.Cell>
+                      <Table.Cell>{remainingBudget}</Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+            </Table.Body>
+          </Table>
         </Grid.Column>
         <Grid.Column>
           <DashboardDataPane title="Expenses by category">

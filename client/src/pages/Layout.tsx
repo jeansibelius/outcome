@@ -11,7 +11,8 @@ import TopNavigation from "../components/TopNavigation";
 const Layout = () => {
   const [entryModalOpen, setEntryModalOpen] = React.useState<boolean>(false);
   const [loginModalOpen, setLoginModalOpen] = React.useState<boolean>(false);
-  const [categoryModalOpen, setCategoryModalOpen] = React.useState<boolean>(false);
+  const [categoryModalOpen, setCategoryModalOpen] =
+    React.useState<boolean>(false);
 
   const openEntryModal = (): void => setEntryModalOpen(true);
   const openCategoryModal = (): void => setCategoryModalOpen(true);
@@ -29,7 +30,7 @@ const Layout = () => {
 
   const sharedContent = () => (
     <>
-      <Container className="px-1 pt-8 pb-40">
+      <Container className="px-1 pt-8 pb-80">
         <Outlet />
       </Container>
       <BottomNavigation
@@ -47,7 +48,10 @@ const Layout = () => {
         <TopNavigation />
         {sharedContent()}
         <EntryModal modalOpen={entryModalOpen} onClose={closeEntryModal} />
-        <CategoryModal modalOpen={categoryModalOpen} onClose={closeCategoryModal} />
+        <CategoryModal
+          modalOpen={categoryModalOpen}
+          onClose={closeCategoryModal}
+        />
       </>
     );
   } else {
