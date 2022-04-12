@@ -19,6 +19,7 @@ import {
   entriesToIncomeAndExpenseSumBarData,
   entriesToIncomeAndExpenseSumBarDataKeys,
 } from "../utils/data";
+import { NoEntries } from "./Entries";
 
 const Dashboard = () => {
   const getEntries = useQuery(ALL_ENTRIES);
@@ -99,6 +100,9 @@ const Dashboard = () => {
     !incomesByCategory
   )
     return <div>Loading...</div>;
+
+  if (getEntries.data.returnAllEntries.length === 0) return <NoEntries />;
+
   return (
     <>
       <Grid stackable columns={2}>

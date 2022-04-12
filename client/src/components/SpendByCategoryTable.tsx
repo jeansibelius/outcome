@@ -76,7 +76,6 @@ type TableDataType = {
 }[];
 
 function tableReducer(state: SortState, action: SortAction): SortState {
-  console.log("before", state, action);
   switch (action.type) {
     case "UPDATE_DATA":
       const sortedData = _.sortBy(action.data, [state.column]) as TableDataType;

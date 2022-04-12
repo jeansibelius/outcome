@@ -141,8 +141,8 @@ export const CategorySelect = ({ entryType }: CategorySelectProps) => {
         search
         selection
         error={meta.error ? true : false}
-        options={stateOptions}
-        value={meta.value ? meta.value : stateOptions[0].value}
+        options={stateOptions || []}
+        value={meta.value ? meta.value : undefined}
         onChange={onChange}
         loading={getCategories.loading ? true : false}
       />

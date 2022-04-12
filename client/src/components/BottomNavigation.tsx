@@ -49,9 +49,13 @@ const BottomNavigation = ({
           return aDate.valueOf() - bDate.valueOf();
         }
       );
-      const oldestEntryDate = new Date(sortedEntries[0].date);
+      const oldestEntryDate = new Date(
+        sortedEntries.length > 0 ? sortedEntries[0].date : new Date()
+      );
       const newestEntryDate = new Date(
-        sortedEntries[sortedEntries.length - 1].date
+        sortedEntries.length > 0
+          ? sortedEntries[sortedEntries.length - 1].date
+          : new Date()
       );
       setOldestDate(oldestEntryDate);
       setNewestDate(
