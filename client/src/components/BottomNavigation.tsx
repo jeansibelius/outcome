@@ -170,6 +170,7 @@ const BottomNavigation = ({
                 <Menu.Item position="right" fitted>
                   {openEntryModal &&
                   (location.pathname === `/${entriesPath}` ||
+                    location.pathname === "/account" ||
                     location.pathname === "/") ? (
                     <Button
                       circular
