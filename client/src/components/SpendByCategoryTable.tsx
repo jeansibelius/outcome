@@ -1,16 +1,58 @@
 import _ from "lodash";
-import { useReducer } from "react";
-import { Header, Table } from "semantic-ui-react";
+import { useEffect, useReducer } from "react";
+import { Header, Icon, Table } from "semantic-ui-react";
 import { CustomPieChartData } from "../types";
 import { getCountOfDaysInMonth } from "../utils";
 
+const getWeeklyBudget = (budget: number): number => {
+  const today = new Date();
+  const weekDivider =
+    getCountOfDaysInMonth(today.getFullYear(), today.getMonth()) / 7;
+  return Math.floor(budget / weekDivider);
+};
+
+const mapEntriesToCategories = ({
+  categoryData,
+  entrySumData,
+}: SpendByCategoryTableProps) => {
+  const data = categoryData.map((category) => {
+    const expenseValue =
+      entrySumData.find((data) => data.id === category.id)?.value || 0;
+    const remainingBudget = expenseValue
+      ? category.value - expenseValue
+      : category.value;
+    return {
+      name: category.id,
+      budget: category.value,
+      weeklyBudget: getWeeklyBudget(category.value),
+      spend: expenseValue,
+      remainingBudget: remainingBudget,
+      remainingWeeklyBudget: getWeeklyBudget(remainingBudget),
+    };
+  });
+  const uncategorised = entrySumData.find((sum) => sum.id === "uncategorised");
+  if (uncategorised) {
+    data.push({
+      name: "Uncategorised",
+      budget: 0,
+      weeklyBudget: 0,
+      spend: uncategorised.value,
+      remainingBudget: -uncategorised.value,
+      remainingWeeklyBudget: getWeeklyBudget(-uncategorised.value),
+    });
+  }
+  return data;
+};
+
 enum SortActionKind {
+  UPDATE_DATA = "UPDATE_DATA",
   CHANGE_SORT = "CHANGE_SORT",
 }
 
 interface SortAction {
   type: SortActionKind;
   column: string;
+  data?: TableDataType;
 }
 
 enum SortDirection {
@@ -34,7 +76,15 @@ type TableDataType = {
 }[];
 
 function tableReducer(state: SortState, action: SortAction): SortState {
+  console.log("before", state, action);
   switch (action.type) {
+    case "UPDATE_DATA":
+      const sortedData = _.sortBy(action.data, [state.column]) as TableDataType;
+      return {
+        ...state,
+        data:
+          state.direction === "ascending" ? sortedData : sortedData.reverse(),
+      };
     case "CHANGE_SORT":
       if (state.column === action.column) {
         return {
@@ -50,7 +100,7 @@ function tableReducer(state: SortState, action: SortAction): SortState {
       return {
         column: action.column,
         data: _.sortBy(state.data, [action.column]),
-        direction: SortDirection.ascending,
+        direction: state.direction,
       };
     default:
       throw new Error();
@@ -66,37 +116,28 @@ const SpendByCategoryTable = ({
   categoryData,
   entrySumData,
 }: SpendByCategoryTableProps) => {
-  const today = new Date();
-  const weekDivider =
-    getCountOfDaysInMonth(today.getFullYear(), today.getMonth()) / 7;
-  const getWeeklyBudget = (budget: number): number =>
-    Math.floor(budget / weekDivider);
-
-  const tableData: TableDataType = categoryData.map((category) => {
-    const expenseValue = entrySumData.find(
-      (data) => data.id === category.id
-    )?.value;
-    const remainingBudget = expenseValue
-      ? category.value - expenseValue
-      : category.value;
-    return {
-      name: category.id,
-      budget: category.value,
-      weeklyBudget: getWeeklyBudget(category.value),
-      spend: expenseValue,
-      remainingBudget: remainingBudget,
-      remainingWeeklyBudget: getWeeklyBudget(remainingBudget),
-    };
+  const tableData: TableDataType = mapEntriesToCategories({
+    categoryData,
+    entrySumData,
   });
+
   const initialState = {
-    column: undefined,
+    column: "name",
     data: tableData,
-    direction: undefined,
+    direction: SortDirection.ascending,
   };
 
   const [state, dispatch] = useReducer(tableReducer, initialState);
 
   const { column, data, direction }: SortState = state;
+
+  useEffect(() => {
+    dispatch({
+      type: SortActionKind.UPDATE_DATA,
+      column: state.column || "name",
+      data: mapEntriesToCategories({ categoryData, entrySumData }),
+    });
+  }, [categoryData, entrySumData, state.column]);
 
   const categoriesTotal = categoryData.reduce(
     (sum, cat) => (sum += cat.value),
@@ -111,7 +152,7 @@ const SpendByCategoryTable = ({
     <>
       <Header as="h3">Spend by category</Header>
       <div style={{ overflowX: "scroll" }}>
-        <Table basic="very" sortable unstackable>
+        <Table basic="very" sortable unstackable singleLine>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell
@@ -196,13 +237,19 @@ const SpendByCategoryTable = ({
                     key={name}
                     negative={remainingBudget < 0 ? true : false}
                     warning={
-                      remainingBudget > 0 && remainingBudget < budget / 5
+                      name === "Uncategorised" ||
+                      (remainingBudget > 0 && remainingBudget < budget / 5)
                         ? true
                         : false
                     }
                     positive={remainingBudget > budget / 2 ? true : false}
                   >
-                    <Table.Cell>{name}</Table.Cell>
+                    <Table.Cell>
+                      {name === "Uncategorised" ? (
+                        <Icon name="attention" />
+                      ) : null}
+                      {name}
+                    </Table.Cell>
                     <Table.Cell>{budget}</Table.Cell>
                     <Table.Cell>{weeklyBudget}</Table.Cell>
                     <Table.Cell>{spend}</Table.Cell>
