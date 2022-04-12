@@ -99,10 +99,17 @@ const Dashboard = () => {
     !incomesByCategory
   )
     return <div>Loading...</div>;
-  console.log(incomeExpenseData);
   return (
     <>
-      <Grid stackable columns={3}>
+      <Grid stackable columns={2}>
+        <Grid.Column>
+          <SpendByCategoryTable
+            categoryData={categoryChartData.filter(
+              (category) => category.type === IncomeExpenseType.Expense
+            )}
+            entrySumData={expensesByCategory}
+          />
+        </Grid.Column>
         <Grid.Column>
           <DashboardDataPane title="Income vs. Expenses">
             <CustomHorizontalBar
@@ -120,14 +127,6 @@ const Dashboard = () => {
               0
             )}
           </Header>
-        </Grid.Column>
-        <Grid.Column>
-          <SpendByCategoryTable
-            categoryData={categoryChartData.filter(
-              (category) => category.type === IncomeExpenseType.Expense
-            )}
-            entrySumData={expensesByCategory}
-          />
         </Grid.Column>
         {expensesByCategory.length > 0 ? (
           <Grid.Column>
