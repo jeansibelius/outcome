@@ -2,8 +2,13 @@ import React from "react";
 import { Button, Icon, Modal, Segment } from "semantic-ui-react";
 import { Entry, EntryInput, NewEntry } from "../types";
 import { useMutation } from "@apollo/client";
-import { CREATE_ENTRY, ALL_ENTRIES, UPDATE_ENTRY, DELETE_ENTRY } from "../queries";
-import { toNewEntry } from "../utils";
+import {
+  CREATE_ENTRY,
+  ALL_ENTRIES,
+  UPDATE_ENTRY,
+  DELETE_ENTRY,
+} from "../queries";
+import { getYearMonthDay, toNewEntry } from "../utils";
 import NewEntryForm from "./NewEntryForm";
 import UpdateEntryForm from "./UpdateEntryForm";
 
@@ -21,21 +26,27 @@ const AddEntryModal = ({
   updateEntryValues,
 }: Props) => {
   const [error, setError] = React.useState<string | undefined>();
-  const [createEntry] = useMutation<{ CreateEntry: Entry }, { entryData: NewEntry }>(CREATE_ENTRY, {
+  const [createEntry] = useMutation<
+    { CreateEntry: Entry },
+    { entryData: NewEntry }
+  >(CREATE_ENTRY, {
     refetchQueries: [{ query: ALL_ENTRIES }],
     onError: (error) => {
       throw new Error(error.message);
     },
   });
-  const [updateEntry] = useMutation<{ UpdateEntry: Entry }, { id: string; data: EntryInput }>(
-    UPDATE_ENTRY,
+  const [updateEntry] = useMutation<
+    { UpdateEntry: Entry },
+    { id: string; data: EntryInput }
+  >(UPDATE_ENTRY, {
+    refetchQueries: [{ query: ALL_ENTRIES }],
+  });
+  const [deleteEntry] = useMutation<{ DeleteEntry: boolean }, { id: string }>(
+    DELETE_ENTRY,
     {
       refetchQueries: [{ query: ALL_ENTRIES }],
     }
   );
-  const [deleteEntry] = useMutation<{ DeleteEntry: boolean }, { id: string }>(DELETE_ENTRY, {
-    refetchQueries: [{ query: ALL_ENTRIES }],
-  });
 
   const submitNewEntry = async (values: EntryInput): Promise<void> => {
     try {
@@ -57,9 +68,20 @@ const AddEntryModal = ({
   const submitUpdateEntry = async (data: EntryInput): Promise<void> => {
     try {
       if (!updateEntryValues) {
-        throw new Error("Values missing from the entry you're trying to update.");
+        throw new Error(
+          "Values missing from the entry you're trying to update."
+        );
       }
       const updateData = toNewEntry(data);
+
+      // Keep original date with time, if date is unchanged
+      if (
+        getYearMonthDay(updateData.date) ===
+        getYearMonthDay(updateEntryValues.date)
+      ) {
+        updateData.date = updateEntryValues.date;
+      }
+
       await updateEntry({
         variables: { id: updateEntryValues.id, data: updateData },
       });
@@ -87,7 +109,13 @@ const AddEntryModal = ({
   };
 
   return (
-    <Modal className="p-2" open={modalOpen} onClose={onClose} centered={true} closeIcon>
+    <Modal
+      className="p-2"
+      open={modalOpen}
+      onClose={onClose}
+      centered={true}
+      closeIcon
+    >
       <Modal.Header>
         {isUpdatingEntry && updateEntryValues ? (
           <>
@@ -110,7 +138,10 @@ const AddEntryModal = ({
       <Modal.Content>
         {error && <Segment inverted color="red">{`Error: ${error}`}</Segment>}
         {isUpdatingEntry && updateEntryValues ? (
-          <UpdateEntryForm onSubmit={submitUpdateEntry} updateEntryValues={updateEntryValues} />
+          <UpdateEntryForm
+            onSubmit={submitUpdateEntry}
+            updateEntryValues={updateEntryValues}
+          />
         ) : (
           <NewEntryForm onSubmit={submitNewEntry} />
         )}
