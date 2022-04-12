@@ -36,8 +36,8 @@
 - Add date filtering by month to reporting (default ongoing month) ✅
 - Entries' view made more compact ✅
 - New data panels: spend per category vs. budgeted; how much left (total/per week) ✅
+- Bug: entry category resets to first in array, when editing an existing entry ✅
 - Remove zeroing of date in entries to allow proper sorting (same day entries)
-- Bug: entry category resets to first in array, when editing an existing entry
 - Bug: entry modal fails, if there are no categories
 - Test coverage for client is sufficient (considering unfinalised UI)
 

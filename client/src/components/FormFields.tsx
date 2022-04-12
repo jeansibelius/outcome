@@ -15,7 +15,12 @@ interface InputFieldProps extends FieldProps {
 
 // TODO check if it would be possible to make this better by
 // https://formik.org/docs/api/useField#fieldinputpropsvalue
-export const InputField = ({ field, label, placeholder, type }: InputFieldProps) => {
+export const InputField = ({
+  field,
+  label,
+  placeholder,
+  type,
+}: InputFieldProps) => {
   return (
     <Form.Field>
       <label>{label}</label>
@@ -34,7 +39,10 @@ export const RadioGroup = ({ name, label, elements }: RadioGroupFields) => {
   const fieldName = { name };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [field, meta, helpers] = useField(fieldName);
-  const onChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+  const onChange = (
+    _event: React.SyntheticEvent<HTMLElement, Event>,
+    data: DropdownProps
+  ) => {
     helpers.setTouched(true);
     helpers.setValue(data.value);
   };
@@ -65,7 +73,7 @@ interface CategorySelectProps {
   entryType: string;
 }
 
-interface GetCategoryData {
+interface GetCategoryDataQuery {
   returnAllCategories: Category[];
 }
 
@@ -82,10 +90,14 @@ export const CategorySelect = ({ entryType }: CategorySelectProps) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_field, meta, helpers] = useField(fieldName);
 
-  const getCategories = useQuery<GetCategoryData>(ALL_CATEGORIES);
-  const [categories, setCategories] = useState<Category[] | undefined>(undefined);
+  const getCategories = useQuery<GetCategoryDataQuery>(ALL_CATEGORIES);
+  const [categories, setCategories] = useState<Category[] | undefined>(
+    undefined
+  );
 
-  const [stateOptions, setStateOptions] = useState<StateOptions[] | undefined>();
+  const [stateOptions, setStateOptions] = useState<
+    StateOptions[] | undefined
+  >();
 
   useEffect(() => {
     if (getCategories.data) {
@@ -109,14 +121,10 @@ export const CategorySelect = ({ entryType }: CategorySelectProps) => {
     }
   }, [categories, entryType]);
 
-  useEffect(() => {
-    if (stateOptions) {
-      helpers.setValue(stateOptions[0].value);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stateOptions]);
-
-  const onChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+  const onChange = (
+    _event: React.SyntheticEvent<HTMLElement, Event>,
+    data: DropdownProps
+  ) => {
     helpers.setTouched(true);
     helpers.setValue(data.value);
   };
@@ -147,16 +155,26 @@ export const IconSelect = () => {
   const fieldName = "icon";
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_field, _meta, helpers] = useField(fieldName);
-  const [stateOptions, setStateOptions] = useState<StateOptions[] | undefined>();
+  const [stateOptions, setStateOptions] = useState<
+    StateOptions[] | undefined
+  >();
 
-  const onChange = (_event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+  const onChange = (
+    _event: React.SyntheticEvent<HTMLElement, Event>,
+    data: DropdownProps
+  ) => {
     helpers.setTouched(true);
     helpers.setValue(data.value);
   };
 
   useEffect(() => {
     setStateOptions(
-      ICONS_AND_ALIASES.map((icon) => ({ key: icon, text: icon, value: icon, icon: icon }))
+      ICONS_AND_ALIASES.map((icon) => ({
+        key: icon,
+        text: icon,
+        value: icon,
+        icon: icon,
+      }))
     );
   }, []);
 
