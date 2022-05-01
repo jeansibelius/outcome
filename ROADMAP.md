@@ -68,7 +68,7 @@
   list in icon options?)
 - Add currency to user? which can then be used for all forms and views
 - Update Fomantic UI css to check, if it fixes icon not visible in dropdown issue and remove the
-  patch (& patch package)
+  patch (& patch package) (should be introduced in 2.9.0)
   https://github.com/fomantic/Fomantic-UI/issues/2172
 - Consider refactoring types & resolvers according to this example:
   https://github.com/MichalLytek/type-graphql/tree/master/examples/apollo-client
