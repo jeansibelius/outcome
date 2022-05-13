@@ -3,6 +3,8 @@ services:
     extends:
       file: ./docker-services.yml
       service: server
+    environment:
+      - CHOKIDAR_USEPOLLING=true
     volumes:
       - ./server/:/usr/src/app
 

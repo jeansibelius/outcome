@@ -5,7 +5,6 @@ RUN dpkg -i dumb-init_*.deb
 
 WORKDIR /usr/src/app
 
-#COPY --chown=node:node . .
 COPY --chown=node:node package.json package.json 
 
 RUN npm install 
