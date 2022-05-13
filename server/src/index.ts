@@ -1,5 +1,8 @@
 import { ApolloServer } from "apollo-server-express";
-import { ApolloServerPluginDrainHttpServer, AuthenticationError } from "apollo-server-core";
+import {
+  ApolloServerPluginDrainHttpServer,
+  AuthenticationError,
+} from "apollo-server-core";
 import cors from "cors";
 import express from "express";
 import http from "http";
@@ -49,7 +52,11 @@ async function startApolloServer() {
   const schema = await schemaBuild();
   const server = new ApolloServer({
     schema,
-    context: async ({ req }: { req: RequestCustom }): Promise<ContextType | null> => {
+    context: async ({
+      req,
+    }: {
+      req: RequestCustom;
+    }): Promise<ContextType | null> => {
       // Exclude login from auth
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       if (req.body.query.match("Login")) return null;
@@ -71,12 +78,16 @@ async function startApolloServer() {
       if (!user) throw new AuthenticationError("You must be logged in");
 
       // Check that user belongs to given space
-      const spaceFromDB: Space | null | undefined = await SpaceModel.findById({ _id: space });
+      const spaceFromDB: Space | null | undefined = await SpaceModel.findById({
+        _id: space,
+      });
       if (!spaceFromDB) {
         throw new AuthenticationError("Given space doesn't exist in the DB.");
       }
       if (!spaceFromDB.users?.includes(new mongoose.Types.ObjectId(user.id))) {
-        throw new AuthenticationError("User doesn't belong to the given space.");
+        throw new AuthenticationError(
+          "User doesn't belong to the given space."
+        );
       }
 
       // add the user & active space to the context
@@ -95,7 +106,9 @@ async function startApolloServer() {
 
   const PORT = process.env.PORT || 4000;
   // Modified server startup
-  await new Promise<void>((resolve) => httpServer.listen({ port: PORT }, resolve));
+  await new Promise<void>((resolve) =>
+    httpServer.listen({ port: PORT }, resolve)
+  );
   console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 

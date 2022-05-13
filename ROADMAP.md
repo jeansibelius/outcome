@@ -40,11 +40,11 @@
 - Bug: spend by category table doesn't list the correct spending for given month ✅
 - Bug: entry modal fails, if there are no categories ✅
 - Remove zeroing of date in entries to allow proper sorting (same day entries) ✅
+- Containerize the project
 - Test coverage for client is sufficient (considering unfinalised UI)
 
 ## Next steps
 
-- Register view exists
 - Caching: Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
 - Add safer UI to deletion of entries and categories (loading status when clicked, clear response in
@@ -60,6 +60,7 @@
 - Refactor error message from modals to its own dismissable component (toast?)
 - Refactor modal to a reusable component (instead of having two implementations in NewEntryModal and
   NewCategoryModal)
+- Register view exists
 - Add search feature to NewEntryForm name field (to allow quick selection of previously used names)
 - Add pagination to entries view (load more or similar)
 - Improve submission form appearance (fancier invalid/error states etc.)

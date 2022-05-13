@@ -1,0 +1,25 @@
+services:
+  server:
+    extends:
+      file: ./docker-services.yml
+      service: server
+    volumes:
+      - ./server/:/usr/src/app
+
+  client:
+    extends:
+      file: ./docker-services.yml
+      service: client 
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./client/:/usr/src/app # Mount client dir to enable development
+
+  reverse_proxy:
+    extends:
+      file: ./docker-services.yml
+      service: nginx
+
+  debug_helper:
+    image: busybox
+

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node ./webpackWatchSetup.js && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "postinstall": "patch-package",
@@ -58,7 +58,6 @@
       "react-app/jest"
     ]
   },
-  "proxy": "http://localhost:4000",
   "browserslist": {
     "production": [
       ">0.2%",
