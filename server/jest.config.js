@@ -4,7 +4,7 @@
 module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
-  roots: ["<rootDir>/src/", "../client/"],
+  //roots: ["<rootDir>/src/", "../client/"],
   //moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths),
   globals: {
     "ts-jest": {

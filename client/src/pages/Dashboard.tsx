@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { Grid, Header, Statistic } from "semantic-ui-react";
+import { Grid, Header } from "semantic-ui-react";
 import CustomHorizontalBar, {
   CustomHorizontalBarData,
 } from "../components/charts/CustomHorizontalBar";
