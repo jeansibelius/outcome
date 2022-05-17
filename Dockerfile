@@ -9,9 +9,10 @@ COPY . .
 FROM base AS build 
 RUN npm ci
 ENV CI true
-# TODO add env vars before pushing to git
-ENV MONGODB_URI_TEST uri_here
-ENV JWT_SECRET secret_here
+ARG MONGODB_URI_TEST
+ENV MONGODB_URI_TEST $MONGODB_URI_TEST 
+ARG JWT_SECRET
+ENV JWT_SECRET $JWT_SECRET 
 ENV NODE_ENV test
 RUN npm run test
 RUN npm run build
@@ -21,8 +22,8 @@ FROM node:lts-slim@sha256:3a4243f6c0cac673c7829a9a875ed599063e001bac9a38e82f1c31
 WORKDIR /usr/src/app
 COPY --from=build --chown=node:node /usr/src/app/ ./
 ENV NODE_ENV production
-# TODO add env vars before pushing to git
-ENV MONGODB_URI_PROD uri_here
-ENV JWT_SECRET secret_here
+ARG MONGODB_URI_PROD
+ENV MONGODB_URI_PROD $MONGODB_URI_PROD 
+ENV JWT_SECRET $JWT_SECRET
 USER node
 CMD ["node", "server/build/index.js"]

@@ -4,6 +4,7 @@ services:
     build:
       context: ./server
       dockerfile: dev.Dockerfile
+    env_file: ./server/.env
 
   client:
     image: outcome-client-dev 
@@ -20,7 +21,7 @@ services:
     ports:
       - 8080:80
     depends_on:
-      - client # wait for the app container to be started
+      - client
       - server
 
   debug_helper:

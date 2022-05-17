@@ -22,3 +22,4 @@ services:
       file: ./docker-services.yml
       service: nginx
 
+# docker compose -f docker-compose.yml up

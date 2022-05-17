@@ -27,3 +27,4 @@ services:
   debug_helper:
     image: busybox
 
+# docker compose -f docker-compose.dev.yml --env-file ./server/.env up

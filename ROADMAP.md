@@ -40,7 +40,7 @@
 - Bug: spend by category table doesn't list the correct spending for given month ✅
 - Bug: entry modal fails, if there are no categories ✅
 - Remove zeroing of date in entries to allow proper sorting (same day entries) ✅
-- Containerize the project
+- Containerize the project ✅
 - Test coverage for client is sufficient (considering unfinalised UI)
 
 ## Next steps
