@@ -1,25 +1,25 @@
 import { useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, Header } from "semantic-ui-react";
 import CustomHorizontalBar, {
   CustomHorizontalBarData,
 } from "../components/charts/CustomHorizontalBar";
-import CustomPieChart, {
-  CustomPieChartData,
-} from "../components/charts/CustomResponsivePie";
+import CustomPieChart from "../components/charts/CustomResponsivePie";
 import DashboardDataPane from "../components/DashboardDataPane";
+import SpendByCategoryTable from "../components/SpendByCategoryTable";
 import {
   ALL_CATEGORIES,
   ALL_ENTRIES,
   GET_CURRENT_VIEW_MONTH,
 } from "../queries";
-import { Entry, IncomeExpenseType } from "../types";
+import { CustomPieChartData, Entry, IncomeExpenseType } from "../types";
 import {
   categoriesToIdAndValue,
   entriesByCategoryToIdAndValue,
   entriesToIncomeAndExpenseSumBarData,
   entriesToIncomeAndExpenseSumBarDataKeys,
 } from "../utils/data";
+import { NoEntries } from "./Entries";
 
 const Dashboard = () => {
   const getEntries = useQuery(ALL_ENTRIES);
@@ -101,9 +101,19 @@ const Dashboard = () => {
   )
     return <div>Loading...</div>;
 
+  if (getEntries.data.returnAllEntries.length === 0) return <NoEntries />;
+
   return (
     <>
-      <Grid stackable columns={3}>
+      <Grid stackable columns={2}>
+        <Grid.Column>
+          <SpendByCategoryTable
+            categoryData={categoryChartData.filter(
+              (category) => category.type === IncomeExpenseType.Expense
+            )}
+            entrySumData={expensesByCategory}
+          />
+        </Grid.Column>
         <Grid.Column>
           <DashboardDataPane title="Income vs. Expenses">
             <CustomHorizontalBar
@@ -111,17 +121,31 @@ const Dashboard = () => {
               keys={incomeExpenseDataKeys}
             />
           </DashboardDataPane>
+          <Header sub textAlign="center">
+            Balance:{" "}
+            {incomeExpenseData.reduce(
+              (sum, entry) =>
+                entry.type === IncomeExpenseType.Income
+                  ? (sum += entry.total as number)
+                  : (sum -= entry.total as number),
+              0
+            )}
+          </Header>
         </Grid.Column>
-        <Grid.Column>
-          <DashboardDataPane title="Expenses by category">
-            <CustomPieChart data={expensesByCategory} />
-          </DashboardDataPane>
-        </Grid.Column>
-        <Grid.Column>
-          <DashboardDataPane title="Incomes by category">
-            <CustomPieChart data={incomesByCategory} />
-          </DashboardDataPane>
-        </Grid.Column>
+        {expensesByCategory.length > 0 ? (
+          <Grid.Column>
+            <DashboardDataPane title="Expenses by category">
+              <CustomPieChart data={expensesByCategory} />
+            </DashboardDataPane>
+          </Grid.Column>
+        ) : null}
+        {incomesByCategory.length > 0 ? (
+          <Grid.Column>
+            <DashboardDataPane title="Incomes by category">
+              <CustomPieChart data={incomesByCategory} />
+            </DashboardDataPane>
+          </Grid.Column>
+        ) : null}
       </Grid>
     </>
   );

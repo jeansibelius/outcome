@@ -15,7 +15,10 @@ const UpdateEntryForm = withFormik<UpdateEntryFormProps, EntryFormValues>({
       date: updateEntryValues.date.toString().slice(0, 10),
       name: updateEntryValues.name,
       amount: updateEntryValues.amount,
-      description: !updateEntryValues.description ? "" : updateEntryValues.description,
+      description: !updateEntryValues.description
+        ? ""
+        : updateEntryValues.description,
+      category: updateEntryValues.category?.id,
     };
   },
 

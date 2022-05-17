@@ -44,7 +44,10 @@ const errorLink = onError(({ graphQLErrors, networkError, response }) => {
       console.log(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       );
-      if (message.includes("TokenExpiredError")) {
+      if (
+        message.includes("jwt expired") ||
+        message.includes("Token missing")
+      ) {
         await logout(client);
       }
     });

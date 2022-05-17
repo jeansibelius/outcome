@@ -60,3 +60,10 @@ export interface EntryInput {
 }
 
 export type localStorageUser = Omit<User, "id" | "email"> | null;
+
+export interface CustomPieChartData {
+  id: string;
+  value: number;
+  type: string;
+  color?: string;
+}

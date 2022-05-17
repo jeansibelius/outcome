@@ -13,7 +13,9 @@ export class LoginResolver {
     @Arg("email") email: string,
     @Arg("password") password: string
   ): Promise<AuthResponse> {
-    const user: User | null = await UserModel.findOne({ email }).populate("spaces");
+    const user: User | null = await UserModel.findOne({ email }).populate(
+      "spaces"
+    );
 
     const passwordCorrect =
       // Compare even, if user is null to avoid time based user sniffing

@@ -7,6 +7,10 @@ import EntryModal from "../components/EntryModal";
 import { IsLoggedIn } from "../utils";
 import Entry from "../components/Entry";
 
+export const NoEntries = () => (
+  <div>No entries. Please add some using the "New entry" button below.</div>
+);
+
 const Entries = () => {
   const getEntries = useQuery(ALL_ENTRIES);
   const [entries, setEntries] = React.useState<EntryType[] | undefined>(
@@ -67,7 +71,7 @@ const Entries = () => {
     );
   }
 
-  if (entries) {
+  if (entries && entries?.length > 0) {
     return (
       <>
         {updateEntryValues ? (
@@ -95,7 +99,7 @@ const Entries = () => {
       </>
     );
   }
-  return null;
+  return <NoEntries />;
 };
 
 export default Entries;

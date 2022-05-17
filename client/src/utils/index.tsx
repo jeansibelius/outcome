@@ -72,14 +72,24 @@ const parseString = (toParse: unknown): string => {
 
 const isDate = (date: any): date is string => {
   const r = new RegExp(/[0-9]{4}-[0-9]{2}-[0-9]{2}/);
-  return Boolean(Date.parse(date)) && r.test(date);
+  return Boolean(Date.parse(date)) && r.test(new Date(date).toISOString());
 };
 
-const parseDate = (toParse: unknown): string => {
+const parseDate = (toParse: unknown): Date => {
   if (!toParse || !isDate(toParse)) {
     throw new Error("Date is not set or format is incorrect.");
   }
-  return toParse;
+  const date = new Date(toParse);
+  const now = new Date();
+  const parsedDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    now.getHours(),
+    now.getMinutes(),
+    now.getSeconds()
+  );
+  return parsedDate;
 };
 
 const isNumber = (number: any): number is number => {
@@ -108,7 +118,7 @@ const parseType = (toParse: unknown): IncomeExpenseType => {
 export const toNewEntry = (object: EntryInput): NewEntry => {
   const newEntry = {
     type: parseType(object.type),
-    date: new Date(parseDate(object.date)),
+    date: parseDate(object.date),
     name: parseString(object.name),
     amount: parseNumber(object.amount),
     description: object.description ? parseString(object.description) : null,
@@ -139,3 +149,6 @@ export const getYearMonthDay = (date = new Date()): string => {
   const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
   return `${date.getFullYear()}-${month}-${day}`;
 };
+
+export const getCountOfDaysInMonth = (year: number, month: number): number =>
+  new Date(year, month, 0).getDate();

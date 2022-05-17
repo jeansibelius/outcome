@@ -9,7 +9,13 @@ import { SpaceResolver } from "./SpaceResolver";
 const schemaBuild = async () =>
   await buildSchema({
     //resolvers: [__dirname + "/*Resolver.ts"],
-    resolvers: [UserResolver, CategoryResolver, EntryResolver, SpaceResolver, LoginResolver],
+    resolvers: [
+      UserResolver,
+      CategoryResolver,
+      EntryResolver,
+      SpaceResolver,
+      LoginResolver,
+    ],
     emitSchemaFile: true,
     validate: true,
   });

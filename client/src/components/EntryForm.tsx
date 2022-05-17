@@ -42,10 +42,24 @@ export const EntryForm = (props: OtherProps & FormikProps<EntryFormValues>) => {
 
   return (
     <Form className="w-full form ui" onSubmit={handleSubmit}>
-      <RadioGroup name="type" label="Type" elements={Object.values(IncomeExpenseType)} />
+      <RadioGroup
+        name="type"
+        label="Type"
+        elements={Object.values(IncomeExpenseType)}
+      />
       <Field name="name" label="Name" type="text" component={InputField} />
-      <Field name="amount" label="Amount" type="number" component={InputField} />
-      <Field name="description" label="Description" type="text" component={InputField} />
+      <Field
+        name="amount"
+        label="Amount"
+        type="number"
+        component={InputField}
+      />
+      <Field
+        name="description"
+        label="Description"
+        type="text"
+        component={InputField}
+      />
       <Field name="date" label="Date" type="date" component={InputField} />
       {entryType ? <CategorySelect entryType={entryType} /> : null}
       <button

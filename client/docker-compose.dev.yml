@@ -1,0 +1,10 @@
+services:
+  client:
+    extends:
+      file: ../docker-compose.dev.yml
+      service: client 
+    environment:
+      - NODE_ENV=development
+    ports:
+      - 3000:3000
+    container_name: outcome-client-dev

@@ -1,6 +1,5 @@
 import { CustomHorizontalBarData } from "../components/charts/CustomHorizontalBar";
-import { CustomPieChartData } from "../components/charts/CustomResponsivePie";
-import { Category, Entry } from "../types";
+import { Category, CustomPieChartData, Entry } from "../types";
 
 export const categoriesToIdAndValue = (
   array: Category[]
@@ -16,7 +15,7 @@ export const entriesByCategoryToIdAndValue = (
 ): CustomPieChartData[] => {
   return array.reduce((arr: any[], entry: Entry) => {
     const isSameCategoryAndType = (el: CustomPieChartData) =>
-      el.id === (entry.category ? entry.category.name : undefined) &&
+      el.id === (entry.category ? entry.category.name : "uncategorised") &&
       el.type === entry.type;
     // Check if category & type combination already exists and get index
     const catIndex = arr.findIndex(isSameCategoryAndType);

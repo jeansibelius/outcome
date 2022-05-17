@@ -34,16 +34,17 @@
 - Separate test, dev, demo and prod databases ✅
 - Test coverage for server is 100 % ✅
 - Add date filtering by month to reporting (default ongoing month) ✅
-- Remove zeroing of date in entries to allow proper sorting (same day entries)
-- Bug: entry category resets to first in array, when editing an existing entry
-- Bug: entry modal fails, if there are no categories
-- Bug: entry category resets to first in array, when editing an existing entry
+- Entries' view made more compact ✅
+- New data panels: spend per category vs. budgeted; how much left (total/per week) ✅
+- Bug: entry category resets to first in array, when editing an existing entry ✅
+- Bug: spend by category table doesn't list the correct spending for given month ✅
+- Bug: entry modal fails, if there are no categories ✅
+- Remove zeroing of date in entries to allow proper sorting (same day entries) ✅
+- Containerize the project ✅
 - Test coverage for client is sufficient (considering unfinalised UI)
-- New data panels: spend per category vs. budgeted; how much left (total/per day/week)
 
 ## Next steps
 
-- Register view exists
 - Caching: Performing actions (adding, editing, deleting) on entries or categories is reflected in the UI
   immediately (queries & cache are kept up to date)
 - Add safer UI to deletion of entries and categories (loading status when clicked, clear response in
@@ -59,6 +60,7 @@
 - Refactor error message from modals to its own dismissable component (toast?)
 - Refactor modal to a reusable component (instead of having two implementations in NewEntryModal and
   NewCategoryModal)
+- Register view exists
 - Add search feature to NewEntryForm name field (to allow quick selection of previously used names)
 - Add pagination to entries view (load more or similar)
 - Improve submission form appearance (fancier invalid/error states etc.)
@@ -67,7 +69,7 @@
   list in icon options?)
 - Add currency to user? which can then be used for all forms and views
 - Update Fomantic UI css to check, if it fixes icon not visible in dropdown issue and remove the
-  patch (& patch package)
+  patch (& patch package) (should be introduced in 2.9.0)
   https://github.com/fomantic/Fomantic-UI/issues/2172
 - Consider refactoring types & resolvers according to this example:
   https://github.com/MichalLytek/type-graphql/tree/master/examples/apollo-client

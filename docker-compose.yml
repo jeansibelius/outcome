@@ -1,0 +1,25 @@
+services:
+  server:
+    extends:
+      file: ./docker-services.yml
+      service: server
+    image: outcome-server
+    build:
+      context: ./
+      dockerfile: Dockerfile
+
+  client:
+    extends:
+      file: ./docker-services.yml
+      service: client 
+    image: outcome-client 
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+
+  reverse_proxy:
+    extends:
+      file: ./docker-services.yml
+      service: nginx
+
+# docker compose -f docker-compose.yml up
