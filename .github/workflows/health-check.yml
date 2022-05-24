@@ -6,7 +6,7 @@ on:
   schedule:
     # * is a special character in YAML CRON string has to be quoted
     # Every 6th minute
-    - cron:  '1/6 * * * *'
+    - cron:  '0 10 * * *'
 
 jobs:
   health_check:
