@@ -1,7 +1,8 @@
 name: "Health check"
 
 on:
-  push
+  push:
+    branches: [mvp]
   schedule:
     # * is a special character in YAML CRON string has to be quoted
     # Every 6th minute
