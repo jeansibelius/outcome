@@ -1,0 +1,97 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches: [master]
+
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
+
+env:
+  CONTAINS_SKIP: ${{ contains(join(github.event.commits.*.message), '#skip') }}
+
+jobs:
+  deployment_pipeline:
+    runs-on: ubuntu-20.04
+    outputs:
+      build_succeeded: ${{ steps.build_status.outputs.build_succeeded }}
+      deploy_succeeded: ${{ steps.deploy_status.outputs.deploy_succeeded }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: npm install
+        run: npm install
+      - name: lint
+        run: npm run eslint
+      - name: build
+        run: npm run build
+      - id: build_status
+        name: Set build status
+        run: |
+          echo "::set-output name=build_succeeded::true"
+          echo ${{ steps.build_status.outputs.build_succeeded }}
+      - name: test
+        run: npm test
+      - name: Deploy to Heroku
+        if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}} 
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          healthcheck: "https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com"
+          rollbackonhealthcheckfailed: true
+      - id: deploy_status
+        name: Set deploy status
+        if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
+        run: |
+          echo "::set-output name=deploy_succeeded::true"
+          echo ${{ steps.deploy_status.outputs.deploy_succeeded }}
+
+  tag_release:
+    needs: [deployment_pipeline]
+    runs-on: ubuntu-20.04
+    if: ${{ ( github.event_name == 'push' && contains(join(github.event.commits.*.message), '#skip') == 'false' ) }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.36.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          DEFAULT_BUMP: patch
+
+  notify_status:
+    # Run always after deployment_pipeline, even if it fails
+    if: ${{ always() }}
+    needs: [deployment_pipeline]
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Build Success
+        if: ${{ needs.deployment_pipeline.outputs.build_succeeded == 'true' }}
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          description: "Build from commit ${{ github.event.head_commit.url }} by ${{ github.event.head_commit.author.username }} succeeded"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Deploy Success
+        if: ${{ needs.deployment_pipeline.outputs.deploy_succeeded == 'true' }}
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          severity: info
+          text: "Deployed a new version of Pokedex"
+          description: "Deploy from commit ${{ github.event.head_commit.url }} by ${{ github.event.head_commit.author.username }} succeeded"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Build/deploy failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ needs.deployment_pipeline.result == 'failure' }}
+        with:
+          severity: error
+          description: "Build/Deploy from commit ${{ github.event.head_commit.url }} by ${{ github.event.head_commit.author.username }} failed"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
