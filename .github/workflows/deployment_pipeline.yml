@@ -90,7 +90,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
-          text: "Deployed a new version of Outcome"
+          text: "Deployed a new version of Outcome https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build failure
         uses: rjstone/discord-webhook-notify@v1

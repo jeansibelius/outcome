@@ -6,7 +6,7 @@ on:
   schedule:
     # * is a special character in YAML CRON string has to be quoted
     # Daily at 03.06
-    - cron:  '6 * * * *'
+    - cron:  '1/2 * * * *'
 
 jobs:
   health_check:
@@ -37,6 +37,5 @@ jobs:
       uses: rjstone/discord-webhook-notify@v1
       with:
         severity: error 
-        text: "Deployed a new version of Pokedex"
         description: "Health check of https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com failed"
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
