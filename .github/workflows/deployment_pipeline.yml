@@ -78,10 +78,6 @@ jobs:
     needs: [deployment_pipeline]
     runs-on: ubuntu-20.04
     steps:
-      - name: GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - name: Build Success
         if: ${{ needs.deployment_pipeline.outputs.build_succeeded == 'true' }}
         uses: rjstone/discord-webhook-notify@v1
@@ -94,13 +90,20 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
-          text: "Deployed a new version of Outcome"
+          text: "Deployed a new version of Outcome https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Build/deploy failure
+      - name: Build failure
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ needs.deployment_pipeline.result == 'failure' }}
+        if: ${{ needs.deployment_pipeline.outputs.build_succeeded == 'false' && needs.deployment_pipeline.result == 'failure' }}
         with:
           severity: error
-          text: "Build/deploy failed"
+          text: "Build failed"
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Deploy failure
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ needs.deployment_pipeline.outputs.deploy_succeeded == 'false' && needs.deployment_pipeline.result == 'failure' }}
+        with:
+          severity: error
+          text: "Deploy failed"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 

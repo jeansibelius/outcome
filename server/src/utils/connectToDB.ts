@@ -25,7 +25,7 @@ const connectToDB = async (): Promise<mongoose.Connection | void> => {
     try {
       const mongoose = await connect(MONGODB_URI);
       console.log("Connected to MongoDB", process.env.NODE_ENV);
-      if (process.env.NODE_ENV !== "production" && process.env.NODE_ENV !== "demo") {
+      if (process.env.NODE_ENV === "development") {
         mongoose.set("debug", true);
       }
       return mongoose.connection;

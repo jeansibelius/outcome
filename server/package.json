@@ -4,7 +4,7 @@
   "description": "Simple app to track household expenses and budget",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test jest --runInBand",
+    "test": "NODE_ENV=test jest --runInBand --silent",
     "test:coverage": "NODE_ENV=test jest --runInBand --verbose --coverage=true",
     "test:watch": "npm test -- --watch",
     "test:badges": "npm run test:coverage && jest-coverage-badges output \"./badges\"",
