@@ -78,10 +78,6 @@ jobs:
     needs: [deployment_pipeline]
     runs-on: ubuntu-20.04
     steps:
-      - name: GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
       - name: Build Success
         if: ${{ needs.deployment_pipeline.outputs.build_succeeded == 'true' }}
         uses: rjstone/discord-webhook-notify@v1
