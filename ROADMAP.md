@@ -41,6 +41,7 @@
 - Bug: entry modal fails, if there are no categories ✅
 - Remove zeroing of date in entries to allow proper sorting (same day entries) ✅
 - Containerize the project ✅
+- Add category filtering to entries' view
 - Test coverage for client is sufficient (considering unfinalised UI)
 
 ## Next steps

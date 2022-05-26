@@ -9,7 +9,7 @@ describe("When connecting to the DB", () => {
       process.env = { ...OLD_ENV };
       process.env.NODE_ENV = envToTest;
       const connection: mongoose.Connection | void = await connectToDB();
-      connection?.close();
+      await connection?.close();
       expect(connection?.name).toEqual(envToTest);
       process.env = OLD_ENV;
     });
@@ -20,7 +20,7 @@ describe("When connecting to the DB", () => {
       process.env = { ...OLD_ENV };
       process.env.NODE_ENV = envToTest;
       const connection: mongoose.Connection | void = await connectToDB();
-      connection?.close();
+      await connection?.close();
       expect(connection?.name).toEqual("test");
       process.env = OLD_ENV;
     });
@@ -36,7 +36,7 @@ describe("When connecting to the DB", () => {
     const consoleErrorSpy = jest.spyOn(console, "error");
 
     const connection: mongoose.Connection | void = await connectToDB();
-    connection?.close();
+    await connection?.close();
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Error connecting to MongoDB: Invalid connection string "invalidUriToThrowError"'
@@ -54,7 +54,7 @@ describe("When connecting to the DB", () => {
     const consoleErrorSpy = jest.spyOn(console, "error");
 
     const connection: mongoose.Connection | void = await connectToDB();
-    connection?.close();
+    await connection?.close();
 
     expect(consoleErrorSpy).toHaveBeenCalledWith("MongoDB URI is undefined");
     process.env = OLD_ENV;

@@ -14,6 +14,7 @@ import { Entry } from "src/entities/Entry";
 let user: { id: string };
 let space: string;
 let dbConnection: mongoose.Connection | void;
+const CreateEntry = createEntry as string;
 
 beforeAll(async () => {
   dbConnection = await connectToDB();
@@ -26,15 +27,15 @@ beforeEach(async () => {
   space = defaultSpaceID;
 });
 
-afterAll(() => {
-  dbConnection?.close();
+afterAll(async () => {
+  await dbConnection?.close();
   console.log("closed db connection");
 });
 
 describe("When resolving entries", () => {
   test("createEntry returns a new entry with correct details", async () => {
     const response = await callQuery({
-      source: createEntry,
+      source: CreateEntry,
       variableValues: exampleEntries[0],
       contextValue: {
         user,
@@ -57,7 +58,7 @@ describe("When resolving entries", () => {
       },
     };
     const response = await callQuery({
-      source: createEntry,
+      source: CreateEntry,
       variableValues,
       contextValue: {
         user,
@@ -69,30 +70,31 @@ describe("When resolving entries", () => {
   });
 
   test("returnAllEntries returns all existing categories", async () => {
-    let entries: any[] = [];
+    const entries: Entry[] = [];
     const entryResponses = exampleEntries.map((entry) =>
       callQuery({
-        source: createEntry,
+        source: CreateEntry,
         variableValues: entry,
         contextValue: {
           user,
           space,
         },
       })
-        .then((response) => entries.push(response.data?.createEntry))
+        .then((response) => entries.push(response.data?.createEntry as Entry))
         .catch((e) => console.log(e))
     );
     await Promise.all(entryResponses);
 
     const response = await callQuery({
-      source: returnAllEntries,
+      source: returnAllEntries as string,
       contextValue: {
         user,
         space,
       },
     });
     entries.sort((obj1, obj2) => obj1.name.localeCompare(obj2.name));
-    const allEntries = response.data?.returnAllEntries.sort((obj1: Entry, obj2: Entry) =>
+    const allEntries = response.data?.returnAllEntries as Entry[];
+    allEntries.sort((obj1: Entry, obj2: Entry) =>
       obj1.name.localeCompare(obj2.name)
     );
     expect(allEntries).toEqual(entries);
@@ -100,7 +102,7 @@ describe("When resolving entries", () => {
 
   test("updateEntry returns the correct entry with new details", async () => {
     const createResponse = await callQuery({
-      source: createEntry,
+      source: CreateEntry,
       variableValues: exampleEntries[0],
       contextValue: {
         user,
@@ -109,7 +111,7 @@ describe("When resolving entries", () => {
     });
 
     const updateValues = {
-      id: createResponse.data?.createEntry.id,
+      id: createResponse.data?.createEntry.id as string,
       data: {
         type: "Income",
         date: "2021-12-09T00:00:00.000Z",
@@ -119,7 +121,7 @@ describe("When resolving entries", () => {
       },
     };
     const updateResponse = await callQuery({
-      source: updateEntry,
+      source: updateEntry as string,
       variableValues: updateValues,
       contextValue: {
         user,
@@ -134,7 +136,7 @@ describe("When resolving entries", () => {
 
   test("updateEntry returns an error if no entry exists with given ID", async () => {
     await callQuery({
-      source: createEntry,
+      source: CreateEntry,
       variableValues: exampleEntries[0],
       contextValue: {
         user,
@@ -153,7 +155,7 @@ describe("When resolving entries", () => {
       },
     };
     const updateResponse = await callQuery({
-      source: updateEntry,
+      source: updateEntry as string,
       variableValues: updateValues,
       contextValue: {
         user,
@@ -173,7 +175,7 @@ describe("When resolving entries", () => {
 
   test("deleteEntry returns true when called with a entry ID and", async () => {
     const createResponse = await callQuery({
-      source: createEntry,
+      source: CreateEntry,
       variableValues: exampleEntries[0],
       contextValue: {
         user,
@@ -182,7 +184,7 @@ describe("When resolving entries", () => {
     });
 
     const deleteResponse = await callQuery({
-      source: deleteEntry,
+      source: deleteEntry as string,
       variableValues: {
         id: createResponse.data?.createEntry.id,
       },

@@ -20,7 +20,9 @@ export interface AuthResponse {
   token: string;
 }
 
-export type DecodedJwtToken = jwt.JwtPayload;
+export interface DecodedJwtToken extends jwt.JwtPayload {
+  id?: string;
+}
 
 export interface ContextType extends Context {
   user: DecodedJwtToken;

@@ -2,7 +2,12 @@ import { GraphQLSchema, ExecutionResult, graphql } from "graphql";
 import { Maybe } from "type-graphql";
 import schemaBuild from "../resolvers";
 
-import { CategoryModel, EntryModel, SpaceModel, UserModel } from "../entities/index";
+import {
+  CategoryModel,
+  EntryModel,
+  SpaceModel,
+  UserModel,
+} from "../entities/index";
 import { getHashedPassword } from "../utils";
 import { exampleUser } from "./testHelpers";
 import { Space } from "src/entities/Space";
@@ -46,13 +51,17 @@ export const resetDB = async () => {
   console.log(`deleted ${deletedEntries.deletedCount} entrie(s)`);
 };
 
-export const createDefaultSpace = async (): Promise<mongoose.Document & Space> => {
+export const createDefaultSpace = async (): Promise<
+  mongoose.Document & Space
+> => {
   const space = await SpaceModel.create({ name: "Test Space" });
   console.log("created space", space);
   return space;
 };
 
-export const createDefaultUser = async (): Promise<mongoose.Document & User> => {
+export const createDefaultUser = async (): Promise<
+  mongoose.Document & User
+> => {
   const user = await UserModel.create({
     first_name: exampleUser.first_name,
     last_name: exampleUser.last_name,
@@ -70,11 +79,14 @@ export const createDefaultUserAndSpace = async (): Promise<{
   const user = await createDefaultUser();
   const space = await createDefaultSpace();
 
-  space.users = space.users?.concat(user.id);
-  user.spaces = user.spaces?.concat(space.id);
+  space.users = space.users?.concat(user);
+  user.spaces = user.spaces?.concat(space);
 
   await user.save();
   await space.save();
 
-  return { defaultUser: { id: user.id }, defaultSpaceID: space.id };
+  return {
+    defaultUser: { id: user.id as string },
+    defaultSpaceID: space.id as string,
+  };
 };

@@ -4,7 +4,9 @@
   "description": "Simple app to track household expenses and budget",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint --ext .ts src",
+    "client-lint": "npm run lint --prefix client",
+    "server-lint": "npm run lint --prefix server",
+    "lint": "npm run client-lint && npm run server-lint",
     "client-build": "npm run build --prefix client",
     "client-install": "npm ci --prefix client",
     "server-build": "npm run build --prefix server",
@@ -31,5 +33,10 @@
   "bugs": {
     "url": "https://github.com/jeansibelius/outcome/issues"
   },
-  "homepage": "https://github.com/jeansibelius/outcome#readme"
+  "homepage": "https://github.com/jeansibelius/outcome#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "eslint": "^8.16.0",
+    "eslint-plugin-jest": "^26.2.2"
+  }
 }
