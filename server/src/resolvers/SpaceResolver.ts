@@ -2,6 +2,7 @@ import { SpaceModel, UserModel } from "../entities";
 import { Space } from "../entities/Space";
 import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { SpaceInput, SpaceUpdateInput } from "./inputTypes/SpaceInput";
+import { Types } from "mongoose";
 
 const populatePaths = "users";
 
@@ -41,8 +42,11 @@ export class SpaceResolver {
   }
 
   @Mutation(() => Space)
-  async addUserToSpace(@Arg("id") id: string, @Arg("userId") userId: string): Promise<Space> {
-    const space = await SpaceModel.findById({ _id: id });
+  async addUserToSpace(
+    @Arg("id") spaceId: string,
+    @Arg("userId") userId: string
+  ): Promise<Space> {
+    const space = await SpaceModel.findById({ _id: spaceId });
     if (!space) {
       throw new Error("Invalid space id");
     }
@@ -51,15 +55,21 @@ export class SpaceResolver {
       throw new Error("Invalid user id");
     }
 
+    let typedUserId = undefined;
+    let typedSpaceId = undefined;
+    if (typeof user.id === "string") typedUserId = new Types.ObjectId(user.id);
+    if (typeof space.id === "string")
+      typedSpaceId = new Types.ObjectId(space.id);
+
     // Add user id to space, if it doesn't exist there already
-    if (space.users && !space.users.includes(user.id)) {
-      space.users = space.users.concat(user.id);
+    if (space.users && !space.users.includes(typedUserId)) {
+      space.users = space.users.concat(typedUserId);
       await space.save();
     }
 
     // Add space id to user, if it doesn't exist there already
-    if (user.spaces && !user.spaces.includes(space.id)) {
-      user.spaces = user.spaces.concat(space.id);
+    if (user.spaces && !user.spaces.includes(typedSpaceId)) {
+      user.spaces = user.spaces.concat(typedSpaceId);
       await user.save();
     }
 
@@ -67,7 +77,10 @@ export class SpaceResolver {
   }
 
   @Mutation(() => Space)
-  async deleteUserFromSpace(@Arg("id") id: string, @Arg("userId") userId: string): Promise<Space> {
+  async deleteUserFromSpace(
+    @Arg("id") id: string,
+    @Arg("userId") userId: string
+  ): Promise<Space> {
     const space = await SpaceModel.findById({ _id: id });
     if (!space) {
       throw new Error("Invalid space id");
@@ -77,12 +90,18 @@ export class SpaceResolver {
       throw new Error("Invalid user id");
     }
 
-    if (space.users && space.users.includes(user.id)) {
-      space.users = space.users.filter((id) => id!.toString() !== user.id);
+    let typedUserId = undefined;
+    let typedSpaceId = undefined;
+    if (typeof user.id === "string") typedUserId = new Types.ObjectId(user.id);
+    if (typeof space.id === "string")
+      typedSpaceId = new Types.ObjectId(space.id);
+
+    if (space.users && space.users.includes(typedUserId)) {
+      space.users = space.users.filter((id) => id?.toString() !== user.id);
       await space.save();
     }
-    if (user.spaces && user.spaces.includes(space.id)) {
-      user.spaces = user.spaces.filter((id) => id!.toString() !== space.id);
+    if (user.spaces && user.spaces.includes(typedSpaceId)) {
+      user.spaces = user.spaces.filter((id) => id?.toString() !== space.id);
       await user.save();
     }
     return space.populate(populatePaths);

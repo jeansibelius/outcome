@@ -5,6 +5,7 @@ import { createSpace, spaceDetails } from "../../../client/src/queries";
 import { mongoose } from "@typegoose/typegoose";
 import { exampleSpaces, exampleUser } from "../test-utils/testHelpers";
 import { Space } from "src/entities/Space";
+import { User } from "src/entities/User";
 
 let userID: string;
 let dbConnection: mongoose.Connection | void;
@@ -15,12 +16,12 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetDB();
-  const { id } = await createDefaultUser();
-  userID = id;
+  const user: User = await createDefaultUser();
+  userID = String(user.id);
 });
 
-afterAll(() => {
-  dbConnection?.close();
+afterAll(async () => {
+  await dbConnection?.close();
   console.log("closed db connection");
 });
 
@@ -70,7 +71,7 @@ describe("When resolving spaces", () => {
   test("createSpace returns a new space with correct details", async () => {
     const variableValues = exampleSpaces[0];
     const response = await callQuery({
-      source: createSpace,
+      source: createSpace as string,
       variableValues,
     });
     expect(response).toMatchObject({
@@ -79,13 +80,13 @@ describe("When resolving spaces", () => {
   });
 
   test("returnAllSpaces returns all existing spaces", async () => {
-    let spaces: any[] = [];
+    const spaces: Space[] = [];
     const spaceResponses = exampleSpaces.map((space) =>
       callQuery({
-        source: createSpace,
+        source: createSpace as string,
         variableValues: space,
       })
-        .then((response) => spaces.push(response.data?.createSpace))
+        .then((response) => spaces.push(response.data?.createSpace as Space))
         .catch((e) => console.log(e))
     );
     await Promise.all(spaceResponses);
@@ -94,7 +95,8 @@ describe("When resolving spaces", () => {
       source: returnAllSpaces,
     });
     spaces.sort((cat1, cat2) => cat1.name.localeCompare(cat2.name));
-    const allSpaces = response.data?.returnAllSpaces.sort((cat1: Space, cat2: Space) =>
+    const allSpaces: Space[] = response.data?.returnAllSpaces as Space[];
+    allSpaces.sort((cat1: Space, cat2: Space) =>
       cat1.name.localeCompare(cat2.name)
     );
     expect(allSpaces).toEqual(spaces);
@@ -102,12 +104,12 @@ describe("When resolving spaces", () => {
 
   test("updateSpace returns the correct space with new details", async () => {
     const createResponse = await callQuery({
-      source: createSpace,
+      source: createSpace as string,
       variableValues: exampleSpaces[0],
     });
 
     const updateValues = {
-      id: createResponse.data?.createSpace.id,
+      id: createResponse.data?.createSpace.id as string,
       data: {
         name: "New space name",
       },
@@ -124,7 +126,7 @@ describe("When resolving spaces", () => {
 
   test("updateSpace returns an error if no space exists with given ID", async () => {
     await callQuery({
-      source: createSpace,
+      source: createSpace as string,
       variableValues: exampleSpaces[0],
     });
 
@@ -150,12 +152,13 @@ describe("When resolving spaces", () => {
   });
 
   describe("addUserToSpace", () => {
-    let space: any;
+    let space: Space;
     beforeEach(async () => {
-      space = await callQuery({
-        source: createSpace,
+      const newSpace = await callQuery({
+        source: createSpace as string,
         variableValues: exampleSpaces[0],
       });
+      space = newSpace.data?.createSpace as Space;
     });
 
     test("returns an error, if the space id is incorrect", async () => {
@@ -181,7 +184,7 @@ describe("When resolving spaces", () => {
 
     test("returns an error, if the user id is incorrect", async () => {
       const updateValues = {
-        spaceId: space.data?.createSpace.id,
+        spaceId: space.id,
         userId: "61ed32462126f9bc47f96251",
       };
 
@@ -202,7 +205,7 @@ describe("When resolving spaces", () => {
 
     test("returns the correct space with new details", async () => {
       const updateValues = {
-        spaceId: space.data?.createSpace.id,
+        spaceId: space.id,
         userId: userID,
       };
 
@@ -214,7 +217,7 @@ describe("When resolving spaces", () => {
       expect(updateResponse).toMatchObject({
         data: {
           addUserToSpace: {
-            ...space.data?.createSpace,
+            ...space,
             users: [
               {
                 first_name: exampleUser.first_name,
@@ -228,7 +231,7 @@ describe("When resolving spaces", () => {
 
     test("returns the space unedited if user and space are already linked", async () => {
       const updateValues = {
-        spaceId: space.data?.createSpace.id,
+        spaceId: space.id,
         userId: userID,
       };
 
@@ -247,12 +250,13 @@ describe("When resolving spaces", () => {
   });
 
   describe("deleteUserFromSpace", () => {
-    let space: any;
+    let space: Space;
     beforeEach(async () => {
-      space = await callQuery({
-        source: createSpace,
+      const newSpace = await callQuery({
+        source: createSpace as string,
         variableValues: exampleSpaces[0],
       });
+      space = newSpace.data?.createSpace as Space;
     });
 
     test("returns an error, if the space id is incorrect", async () => {
@@ -278,7 +282,7 @@ describe("When resolving spaces", () => {
 
     test("returns an error, if the user id is incorrect", async () => {
       const updateValues = {
-        spaceId: space.data?.createSpace.id,
+        spaceId: space.id,
         userId: "61ed32462126f9bc47f96251",
       };
 
@@ -299,7 +303,7 @@ describe("When resolving spaces", () => {
 
     test("returns the correct space with new details", async () => {
       const updateValues = {
-        spaceId: space.data?.createSpace.id,
+        spaceId: space.id,
         userId: userID,
       };
 
@@ -314,13 +318,13 @@ describe("When resolving spaces", () => {
       });
 
       expect(deleteResponse).toMatchObject({
-        data: { deleteUserFromSpace: { ...space.data?.createSpace } },
+        data: { deleteUserFromSpace: { ...space } },
       });
     });
 
     test("returns the correct space without edits, if the user and space were not linked to begin with", async () => {
       const updateValues = {
-        spaceId: space.data?.createSpace.id,
+        spaceId: space.id,
         userId: userID,
       };
 
@@ -330,20 +334,20 @@ describe("When resolving spaces", () => {
       });
 
       expect(deleteResponse).toMatchObject({
-        data: { deleteUserFromSpace: { ...space.data?.createSpace } },
+        data: { deleteUserFromSpace: { ...space } },
       });
     });
   });
 
   test("deleteSpace returns true when called with a space ID and", async () => {
-    let spaces: any[] = [];
+    const spaces: Space[] = [];
     // Create three spaces
     const spaceResponses = exampleSpaces.map((space) =>
       callQuery({
-        source: createSpace,
+        source: createSpace as string,
         variableValues: space,
       })
-        .then((response) => spaces.push(response.data?.createSpace))
+        .then((response) => spaces.push(response.data?.createSpace as Space))
         .catch((e) => console.log(e))
     );
     await Promise.all(spaceResponses);

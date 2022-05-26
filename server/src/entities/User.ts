@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import { prop as Property, Ref } from "@typegoose/typegoose";
+import { mongoose, prop as Property, Ref } from "@typegoose/typegoose";
 import { Space } from "./Space";
 
 @ObjectType()
@@ -20,7 +20,7 @@ export class PublicUser {
 @ObjectType()
 export class User extends PublicUser {
   @Field(() => ID)
-  id: string;
+  id: mongoose.Types.ObjectId;
 
   @Field()
   @Property({ required: true })

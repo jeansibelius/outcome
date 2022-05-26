@@ -6,6 +6,7 @@ import { getHashedPassword } from "../utils";
 import { ContextType } from "../types";
 import { mongoose } from "@typegoose/typegoose";
 import { Space } from "src/entities/Space";
+import { Types } from "mongoose";
 
 const populatePaths = "spaces";
 
@@ -44,7 +45,11 @@ export class UserResolver {
         name: "My Budget",
         users: [user.id],
       });
-      user.spaces = user.spaces.concat(newSpace.id);
+      const typedNewSpaceId: Types.ObjectId | undefined =
+        typeof newSpace.id === "string"
+          ? new Types.ObjectId(newSpace.id)
+          : undefined;
+      user.spaces = user.spaces.concat(typedNewSpaceId);
     } else {
       user.spaces = user.spaces.concat(new mongoose.Types.ObjectId(ctx.space));
     }
@@ -53,8 +58,15 @@ export class UserResolver {
   }
 
   @Mutation(() => User)
-  async updateUser(@Arg("id") id: string, @Arg("data") userUpdate: UserUpdateInput): Promise<User> {
-    const user = await UserModel.findByIdAndUpdate(id, { ...userUpdate }, { new: true });
+  async updateUser(
+    @Arg("id") id: string,
+    @Arg("data") userUpdate: UserUpdateInput
+  ): Promise<User> {
+    const user = await UserModel.findByIdAndUpdate(
+      id,
+      { ...userUpdate },
+      { new: true }
+    );
     if (!user) {
       throw new Error("Invalid user id");
     }

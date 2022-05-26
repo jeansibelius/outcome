@@ -12,8 +12,8 @@ describe("When decoding a token", () => {
     dbConnection = await connectToDB();
   });
 
-  afterAll(() => {
-    dbConnection?.close();
+  afterAll(async () => {
+    await dbConnection?.close();
     console.log("closed db connection");
   });
 
@@ -23,7 +23,9 @@ describe("When decoding a token", () => {
 
     const token = "anyrandomstring";
     process.env.JWT_SECRET = undefined;
-    expect(() => decodeToken(token)).toThrowError("JWT secret missing from env.");
+    expect(() => decodeToken(token)).toThrowError(
+      "JWT secret missing from env."
+    );
     process.env = OLD_ENV;
   });
 
@@ -41,14 +43,14 @@ describe("When decoding a token", () => {
     await resetDB();
     const user = await createDefaultUser();
     const response = await callQuery({
-      source: login,
+      source: login as string,
       variableValues: {
         email: exampleUser.email,
         password: exampleUser.password,
       },
     });
     const issuedAt = Math.floor(Date.now() / 1000); // JWT timestamp precision
-    const token = response.data?.login.token;
+    const token = response.data?.login.token as string;
     const decodedTokenUser = decodeToken(token);
     expect(decodedTokenUser.exp).toEqual(issuedAt + 60 * 60 * 24); // Expriy in 24h from issuance
     expect(decodedTokenUser.iat).toEqual(issuedAt);

@@ -20,12 +20,17 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   await resetDB();
-  const { id } = await createDefaultSpace();
-  space = id;
+  const newSpace = await createDefaultSpace();
+  space = newSpace.id as string;
 });
 
-afterAll(() => {
-  dbConnection?.close();
+const CreateCategory = createCategory as string;
+const DeleteCategory = deleteCategory as string;
+const ReturnAllCategories = returnAllCategories as string;
+const UpdateCategory = updateCategory as string;
+
+afterAll(async () => {
+  await dbConnection?.close();
   console.log("closed db connection");
 });
 
@@ -41,7 +46,7 @@ describe("When resolving categories", () => {
       },
     };
     const response = await callQuery({
-      source: createCategory,
+      source: CreateCategory,
       variableValues,
       contextValue: {
         space,
@@ -53,36 +58,39 @@ describe("When resolving categories", () => {
   });
 
   test("returnAllCategories returns all existing categories", async () => {
-    let categories: any[] = [];
+    const categories: Category[] = [];
     const categoryResponses = exampleCategories.map((category) =>
       callQuery({
-        source: createCategory,
+        source: CreateCategory,
         variableValues: category,
         contextValue: {
           space,
         },
       })
-        .then((response) => categories.push(response.data?.createCategory))
+        .then((response) =>
+          categories.push(response.data?.createCategory as Category)
+        )
         .catch((e) => console.log(e))
     );
     await Promise.all(categoryResponses);
 
     const response = await callQuery({
-      source: returnAllCategories,
+      source: ReturnAllCategories,
       contextValue: {
         space,
       },
     });
     categories.sort((cat1, cat2) => cat1.name.localeCompare(cat2.name));
-    const allCategories = response.data?.returnAllCategories.sort(
-      (cat1: Category, cat2: Category) => cat1.name.localeCompare(cat2.name)
+    const allCategories = response.data?.returnAllCategories as Category[];
+    allCategories.sort((cat1: Category, cat2: Category) =>
+      cat1.name.localeCompare(cat2.name)
     );
     expect(allCategories).toEqual(categories);
   });
 
   test("updateCategory returns the correct category with new details", async () => {
     const createResponse = await callQuery({
-      source: createCategory,
+      source: CreateCategory,
       variableValues: exampleCategories[0],
       contextValue: {
         space,
@@ -90,7 +98,7 @@ describe("When resolving categories", () => {
     });
 
     const updateValues = {
-      id: createResponse.data?.createCategory.id,
+      id: createResponse.data?.createCategory.id as string,
       data: {
         type: "Expense",
         name: "Expense test",
@@ -100,7 +108,7 @@ describe("When resolving categories", () => {
       },
     };
     const updateResponse = await callQuery({
-      source: updateCategory,
+      source: UpdateCategory,
       variableValues: updateValues,
       contextValue: {
         space,
@@ -114,7 +122,7 @@ describe("When resolving categories", () => {
 
   test("updateCategory returns an error if no category exists with given ID", async () => {
     await callQuery({
-      source: createCategory,
+      source: CreateCategory,
       variableValues: exampleCategories[0],
       contextValue: {
         space,
@@ -132,7 +140,7 @@ describe("When resolving categories", () => {
       },
     };
     const updateResponse = await callQuery({
-      source: updateCategory,
+      source: UpdateCategory,
       variableValues: updateValues,
       contextValue: {
         space,
@@ -151,7 +159,7 @@ describe("When resolving categories", () => {
 
   test("deleteCategory returns true when called with a category ID and", async () => {
     const createResponse = await callQuery({
-      source: createCategory,
+      source: CreateCategory,
       variableValues: exampleCategories[0],
       contextValue: {
         space,
@@ -159,7 +167,7 @@ describe("When resolving categories", () => {
     });
 
     const deleteResponse = await callQuery({
-      source: deleteCategory,
+      source: DeleteCategory,
       variableValues: {
         id: createResponse.data?.createCategory.id,
       },

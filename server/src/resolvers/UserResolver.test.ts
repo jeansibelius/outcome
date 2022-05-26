@@ -4,6 +4,7 @@ import { callQuery, createDefaultSpace, resetDB } from "../test-utils";
 import { mongoose } from "@typegoose/typegoose";
 import { exampleUsers } from "../test-utils/testHelpers";
 import { Space } from "src/entities/Space";
+import { User } from "src/entities/User";
 
 let space: Space;
 let dbConnection: mongoose.Connection | void;
@@ -17,8 +18,8 @@ beforeEach(async () => {
   space = await createDefaultSpace();
 });
 
-afterAll(() => {
-  dbConnection?.close();
+afterAll(async () => {
+  await dbConnection?.close();
   console.log("closed db connection");
 });
 
@@ -147,6 +148,7 @@ describe("When resolving users", () => {
     });
   });
 
+  // eslint-disable-next-line jest/no-commented-out-tests
   /*
   test("returnAllUsers returns all existing users", async () => {
     let users: any[] = [];
@@ -179,7 +181,7 @@ describe("When resolving users", () => {
     });
 
     const updateValues = {
-      id: createResponse.data?.createUser.id,
+      id: createResponse.data?.createUser.id as string,
       data: {
         first_name: "Newname",
       },
@@ -224,14 +226,14 @@ describe("When resolving users", () => {
   });
 
   test("deleteUser returns true when called with a user ID and", async () => {
-    let users: any[] = [];
+    const users: User[] = [];
     // Create three users
     const userResponses = exampleUsers.map((user) =>
       callQuery({
         source: createUser,
         variableValues: user,
       })
-        .then((response) => users.push(response.data?.createUser))
+        .then((response) => users.push(response.data?.createUser as User))
         .catch((e) => console.log(e))
     );
     await Promise.all(userResponses);

@@ -32,8 +32,9 @@ export class LoginResolver {
     };
 
     const SECRET = process.env.JWT_SECRET;
+    if (!SECRET) throw new Error("Secret missing");
 
-    const token = jwt.sign(userForToken, SECRET!, { expiresIn: "24h" });
+    const token = jwt.sign(userForToken, SECRET, { expiresIn: "24h" });
 
     return {
       token,
