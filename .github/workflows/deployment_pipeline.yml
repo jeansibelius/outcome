@@ -38,8 +38,8 @@ jobs:
           MONGODB_URI: ${{ secrets.MONGODB_URI_TEST }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          MONGODB_URI_TEST=$MONGODB_URI
-          JWT_SECRET=$JWT_SECRET
+          export MONGODB_URI_TEST=$MONGODB_URI
+          export JWT_SECRET=$JWT_SECRET
           npm test
       - name: Deploy to Heroku
         if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
