@@ -2,8 +2,7 @@ name: Testing stuff
 
 on:
   push:
-    branches:
-      - master
+    branches: [mvp]
 
 env:
   CONTAINS_SKIP: ${{ contains(join(github.event.commits.*.message), '#skip') }}
