@@ -60,17 +60,16 @@ jobs:
   tag_release:
     needs: [deployment_pipeline]
     runs-on: ubuntu-20.04
-    if: ${{ ( github.event_name == 'push' && contains(join(github.event.commits.*.message), '#skip') == 'false' ) }}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
       - name: Bump version and push tag
+        if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
         uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WITH_V: true
-          DEFAULT_BUMP: patch
+          DEFAULT_BUMP: minor
 
   notify_status:
     # Run always after deployment_pipeline, even if it fails
