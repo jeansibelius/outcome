@@ -41,7 +41,7 @@ jobs:
           export MONGODB_URI_TEST=$MONGODB_URI
           export JWT_SECRET=$JWT_SECRET
           npm test
-      - name: Deploy to Heroku
+      - name: Deploy to Heroku Prod
         if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
@@ -49,6 +49,15 @@ jobs:
           heroku_app_name: ${{secrets.HEROKU_APP_NAME}} 
           heroku_email: ${{secrets.HEROKU_EMAIL}}
           healthcheck: "https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com"
+          rollbackonhealthcheckfailed: true
+      - name: Deploy to Heroku Demo
+        if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_DEMO_APP_NAME}} 
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          healthcheck: "https://${{secrets.HEROKU_DEMO_APP_NAME}}.herokuapp.com"
           rollbackonhealthcheckfailed: true
       - id: deploy_status
         name: Set deploy status
@@ -89,7 +98,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
-          text: "Deployed a new version of Outcome https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com"
+          text: "Deployed a new version of Outcome https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com and https://${{secrets.HEROKU_DEMO_APP_NAME}}.herokuapp.com"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build failure
         uses: rjstone/discord-webhook-notify@v1
