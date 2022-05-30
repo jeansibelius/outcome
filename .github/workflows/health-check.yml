@@ -16,7 +16,7 @@ jobs:
       uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
-        url: "https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com"
+        url: "https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com"|"https://${{secrets.HEROKU_DEMO_APP_NAME}}.herokuapp.com"
         # Follow redirects, or just report success on 3xx status codes
         follow-redirect: false # Optional, defaults to "false"
         # Fail this action after this many failed attempts
@@ -28,12 +28,12 @@ jobs:
       uses: rjstone/discord-webhook-notify@v1
       with:
         severity: info
-        description: "Health check of https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com succeeded"
+        description: "Health check of https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com and https://${{secrets.HEROKU_DEMO_APP_NAME}}.herokuapp.com succeeded"
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
     - name: Health Check Fail
       if: failure()
       uses: rjstone/discord-webhook-notify@v1
       with:
         severity: error 
-        description: "Health check of https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com failed"
+        description: "Health check of https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com and/or https://${{secrets.HEROKU_DEMO_APP_NAME}}.herokuapp.com failed"
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
