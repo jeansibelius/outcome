@@ -12,7 +12,7 @@ import {
   IS_LOGGED_IN,
   GET_ME,
   GET_ACTIVE_SPACE,
-  GET_CURRENT_VIEW_MONTH,
+  GET_CURRENT_VIEW_RANGE,
 } from "../queries";
 import { isLoggedInVar, currentUserVar } from "../cache";
 
@@ -33,7 +33,7 @@ export const GetActiveSpace = (): Space => {
 };
 
 export const GetCurrentViewMonth = (): Date => {
-  const { data } = useQuery(GET_CURRENT_VIEW_MONTH);
+  const { data } = useQuery(GET_CURRENT_VIEW_RANGE);
   return data.currentViewMonth;
 };
 
