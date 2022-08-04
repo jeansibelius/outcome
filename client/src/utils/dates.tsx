@@ -11,6 +11,6 @@ export const getYearMonthDay = (date = new Date()): string => {
 export const getCountOfDaysInMonth = (year: number, month: number): number =>
   new Date(year, month, 0).getDate();
 
-export const getYearMonth = (date: Date) => {
-  return date;
+export const getYearMonth = ({ date = new Date(), addMonth = 0 }): Date => {
+  return new Date(date.getFullYear(), date.getMonth() + addMonth);
 };

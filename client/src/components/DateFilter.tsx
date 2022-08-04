@@ -46,7 +46,7 @@ const DateFilter = () => {
   const endInit = new Date(today.getFullYear(), today.getMonth() + 1);
   const initDate = { start: startInit, end: endInit };
   const [dateFilter, setDateFilter] = useState<ViewDateRange>(initDate);
-  const [popupIsOpen, setPopupIsOpen] = useState<boolean>(true);
+  const [popupIsOpen, setPopupIsOpen] = useState<boolean>(false);
 
   const prevMonth = () => {
     const newStart = new Date(

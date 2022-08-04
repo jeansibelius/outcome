@@ -24,6 +24,7 @@ import {
   entriesToIncomeAndExpenseSumBarData,
   entriesToIncomeAndExpenseSumBarDataKeys,
 } from "../utils/data";
+import { getYearMonth } from "../utils/dates";
 import { NoEntries } from "./Entries";
 
 const Dashboard = () => {
@@ -41,9 +42,8 @@ const Dashboard = () => {
     useState<CustomPieChartData[]>();
 
   const currentViewDateRange = useQuery(GET_CURRENT_VIEW_RANGE);
-  const today = new Date();
-  const startInit = new Date(today.getFullYear(), today.getMonth());
-  const endInit = new Date(today.getFullYear(), today.getMonth() + 1);
+  const startInit = getYearMonth({});
+  const endInit = getYearMonth({ addMonth: 1 });
   const initDate = { start: startInit, end: endInit };
   const [dateFilter, setDateFilter] = useState<ViewDateRange>(initDate);
 
