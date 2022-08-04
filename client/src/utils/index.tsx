@@ -12,7 +12,7 @@ import {
   IS_LOGGED_IN,
   GET_ME,
   GET_ACTIVE_SPACE,
-  GET_CURRENT_VIEW_MONTH,
+  GET_CURRENT_VIEW_RANGE,
 } from "../queries";
 import { isLoggedInVar, currentUserVar } from "../cache";
 
@@ -33,7 +33,7 @@ export const GetActiveSpace = (): Space => {
 };
 
 export const GetCurrentViewMonth = (): Date => {
-  const { data } = useQuery(GET_CURRENT_VIEW_MONTH);
+  const { data } = useQuery(GET_CURRENT_VIEW_RANGE);
   return data.currentViewMonth;
 };
 
@@ -139,16 +139,3 @@ export const toNewCategory = (object: CategoryInput): NewCategory => {
   };
   return newCategory;
 };
-
-export const getYearMonthDay = (date = new Date()): string => {
-  if (!(date instanceof Date)) {
-    date = new Date(date);
-  }
-  const month =
-    date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-  const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-  return `${date.getFullYear()}-${month}-${day}`;
-};
-
-export const getCountOfDaysInMonth = (year: number, month: number): number =>
-  new Date(year, month, 0).getDate();

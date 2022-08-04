@@ -1,6 +1,6 @@
 import { Button, Card, Feed, Header, Icon } from "semantic-ui-react";
 import { Entry as EntryType } from "../types";
-import { getYearMonthDay } from "../utils";
+import { getYearMonthDay } from "../utils/dates";
 
 interface SingleEntryProps {
   entry: EntryType;

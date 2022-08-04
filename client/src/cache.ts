@@ -1,5 +1,5 @@
 import { InMemoryCache, makeVar, ReactiveVar } from "@apollo/client";
-import { localStorageUser, Space } from "./types";
+import { localStorageUser, Space, ViewDateRange } from "./types";
 
 // Add logged in status to cache and make it callable (read())
 const cache: InMemoryCache = new InMemoryCache({
@@ -23,7 +23,7 @@ const cache: InMemoryCache = new InMemoryCache({
         },
         currentViewMonth: {
           read() {
-            return currentViewMonthVar();
+            return currentViewDateRangeVar();
           },
         },
       },
@@ -41,8 +41,6 @@ export const isLoggedInVar: ReactiveVar<boolean> = makeVar<boolean>(
 
 const localUser = localStorage.getItem("outcome-user");
 const initLocalUser = localUser ? JSON.parse(localUser) : null;
-const today = new Date();
-const currentDate = new Date(today.getFullYear(), today.getMonth());
 
 export const currentUserVar: ReactiveVar<localStorageUser> =
   makeVar<localStorageUser>(initLocalUser);
@@ -51,5 +49,9 @@ export const activeSpaceVar: ReactiveVar<Space> = makeVar<Space>(
   initLocalUser ? initLocalUser.spaces[0] : null
 );
 
-export const currentViewMonthVar: ReactiveVar<Date> =
-  makeVar<Date>(currentDate);
+const today = new Date();
+const startDate = new Date(today.getFullYear(), today.getMonth());
+const endDate = new Date(today.getFullYear(), today.getMonth() + 1);
+
+export const currentViewDateRangeVar: ReactiveVar<ViewDateRange> =
+  makeVar<ViewDateRange>({ start: startDate, end: endDate });

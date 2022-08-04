@@ -8,7 +8,8 @@ import {
   UPDATE_ENTRY,
   DELETE_ENTRY,
 } from "../queries";
-import { getYearMonthDay, toNewEntry } from "../utils";
+import { toNewEntry } from "../utils";
+import { getYearMonthDay } from "../utils/dates";
 import NewEntryForm from "./NewEntryForm";
 import UpdateEntryForm from "./UpdateEntryForm";
 

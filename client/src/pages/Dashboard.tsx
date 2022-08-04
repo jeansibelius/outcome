@@ -10,15 +10,21 @@ import SpendByCategoryTable from "../components/SpendByCategoryTable";
 import {
   ALL_CATEGORIES,
   ALL_ENTRIES,
-  GET_CURRENT_VIEW_MONTH,
+  GET_CURRENT_VIEW_RANGE,
 } from "../queries";
-import { CustomPieChartData, Entry, IncomeExpenseType } from "../types";
+import {
+  CustomPieChartData,
+  Entry,
+  IncomeExpenseType,
+  ViewDateRange,
+} from "../types";
 import {
   categoriesToIdAndValue,
   entriesByCategoryToIdAndValue,
   entriesToIncomeAndExpenseSumBarData,
   entriesToIncomeAndExpenseSumBarDataKeys,
 } from "../utils/data";
+import { getYearMonth } from "../utils/dates";
 import { NoEntries } from "./Entries";
 
 const Dashboard = () => {
@@ -35,26 +41,22 @@ const Dashboard = () => {
   const [incomesByCategory, setIncomesByCategory] =
     useState<CustomPieChartData[]>();
 
-  const today = new Date();
-  const currentViewMonth = useQuery(GET_CURRENT_VIEW_MONTH);
-  const [dateFilter, setDateFilter] = useState<Date>(
-    new Date(today.getFullYear(), today.getMonth())
-  );
+  const currentViewDateRange = useQuery(GET_CURRENT_VIEW_RANGE);
+  const startInit = getYearMonth({});
+  const endInit = getYearMonth({ addMonth: 1 });
+  const initDate = { start: startInit, end: endInit };
+  const [dateFilter, setDateFilter] = useState<ViewDateRange>(initDate);
 
   useEffect(() => {
-    setDateFilter(currentViewMonth.data.currentViewMonth);
-  }, [currentViewMonth]);
+    setDateFilter(currentViewDateRange.data.currentViewMonth);
+  }, [currentViewDateRange]);
 
   useEffect(() => {
     if (getEntries.data) {
       const entries = getEntries.data.returnAllEntries.filter(
         (entry: Entry) => {
           const entryDate = new Date(entry.date);
-          const endOfMonth = new Date(
-            dateFilter.getFullYear(),
-            dateFilter.getMonth() + 1
-          );
-          return entryDate >= dateFilter && entryDate < endOfMonth;
+          return entryDate >= dateFilter.start && entryDate < dateFilter.end;
         }
       );
 

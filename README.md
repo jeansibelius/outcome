@@ -72,15 +72,16 @@ In the root...
 
 ### Development
 
-In `./client`...
+To run with Docker: `docker compose -f docker-compose.dev.yml --env-file ./server/.env up`
 
-- `npm start` to run the project at `localhost:3000`
-- and other basic installation/build scripts, as required
+Or directly:
 
-In `./server`...
-
-- `npm run dev` to run the backend in development mode with hot reloading at `localhost:4000/graphql`
-- and other basic installation/build scripts, as required
+- In `./client`...
+  - `npm start` to run the project at `localhost:3000`
+  - and other basic installation/build scripts, as required
+- In `./server`...
+  - `npm run dev` to run the backend in development mode with hot reloading at `localhost:4000/graphql`
+  - and other basic installation/build scripts, as required
 
 ### Testing
 

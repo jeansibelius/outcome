@@ -19,7 +19,7 @@ export const GET_ACTIVE_SPACE = gql`
   }
 `;
 
-export const GET_CURRENT_VIEW_MONTH = gql`
+export const GET_CURRENT_VIEW_RANGE = gql`
   query CurrentViewMonth {
     currentViewMonth @client
   }

@@ -1,6 +1,6 @@
 import { withFormik } from "formik";
 import { IncomeExpenseType } from "../types";
-import { getYearMonthDay } from "../utils";
+import { getYearMonthDay } from "../utils/dates";
 import EntryForm, { EntryFormValues, EntryValidationSchema } from "./EntryForm";
 
 interface NewEntryFormProps {

@@ -2,7 +2,7 @@ import _ from "lodash";
 import { useEffect, useReducer } from "react";
 import { Header, Icon, Table } from "semantic-ui-react";
 import { CustomPieChartData } from "../types";
-import { getCountOfDaysInMonth } from "../utils";
+import { getCountOfDaysInMonth } from "../utils/dates";
 
 const getWeeklyBudget = (budget: number): number => {
   const today = new Date();

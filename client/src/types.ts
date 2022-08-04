@@ -61,6 +61,11 @@ export interface EntryInput {
 
 export type localStorageUser = Omit<User, "id" | "email"> | null;
 
+export type ViewDateRange = {
+  start: Date;
+  end: Date;
+};
+
 export interface CustomPieChartData {
   id: string;
   value: number;
