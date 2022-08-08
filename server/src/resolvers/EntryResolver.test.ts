@@ -69,7 +69,7 @@ describe("When resolving entries", () => {
     expect(response.errors).toBeDefined();
   });
 
-  test("returnAllEntries returns all existing categories", async () => {
+  test("returnAllEntries returns all existing entries", async () => {
     const entries: Entry[] = [];
     const entryResponses = exampleEntries.map((entry) =>
       callQuery({

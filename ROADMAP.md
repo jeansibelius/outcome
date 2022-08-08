@@ -41,8 +41,8 @@
 - Bug: entry modal fails, if there are no categories ✅
 - Remove zeroing of date in entries to allow proper sorting (same day entries) ✅
 - Containerize the project ✅
-- Allow day selection in views (not only monthly)
-- Add category filtering to entries' view
+- Allow day selection in views (not only monthly) ✅
+- Add category filtering to entries' view ✅
 - Add "more info" option to expenses table view to make the view simpler to digest
 - Test coverage for client is sufficient (considering unfinalised UI)
 
