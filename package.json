@@ -17,6 +17,7 @@
     "build": "npm run client-build && npm run server-build",
     "start:prod": "NODE_ENV=production node server/build/index.js",
     "start": "node server/build/index.js",
+    "docker": "docker compose -f docker-compose.dev.yml --env-file ./server/.env up",
     "deploy:demo": "git push heroku-demo mvp:master",
     "deploy": "git push heroku-prod mvp:master"
   },
