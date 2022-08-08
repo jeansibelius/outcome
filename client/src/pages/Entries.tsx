@@ -45,16 +45,27 @@ const Entries = () => {
   }, [currentViewDateRange]);
 
   React.useEffect(() => {
-    if (getEntries.data) {
+    const entryIsWithinDateRange = (entry: EntryType): boolean => {
+      const entryDate = new Date(entry.date);
+      return entryDate >= dateFilter.start && entryDate < dateFilter.end;
+    };
+
+    if (getEntries.data && filteredCategories.length > 0) {
+      // If the category filtering is active, also check against filteredCategories
       setEntries(
         getEntries.data.returnAllEntries.filter((entry: EntryType) => {
-          const entryDate = new Date(entry.date);
           const categoryId = entry.category ? entry.category.id : "";
           return (
-            entryDate >= dateFilter.start &&
-            entryDate < dateFilter.end &&
-            filteredCategories.indexOf(categoryId) !== -1
+            entryIsWithinDateRange(entry) &&
+            filteredCategories.indexOf(categoryId) > -1
           );
+        })
+      );
+    } else if (getEntries.data) {
+      // else check only against dateFilter
+      setEntries(
+        getEntries.data.returnAllEntries.filter((entry: EntryType) => {
+          return entryIsWithinDateRange(entry);
         })
       );
     }
