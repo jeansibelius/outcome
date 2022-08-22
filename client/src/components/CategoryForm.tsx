@@ -3,7 +3,8 @@ import * as Yup from "yup";
 import { FormikProps, Field } from "formik";
 import { Form } from "semantic-ui-react";
 import { IncomeExpenseType } from "../types";
-import { RadioGroup, InputField, IconSelect } from "./FormFields";
+import { RadioGroup, InputField } from "./FormFields";
+import IconSelect from "./IconSelect";
 
 // Shape of form values
 export interface CategoryFormValues {
@@ -28,10 +29,24 @@ const CategoryForm = (props: FormikProps<CategoryFormValues>) => {
 
   return (
     <Form className="w-full form ui" onSubmit={handleSubmit}>
-      <RadioGroup name="type" label="Type" elements={Object.values(IncomeExpenseType)} />
+      <RadioGroup
+        name="type"
+        label="Type"
+        elements={Object.values(IncomeExpenseType)}
+      />
       <Field name="name" label="Name" type="text" component={InputField} />
-      <Field name="monthlyBudget" label="Monthly Budget" type="number" component={InputField} />
-      <Field name="description" label="Description" type="text" component={InputField} />
+      <Field
+        name="monthlyBudget"
+        label="Monthly Budget"
+        type="number"
+        component={InputField}
+      />
+      <Field
+        name="description"
+        label="Description"
+        type="text"
+        component={InputField}
+      />
       <IconSelect />
       <button
         type="submit"

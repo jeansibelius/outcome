@@ -39,7 +39,7 @@ describe("When connecting to the DB", () => {
     await connection?.close();
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error connecting to MongoDB: Invalid connection string "invalidUriToThrowError"'
+      'Error connecting to MongoDB: Invalid scheme, expected connection string to start with "mongodb://" or "mongodb+srv://"'
     );
     process.env = OLD_ENV;
   });
