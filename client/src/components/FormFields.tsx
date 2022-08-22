@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Dropdown, DropdownProps, Form } from "semantic-ui-react";
 import { ALL_CATEGORIES } from "../queries";
 import { Category } from "../types";
-import { ICONS_AND_ALIASES } from "../utils/icons";
 
 interface InputFieldProps extends FieldProps {
   label: string;
@@ -145,54 +144,6 @@ export const CategorySelect = ({ entryType }: CategorySelectProps) => {
         value={meta.value ? meta.value : undefined}
         onChange={onChange}
         loading={getCategories.loading ? true : false}
-      />
-      <ErrorMessage name={fieldName} />
-    </Form.Field>
-  );
-};
-
-export const IconSelect = () => {
-  const fieldName = "icon";
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_field, _meta, helpers] = useField(fieldName);
-  const [stateOptions, setStateOptions] = useState<
-    StateOptions[] | undefined
-  >();
-
-  const onChange = (
-    _event: React.SyntheticEvent<HTMLElement, Event>,
-    data: DropdownProps
-  ) => {
-    helpers.setTouched(true);
-    helpers.setValue(data.value);
-  };
-
-  useEffect(() => {
-    setStateOptions(
-      ICONS_AND_ALIASES.map((icon) => ({
-        key: icon,
-        text: icon,
-        value: icon,
-        icon: icon,
-      }))
-    );
-  }, []);
-
-  if (!stateOptions) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <Form.Field>
-      <label>Icon</label>
-      <Dropdown
-        fluid
-        search
-        selection
-        clearable
-        options={stateOptions}
-        onChange={onChange}
-        loading={!stateOptions ? true : false}
       />
       <ErrorMessage name={fieldName} />
     </Form.Field>
