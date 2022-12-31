@@ -9,17 +9,6 @@ _License: All rights reserved © Rafael Linnankoski (further details [here](http
 ![Functions](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-functions.svg)
 ![Lines](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-lines.svg)
 
-## Demo
-
-#### [Demo hosted on Heroku](https://outcome-demo.herokuapp.com/)
-
-_(Might take a moment to start while the heroku instance wakes up.)_
-
-- The application has been developed mobile-first, which is why **it's currently still best used on mobile** (or the responsive design mode of a browser).
-- Demo credentials
-  - username: `hari.seldon@foundation.org`
-  - password: `test`
-
 ## Project structure
 
 The project is structured as a monorepo with utility scripts in the root package.json (e.g. build).
