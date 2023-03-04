@@ -13,7 +13,7 @@ env:
 
 jobs:
   deployment_pipeline:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     outputs:
       build_succeeded: ${{ steps.build_status.outputs.build_succeeded }}
       deploy_succeeded: ${{ steps.deploy_status.outputs.deploy_succeeded }}
@@ -41,24 +41,12 @@ jobs:
           export MONGODB_URI_TEST=$MONGODB_URI
           export JWT_SECRET=$JWT_SECRET
           npm test
-      - name: Deploy to Heroku Prod
+      - name: Deploy to fly.dev 
+        uses: superfly/flyctl-actions/setup-flyctl@master
         if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}} 
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
-          healthcheck: "https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com"
-          rollbackonhealthcheckfailed: true
-      - name: Deploy to Heroku Demo
-        if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_DEMO_APP_NAME}} 
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
-          healthcheck: "https://${{secrets.HEROKU_DEMO_APP_NAME}}.herokuapp.com"
-          rollbackonhealthcheckfailed: true
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - id: deploy_status
         name: Set deploy status
         if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
