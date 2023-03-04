@@ -32,8 +32,7 @@ jobs:
       - id: build_status
         name: Set build status
         run: |
-          echo "::set-output name=build_succeeded::true"
-          echo ${{ steps.build_status.outputs.build_succeeded }}
+          echo "build_succeeded=true" >> $GITHUB_OUTPUT
       - name: test
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI_TEST }}
@@ -53,8 +52,7 @@ jobs:
         name: Set deploy status
         if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
         run: |
-          echo "::set-output name=deploy_succeeded::true"
-          echo ${{ steps.deploy_status.outputs.deploy_succeeded }}
+          echo "deploy_succeeded=true" >> $GITHUB_OUTPUT
 
   tag_release:
     needs: [build_deploy]
