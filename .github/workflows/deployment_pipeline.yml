@@ -10,9 +10,10 @@ on:
 
 env:
   CONTAINS_SKIP: ${{ contains(join(github.event.commits.*.message), '#skip') }}
+  DEPLOYMENT_URL: https://${{secrets.HEROKU_APP_NAME}}.fly.dev
 
 jobs:
-  deployment_pipeline:
+  build_deploy:
     runs-on: ubuntu-latest
     outputs:
       build_succeeded: ${{ steps.build_status.outputs.build_succeeded }}
@@ -41,10 +42,11 @@ jobs:
           export MONGODB_URI_TEST=$MONGODB_URI
           export JWT_SECRET=$JWT_SECRET
           npm test
-      - name: Deploy to fly.dev 
-        uses: superfly/flyctl-actions/setup-flyctl@master
+      - uses: superfly/flyctl-actions/setup-flyctl@master
         if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
-        run: flyctl deploy --remote-only
+      - run: flyctl deploy --remote-only
+        if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
+        name: Deploy to fly.dev 
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - id: deploy_status
@@ -55,14 +57,14 @@ jobs:
           echo ${{ steps.deploy_status.outputs.deploy_succeeded }}
 
   tag_release:
-    needs: [deployment_pipeline]
+    needs: [build_deploy]
     runs-on: ubuntu-20.04
+    if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: '0'
       - name: Bump version and push tag
-        if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
         uses: anothrNick/github-tag-action@1.36.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -71,7 +73,7 @@ jobs:
   notify_status:
     # Run always after deployment_pipeline, even if it fails
     if: ${{ always() }}
-    needs: [deployment_pipeline]
+    needs: [build_deploy]
     runs-on: ubuntu-20.04
     steps:
       - name: Build Success
@@ -86,7 +88,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
-          text: "Deployed a new version of Outcome https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com and https://${{secrets.HEROKU_DEMO_APP_NAME}}.herokuapp.com"
+          text: "Deployed a new version of Outcome $DEPLOYMENT_URL"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build failure
         uses: rjstone/discord-webhook-notify@v1
@@ -102,4 +104,3 @@ jobs:
           severity: error
           text: "Deploy failed"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-
