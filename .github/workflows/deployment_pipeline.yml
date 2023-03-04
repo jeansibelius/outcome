@@ -71,20 +71,20 @@ jobs:
           DEFAULT_BUMP: minor
 
   notify_status:
-    # Run always after deployment_pipeline, even if it fails
+    # Run always after build_deploy, even if it fails
     if: ${{ always() }}
     needs: [build_deploy]
     runs-on: ubuntu-20.04
     steps:
       - name: Build Success
-        if: ${{ needs.deployment_pipeline.outputs.build_succeeded == 'true' }}
+        if: ${{ needs.build_deploy.outputs.build_succeeded == 'true' }}
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
           text: "Build succeeded"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Deploy Success
-        if: ${{ needs.deployment_pipeline.outputs.deploy_succeeded == 'true' }}
+        if: ${{ needs.build_deploy.outputs.deploy_succeeded == 'true' }}
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
@@ -92,14 +92,14 @@ jobs:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build failure
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ needs.deployment_pipeline.outputs.build_succeeded == 'false' && needs.deployment_pipeline.result == 'failure' }}
+        if: ${{ needs.build_deploy.outputs.build_succeeded == 'false' && needs.build_deploy.result == 'failure' }}
         with:
           severity: error
           text: "Build failed"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Deploy failure
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ needs.deployment_pipeline.outputs.deploy_succeeded == 'false' && needs.deployment_pipeline.result == 'failure' }}
+        if: ${{ needs.build_deploy.outputs.deploy_succeeded == 'false' && needs.build_deploy.result == 'failure' }}
         with:
           severity: error
           text: "Deploy failed"
