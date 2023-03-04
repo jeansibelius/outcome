@@ -10,10 +10,11 @@ on:
 
 env:
   CONTAINS_SKIP: ${{ contains(join(github.event.commits.*.message), '#skip') }}
+  DEPLOYMENT_URL: https://${{secrets.HEROKU_APP_NAME}}.fly.dev
 
 jobs:
-  deployment_pipeline:
-    runs-on: ubuntu-20.04
+  build_deploy:
+    runs-on: ubuntu-latest
     outputs:
       build_succeeded: ${{ steps.build_status.outputs.build_succeeded }}
       deploy_succeeded: ${{ steps.deploy_status.outputs.deploy_succeeded }}
@@ -41,24 +42,13 @@ jobs:
           export MONGODB_URI_TEST=$MONGODB_URI
           export JWT_SECRET=$JWT_SECRET
           npm test
-      - name: Deploy to Heroku Prod
+      - uses: superfly/flyctl-actions/setup-flyctl@master
         if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP_NAME}} 
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
-          healthcheck: "https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com"
-          rollbackonhealthcheckfailed: true
-      - name: Deploy to Heroku Demo
+      - run: flyctl deploy --remote-only
         if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_DEMO_APP_NAME}} 
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
-          healthcheck: "https://${{secrets.HEROKU_DEMO_APP_NAME}}.herokuapp.com"
-          rollbackonhealthcheckfailed: true
+        name: Deploy to fly.dev 
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - id: deploy_status
         name: Set deploy status
         if: ${{ (github.event_name == 'push' && env.CONTAINS_SKIP == 'false') }}
@@ -67,7 +57,7 @@ jobs:
           echo ${{ steps.deploy_status.outputs.deploy_succeeded }}
 
   tag_release:
-    needs: [deployment_pipeline]
+    needs: [build_deploy]
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -81,37 +71,36 @@ jobs:
           DEFAULT_BUMP: minor
 
   notify_status:
-    # Run always after deployment_pipeline, even if it fails
+    # Run always after build_deploy, even if it fails
     if: ${{ always() }}
-    needs: [deployment_pipeline]
+    needs: [build_deploy]
     runs-on: ubuntu-20.04
     steps:
       - name: Build Success
-        if: ${{ needs.deployment_pipeline.outputs.build_succeeded == 'true' }}
+        if: ${{ needs.build_deploy.outputs.build_succeeded == 'true' }}
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
           text: "Build succeeded"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Deploy Success
-        if: ${{ needs.deployment_pipeline.outputs.deploy_succeeded == 'true' }}
+        if: ${{ needs.build_deploy.outputs.deploy_succeeded == 'true' }}
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
-          text: "Deployed a new version of Outcome https://${{secrets.HEROKU_APP_NAME}}.herokuapp.com and https://${{secrets.HEROKU_DEMO_APP_NAME}}.herokuapp.com"
+          text: "Deployed a new version of Outcome $DEPLOYMENT_URL"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build failure
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ needs.deployment_pipeline.outputs.build_succeeded == 'false' && needs.deployment_pipeline.result == 'failure' }}
+        if: ${{ needs.build_deploy.outputs.build_succeeded == 'false' && needs.build_deploy.result == 'failure' }}
         with:
           severity: error
           text: "Build failed"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Deploy failure
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ needs.deployment_pipeline.outputs.deploy_succeeded == 'false' && needs.deployment_pipeline.result == 'failure' }}
+        if: ${{ needs.build_deploy.outputs.deploy_succeeded == 'false' && needs.build_deploy.result == 'failure' }}
         with:
           severity: error
           text: "Deploy failed"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-
