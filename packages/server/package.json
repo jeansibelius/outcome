@@ -1,5 +1,5 @@
 {
-  "name": "packages/server",
+  "name": "server",
   "version": "0.0.1",
   "description": "Simple app to track household expenses and budget",
   "main": "index.js",

@@ -1,7 +1,7 @@
 services:
   server:
     extends:
-      file: ../docker-compose.dev.yml
+      file: ../../docker-compose.dev.yml
       service: server 
     ports:
       - 4000:4000

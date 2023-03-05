@@ -1,5 +1,5 @@
 {
-  "name": "packages/client",
+  "name": "client",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -56,6 +56,13 @@
     "extends": [
       "react-app",
       "react-app/jest"
+    ],
+    "rules": {},
+    "overrides": [
+      {
+        "files": ["**/*.ts?(x)"],
+        "rules": {}
+      }
     ]
   },
   "browserslist": {

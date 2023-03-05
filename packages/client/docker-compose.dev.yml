@@ -1,7 +1,7 @@
 services:
   client:
     extends:
-      file: ../docker-compose.dev.yml
+      file: ../../docker-compose.dev.yml
       service: client 
     environment:
       - NODE_ENV=development

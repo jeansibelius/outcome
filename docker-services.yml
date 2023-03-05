@@ -2,14 +2,14 @@ services:
   server:
     image: outcome-server-dev
     build:
-      context: ./server
+      context: ./packages/server
       dockerfile: dev.Dockerfile
-    env_file: ./server/.env
+    env_file: ./packages/server/.env
 
   client:
     image: outcome-client-dev 
     build:
-      context: ./client
+      context: ./packages/client
       dockerfile: dev.Dockerfile
     depends_on:
       - server

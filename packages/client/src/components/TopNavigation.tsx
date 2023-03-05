@@ -2,7 +2,7 @@ import { useApolloClient } from "@apollo/client";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Image, Menu, Dropdown, Icon } from "semantic-ui-react";
-import { logo } from "../logo";
+import * as logo from "../logo.svg";
 import { localStorageUser, Space } from "../types";
 import { GetActiveSpace, GetMe, logout } from "../utils";
 import { budgetPath } from "./BottomNavigation";
