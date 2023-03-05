@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES6",
+    "lib": ["dom", "es2018", "esnext.asynciterable"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"]
+}

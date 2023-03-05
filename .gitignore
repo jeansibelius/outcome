@@ -8,3 +8,5 @@
 *.lock
 *-lock.json
 tsconfig.tsbuildinfo
+
+_tmp*

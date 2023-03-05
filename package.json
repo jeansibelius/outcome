@@ -12,14 +12,13 @@
     "server-build": "npm run build --prefix server",
     "server-install": "npm ci --prefix server",
     "server-test": "npm test --prefix server",
-    "install": "npm run client-install && npm run server-install",
     "test": "npm run server-test",
-    "build": "npm run client-build && npm run server-build",
-    "start:prod": "NODE_ENV=production node server/build/index.js",
-    "start": "node server/build/index.js",
+    "tsc": "tsc -b",
+    "build": "npm run tsc",
+    "start": "NODE_ENV=production node build/server/src/index.js",
+    "dev": "npm run dev --prefix server",
     "docker": "docker compose -f docker-compose.dev.yml --env-file ./server/.env up",
-    "deploy:demo": "git push heroku-demo mvp:master",
-    "deploy": "git push heroku-prod mvp:master"
+    "deploy": "flyctl deploy"
   },
   "repository": {
     "type": "git",
@@ -33,6 +32,7 @@
   "homepage": "https://github.com/jeansibelius/outcome#readme",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "typescript": "^4.5.4",
     "eslint": "^8.16.0",
     "eslint-plugin-jest": "^26.2.2"
   }

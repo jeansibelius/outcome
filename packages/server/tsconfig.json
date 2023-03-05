@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "src/*":["./src/*"]
+    },
+    "experimentalDecorators": true
+  },
+  "references": [{
+    "path": "../client"
+  }]
+}
