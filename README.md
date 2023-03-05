@@ -61,7 +61,7 @@ In the root...
 
 ### Development
 
-To run with Docker: `docker compose -f docker-compose.dev.yml --env-file ./server/.env up`
+To run with Docker: `docker compose -f docker-compose.dev.yml --env-file ./server/.env up`. The application will be available at `localhost:8080`.
 
 Or directly:
 
