@@ -10,6 +10,7 @@ FROM base AS build
 RUN npm ci
 ENV CI true
 RUN npm run build
+RUN find ./
 
 FROM node:lts-slim@sha256:3a4243f6c0cac673c7829a9a875ed599063e001bac9a38e82f1c31561dc3ffae AS prod
 WORKDIR /usr/src/app
@@ -19,4 +20,6 @@ ARG MONGODB_URI_PROD
 ENV MONGODB_URI_PROD $MONGODB_URI_PROD 
 ENV JWT_SECRET $JWT_SECRET
 USER node
+EXPOSE 80
+RUN find ./
 CMD ["node", "server/build/index.js"]
