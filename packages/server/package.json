@@ -2,7 +2,7 @@
   "name": "server",
   "version": "0.0.1",
   "description": "Simple app to track household expenses and budget",
-  "main": "index.js",
+  "main": "dist/index.js",
   "type": "module",
   "scripts": {
     "test": "NODE_ENV=test jest --runInBand --silent",

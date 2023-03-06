@@ -4,11 +4,13 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "baseUrl": ".",
+    "outDir": "dist",
     "paths": {
       "src/*":["./src/*"]
     },
     "experimentalDecorators": true
   },
+  "include": ["src"],
   "references": [{
     "path": "../client"
   }]
