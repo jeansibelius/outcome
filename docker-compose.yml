@@ -14,7 +14,7 @@ services:
       service: client 
     image: outcome-client 
     build:
-      context: ./client
+      context: ./packages/client
       dockerfile: Dockerfile
 
   reverse_proxy:

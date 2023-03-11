@@ -19,4 +19,6 @@ ARG MONGODB_URI_PROD
 ENV MONGODB_URI_PROD $MONGODB_URI_PROD 
 ENV JWT_SECRET $JWT_SECRET
 USER node
-CMD ["node", "server/build/index.js"]
+EXPOSE 80
+CMD ["npm", "start"]
+#CMD ["node", "server/build/index.js"]
