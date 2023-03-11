@@ -5,9 +5,8 @@ on:
     # * is a special character in YAML CRON string has to be quoted
     # Daily at 03.06
     - cron:  '6 3 * * *'
+  workflow_dispatch:
 
-env:
-  DEPLOYMENT_URL: https://${{secrets.HEROKU_APP_NAME}}.fly.dev
 jobs:
   health_check:
     runs-on: ubuntu-20.04
@@ -18,7 +17,7 @@ jobs:
       uses: jtalk/url-health-check-action@v2
       with:
         # Check the following URLs one by one sequentially
-        url: $DEPLOYMENT_URL
+        url: ${{ vars.DEPLOYMENT_URL }}
         # Follow redirects, or just report success on 3xx status codes
         follow-redirect: false # Optional, defaults to "false"
         # Fail this action after this many failed attempts
@@ -30,12 +29,12 @@ jobs:
       uses: rjstone/discord-webhook-notify@v1
       with:
         severity: info
-        description: "Health check of $DEPLOYMENT_URL succeeded"
+        description: "Health check of ${{ vars.DEPLOYMENT_URL }} succeeded"
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
     - name: Health Check Fail
       if: failure()
       uses: rjstone/discord-webhook-notify@v1
       with:
         severity: error 
-        description: "Health check of $DEPLOYMENT_URL failed"
+        description: "Health check of ${{ vars.DEPLOYMENT_URL }} failed"
         webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
