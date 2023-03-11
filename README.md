@@ -4,6 +4,10 @@
 
 _License: All rights reserved © Rafael Linnankoski (further details [here](https://github.com/jeansibelius/outcome/blob/master/LICENSE.md))._
 
+[![Deployment](https://github.com/jeansibelius/outcome/actions/workflows/deployment_pipeline.yml/badge.svg)](https://github.com/jeansibelius/outcome/actions/workflows/deployment_pipeline.yml)
+
+[![Health check](https://github.com/jeansibelius/outcome/actions/workflows/health-check.yml/badge.svg)](https://github.com/jeansibelius/outcome/actions/workflows/health-check.yml)
+
 ![Statements](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-statements.svg)
 ![Branches](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-branches.svg)
 ![Functions](https://github.com/jeansibelius/outcome/blob/master/server/badges/badge-functions.svg)
