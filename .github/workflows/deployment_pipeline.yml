@@ -10,7 +10,7 @@ on:
 
 env:
   CONTAINS_SKIP: ${{ contains(join(github.event.commits.*.message), '#skip') }}
-  DEPLOYMENT_URL: https://${{secrets.HEROKU_APP_NAME}}.fly.dev
+  DEPLOYMENT_URL: ${{ vars.DEPLOYMENT_URL }}
 
 jobs:
   build_deploy:
