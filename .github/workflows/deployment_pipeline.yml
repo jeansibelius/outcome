@@ -10,7 +10,6 @@ on:
 
 env:
   CONTAINS_SKIP: ${{ contains(join(github.event.commits.*.message), '#skip') }}
-  DEPLOYMENT_URL: ${{ vars.DEPLOYMENT_URL }}
 
 jobs:
   build_deploy:
@@ -86,7 +85,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         with:
           severity: info
-          text: "Deployed a new version of Outcome $DEPLOYMENT_URL"
+          text: "Deployed a new version of Outcome ${{ vars.DEPLOYMENT_URL }}"
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Build failure
         uses: rjstone/discord-webhook-notify@v1
