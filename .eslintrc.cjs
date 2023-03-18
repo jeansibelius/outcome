@@ -1,21 +1,21 @@
 module.exports = {
+  root: true,
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:jest/recommended",
+    "plugin:vitest/recommended",
   ],
-  plugins: ["@typescript-eslint", "eslint-plugin-jest"],
-  settings: {
-    jest: {
-      version: 27,
-    },
-  },
+  plugins: ["@typescript-eslint", "vitest"],
   env: {
     browser: true,
     es6: true,
     node: true,
-    "jest/globals": true,
+  },
+  parser: "@typescript-eslint/parser",
+  parserOptions: {
+    project: "./**/tsconfig.json",
+    tsconfigRootDir: __dirname,
   },
   rules: {
     "@typescript-eslint/semi": ["error"],
@@ -26,16 +26,5 @@ module.exports = {
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     "no-case-declarations": "off",
-    "jest/no-disabled-tests": "warn",
-    "jest/no-focused-tests": "error",
-    "jest/no-identical-title": "error",
-    "jest/prefer-to-have-length": "warn",
-    "jest/valid-expect": "error",
   },
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    project: "./*/tsconfig.json",
-    tsconfigRootDir: __dirname,
-  },
-  root: true,
 };
