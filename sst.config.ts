@@ -6,8 +6,8 @@ import { Database } from "./stacks/Database";
 export default {
   config(_input) {
     return {
-      name: "my-sst-app",
-      region: "us-east-1",
+      name: "outcome",
+      region: "ap-northeast-1",
     };
   },
   stacks(app) {

@@ -1,5 +1,5 @@
 {
-  "name": "@my-sst-app/core",
+  "name": "@outcome/core",
   "version": "0.0.0",
   "type": "module",
   "scripts": {

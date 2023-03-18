@@ -1,5 +1,5 @@
 {
-  "name": "@my-sst-app/graphql",
+  "name": "@outcome/graphql",
   "version": "0.0.0",
   "type": "module",
   "dependencies": {
