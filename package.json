@@ -1,39 +1,42 @@
 {
   "name": "outcome",
-  "version": "0.0.1",
   "description": "Simple app to track household expenses and budget",
   "main": "index.js",
-  "scripts": {
-    "client-lint": "npm run lint --prefix client",
-    "server-lint": "npm run lint --prefix server",
-    "lint": "npm run client-lint && npm run server-lint",
-    "client-build": "npm run build --prefix client",
-    "client-install": "npm ci --prefix client",
-    "server-build": "npm run build --prefix server",
-    "server-install": "npm ci --prefix server",
-    "server-test": "npm test --prefix server",
-    "install": "npm run client-install && npm run server-install",
-    "test": "npm run server-test",
-    "build": "npm run client-build && npm run server-build",
-    "start:prod": "NODE_ENV=production node server/build/index.js",
-    "start": "node server/build/index.js",
-    "docker": "docker compose -f docker-compose.dev.yml --env-file ./server/.env up",
-    "deploy:demo": "git push heroku-demo mvp:master",
-    "deploy": "git push heroku-prod mvp:master"
-  },
+  "private": true,
+  "author": "Rafael Linnankoski",
+  "type": "module",
+  "homepage": "https://github.com/jeansibelius/outcome#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jeansibelius/outcome.git"
   },
-  "author": "Rafael Linnankoski",
-  "private": true,
   "bugs": {
     "url": "https://github.com/jeansibelius/outcome/issues"
   },
-  "homepage": "https://github.com/jeansibelius/outcome#readme",
+  "scripts": {
+    "dev": "sst dev",
+    "build": "sst build",
+    "deploy": "sst deploy",
+    "remove": "sst remove",
+    "console": "sst console",
+    "typecheck": "tsc --noEmit",
+    "test": "sst bind \"vitest run\""
+  },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.26.0",
     "eslint": "^8.16.0",
-    "eslint-plugin-jest": "^26.2.2"
+    "eslint-plugin-jest": "^26.2.2",
+    "sst": "^2.2.1",
+    "aws-cdk-lib": "2.62.2",
+    "constructs": "10.1.156",
+    "typescript": "^5.0.2",
+    "@tsconfig/node16": "^1.0.3",
+    "vitest": "^0.29.3"
+  },
+  "overrides": {
+    "graphql": "16.5.0"
   }
 }

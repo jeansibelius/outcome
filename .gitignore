@@ -1,10 +1,18 @@
-.env
 *.swp
 *.swo
 **/node_modules
 **/build
 **/dist
 **/coverage
-*.lock
-*-lock.json
 tsconfig.tsbuildinfo
+
+# sst
+.sst
+.build
+
+# misc
+.DS_Store
+
+# local env files
+.env
+.env*.local
