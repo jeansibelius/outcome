@@ -105,6 +105,7 @@ async function startApolloServer() {
   });
 
   const PORT = process.env.PORT || 4000;
+  console.log("PORT", PORT);
   // Modified server startup
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: PORT }, resolve)
