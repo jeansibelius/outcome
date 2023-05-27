@@ -1,22 +1,41 @@
-FROM node:lts@sha256:e20f90906aa052de28a41923073eb87e9e0384b9bf1d0d4eab698c4de3dd7df8 AS base
+FROM debian:bullseye as builder
 
-RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_amd64.deb
-RUN dpkg -i dumb-init_*.deb
+ARG NODE_VERSION=16.17.0
 
-WORKDIR /usr/src/app
-COPY . .
+RUN apt-get update; apt install -y curl python-is-python3 pkg-config build-essential
+RUN curl https://get.volta.sh | bash
+ENV VOLTA_HOME /root/.volta
+ENV PATH /root/.volta/bin:$PATH
+RUN volta install node@${NODE_VERSION}
 
-FROM base AS build 
-RUN npm ci
-ENV CI true
-RUN npm run build
+#######################################################################
 
-FROM node:lts-slim@sha256:3a4243f6c0cac673c7829a9a875ed599063e001bac9a38e82f1c31561dc3ffae AS prod
-WORKDIR /usr/src/app
-COPY --from=build --chown=node:node /usr/src/app/ ./
+RUN mkdir /app
+WORKDIR /app
+
+# NPM will not install any package listed in "devDependencies" when NODE_ENV is set to "production",
+# to install all modules: "npm install --production=false".
+# Ref: https://docs.npmjs.com/cli/v9/commands/npm-install#description
+
+#ENV NODE_ENV production
+
+COPY --chown=node:node . .
+
+RUN npm ci 
+RUN npm run build 
+FROM debian:bullseye
+
+LABEL fly_launch_runtime="nodejs"
+
+COPY --from=builder /root/.volta /root/.volta
+COPY --from=builder /app /app
+
+WORKDIR /app
 ENV NODE_ENV production
-ARG MONGODB_URI_PROD
-ENV MONGODB_URI_PROD $MONGODB_URI_PROD 
+ENV PATH /root/.volta/bin:$PATH
+
+ENV MONGODB_URI_PROD $MONGODB_URI_PROD
 ENV JWT_SECRET $JWT_SECRET
-USER node
-CMD ["node", "server/build/index.js"]
+ENV PORT $PORT
+
+CMD [ "npm", "run", "start" ]
